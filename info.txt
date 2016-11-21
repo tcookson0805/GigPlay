@@ -38,6 +38,10 @@ history
 spotify-web-api-js
 react-router-redux
 
+less
+less-loader
+
+
 --------
 SERVER  |
 --------

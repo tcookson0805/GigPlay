@@ -1,9 +1,11 @@
 import {
-  SPOTIFY_TOKENS, SPOTIFY_ME_BEGIN, SPOTIFY_ME_SUCCESS, SPOTIFY_ME_FAILURE
+  SPOTIFY_TOKENS, SPOTIFY_ME_BEGIN, SPOTIFY_ME_SUCCESS, SPOTIFY_ME_FAILURE, FETCH_TRACKS, FETCH_ARTISTS, FETCH_PLAYLISTS, FETCH_PLAYLIST_TRACKS
 } from '../actions/actions';
 
 /** The initial state; no tokens and no user info */
 const initialState = {
+  artists: null,
+  tracks: null,
   accessToken: null,
   refreshToken: null,
   user: {
@@ -47,7 +49,27 @@ function authReducer (state = initialState, action) {
   // currently no failure state :(
   case SPOTIFY_ME_FAILURE:
     return state;
+    
+  case FETCH_TRACKS:
+    return Object.assign({}, state, {
+      tracks: Object.assign({}, state.tracks, action.payload)
+    })
 
+  case FETCH_ARTISTS:
+    return Object.assign({}, state, {
+      artists: Object.assign({}, state.artists, action.payload)
+    })
+    
+  case FETCH_PLAYLISTS:
+    return Object.assign({}, state, {
+      playlists: Object.assign({}, state.playlists, action.payload)
+    })
+    
+  case FETCH_PLAYLIST_TRACKS:
+    return Object.assign({}, state, {
+      playlists: Object.assign({}, state.playlists, action.payload)
+    })
+  
   default:
     return state;
   }

@@ -31,3 +31,52 @@ export function getMyInfo() {
     });
   };
 }
+
+const FETCH_TRACKS = 'FETCH_TRACKS';
+
+export function getMyTracks() {
+
+  return dispatch => {
+    dispatch({ type: FETCH_TRACKS});
+    spotifyApi.getMySavedTracks()
+      .then( (data) => {
+        console.log('data', data)
+      })
+  }
+}
+
+// const FETCH_ARTISTS = 'FETCH_ARTISTS';
+
+// export function getMyArtists() {
+//   return dispatch => {
+//     dispatch({ type: FETCH_ARTISTS });
+//     spotifyApi.isFollowingArtists()
+//       .then( (data) => {
+//         console.log('artists', data)
+//       })
+//   }
+// }
+
+const FETCH_PLAYLISTS = 'FETCH_PLAYLISTS';
+
+export function getMyPlaylists() {
+  return dispatch => {
+    dispatch({ type: FETCH_PLAYLISTS });
+    spotifyApi.getUserPlaylists()
+      .then( (data) => {
+        console.log('playlists', data)
+      })
+  }
+}
+
+const FETCH_PLAYLIST_TRACKS = 'FETCH_PLAYLIST_TRACKS';
+
+export function getPlaylistTracks() {
+  return dispatch => {
+    dispatch({ type: FETCH_PLAYLIST_TRACKS });
+    spotifyApi.getPlaylistTracks('tcookson0805', '0w7glpzRjxZ7liQgumxhFv')
+      .then( (data) => {
+        console.log('playlist tracks', data)
+      })
+  }
+}
