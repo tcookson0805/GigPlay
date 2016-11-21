@@ -1,3 +1,5 @@
+'use strict';
+
 const router = require('express').Router();
 var SpotifyWebApi = require('spotify-web-api-node');
 
@@ -55,7 +57,6 @@ router.get('/callback', (req, res) => {
           console.log(body);
         });
 
-        
         
         res.redirect(`/#/user/${access_token}/${refresh_token}`);
       }).catch( (err) => {

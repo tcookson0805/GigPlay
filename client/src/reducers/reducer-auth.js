@@ -29,8 +29,8 @@ function authReducer (state = initialState, action) {
   switch (action.type) {
   // when we get the tokens... set the tokens!
   case SPOTIFY_TOKENS:
-    const {accessToken, refreshToken} = action;
-    return Object.assign({}, state, {accessToken, refreshToken});
+    const {accessToken, refreshToken} = action.payload;
+    return Object.assign({}, state, {accessToken, refreshToken})
 
   // set our loading property when the loading begins
   case SPOTIFY_ME_BEGIN:
