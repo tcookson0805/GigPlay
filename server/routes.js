@@ -21,9 +21,6 @@ const generateRandomString = (N) => {
   return (Math.random().toString(36)+Array(N).join('0')).slice(2, N+2);
 }
 
-router.get('/', (req, res) => {
-  res.send('yo!');
-});
 
 router.get('/login', (req, res) => {
   const state = generateRandomString(16)
@@ -37,7 +34,7 @@ router.get('/callback', (req, res) => {
   const storedState = req.cookies ? req.cookies[STATE_KEY] : null;
   
   if(state === null || state !== storedState) {
-    res.redirect('/error/state mismatch');
+    res.redirect('/#/error/state mismatch');
   } else {
     
     res.clearCookie(STATE_KEY);
@@ -47,13 +44,22 @@ router.get('/callback', (req, res) => {
         const { expires_in, access_token, refresh_token } = data.body;
         
         console.log('expires_in', expires_in);
+        console.log('======================');
+
         
         spotifyApi.setAccessToken(access_token);
         spotifyApi.setRefreshToken(refresh_token);
         
-        res.redirect(`/user/${access_token}/${refresh_token}`);
+        // use the access token to access the Spotify Web API
+        spotifyApi.getMe().then(({ body }) => {
+          console.log(body);
+        });
+
+        
+        
+        res.redirect(`/#/user/${access_token}/${refresh_token}`);
       }).catch( (err) => {
-        res.redirect('/error/invalid token');
+        res.redirect('/#/error/invalid token');
       });
       
   }

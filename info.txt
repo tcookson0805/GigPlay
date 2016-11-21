@@ -24,3 +24,80 @@ redux-thunk
       | let foo = () => 1 + 2;
       ------------------------------------------------------------     
 
+--------
+CLIENT  |
+--------
+react
+react-dom
+redux
+react-redux
+redux-thunk
+react-router
+react-router-redux
+history
+spotify-web-api-js
+react-router-redux
+
+--------
+SERVER  |
+--------
+express
+body-parser
+cookie-parser
+morgan
+
+webpack
+webpack-dev-middleware
+webpack-hot-middleware
+
+---------------
+SERVER ROUTES  |
+---------------
+spotify-web-api-node
+querystring
+
+
+---------
+WEBPACK  |
+---------
+babel-loader
+babel-core
+babel-preset-es2015
+babel-preset-react
+babel-plugin-react-transform
+raw-loader
+
+
+
+
+Old webpack.config.js
+
+module.exports = {
+  entry: [
+    './client/src/index.js'
+  ],
+  output: {
+    path: __dirname,
+    publicPath: '/',
+    filename: 'bundle.js'
+  },
+  module: {
+    loaders: [
+      { 
+        test: /\.js$/, 
+        exclude: /node_modules/, 
+        loader: "babel-loader",
+        query: {
+          presets: ['es2015', 'react']
+        }
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
+  devServer: {
+    historyApiFallback: true,
+    contentBase: './'
+  }
+};

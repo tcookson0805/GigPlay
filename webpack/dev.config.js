@@ -6,10 +6,10 @@ module.exports = {
   entry: [
     'webpack-hot-middleware/client',
     'babel-polyfill',
-    path.join(__dirname, './client/src/index'),
+    path.join(__dirname, '../client/src/index'),
   ],
   output: {
-    path: path.join(__dirname, './public/'),
+    path: path.join(__dirname, '../public/'),
     filename: 'bundle.js',
     publicPath: '/',
   },

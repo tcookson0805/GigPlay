@@ -22,17 +22,26 @@
     "react-dom": "^15.4.0",
     "react-redux": "^4.4.6",
     "react-router": "^3.0.0",
+    "react-router-redux": "^4.0.7",
+    "react-transform-hmr": "^1.0.4",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
+    "spotify-web-api-js": "^0.21.1",
     "spotify-web-api-node": "^2.3.6",
-    "style-loader": "^0.13.1"
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.3"
   },
   "devDependencies": {
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.8",
+    "babel-plugin-react-transform": "^2.0.2",
+    "babel-polyfill": "^6.16.0",
     "babel-preset-latest": "^6.16.0",
     "nodemon": "^1.11.0",
+    "raw-loader": "^0.5.1",
     "redux-logger": "^2.7.4",
-    "webpack": "^1.13.3"
+    "webpack": "^1.13.3",
+    "webpack-dev-middleware": "^1.8.4",
+    "webpack-hot-middleware": "^2.13.2"
   }
 }

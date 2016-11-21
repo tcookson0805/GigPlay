@@ -4,32 +4,45 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import { Provider } from 'react-redux';
-import { Router, Route, browserHistory } from 'react-router';
-import reducers from './reducers/index';
+import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-router';
+import { syncHistoryWithStore, routeReducer }     from 'react-router-redux';
+import { createHistory } from 'history';
+
+import rootReducer from './reducers/index';
+
 
 
 // Components
 import App from './components/app';
+import Login from './components/login';
+import User from './components/user';
+import Error from './components/error';
 
-const logger = createLogger();
 
-const rootReducer = combineReducers(reducers)
+// Sync dispatched route actions to the history
 
-const Store = createStore(rootReducer, applyMiddleware(thunk, logger));
+// const app = combineReducers(reducers);
+const middleware = applyMiddleware(thunk);
+const store = createStore(rootReducer, middleware)
+
+
+const history = syncHistoryWithStore(hashHistory, store)
+
 
 class Root extends Component {
   render() {
     return (
-      <Provider store={Store}>
-        <Router history={browserHistory}>
+      <Provider store={store}>
+        <Router history={history}>
           <Route path="/" component={App}>
-            <IndexRoute component={login}>
-            </IndexRoute>
+            <IndexRoute component={Login} />
+            <Route path="/#/user/:accessToken/:refreshToken" component={User} />
+            <Route path="/#/error/:errorMsg" component={Error} />
           </Route>
         </Router>
       </Provider>
-    )
+    );
   }
 }
 
-ReactDOM.render(<Root />, document.getElementByClass('container'));
+ReactDOM.render(<Root />, document.getElementById('root'));
