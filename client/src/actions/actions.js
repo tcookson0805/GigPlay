@@ -37,26 +37,43 @@ export function getMyInfo() {
   };
 }
 
+const arr = [];
+
+function getArtists(data) {
+  dispatch({ type: FETCH_TRACKS, data: data})
+}
 
 export function getMyTracks(num) {
   return dispatch => {
     dispatch({ type: FETCH_TRACKS_BEGIN});
-    spotifyApi.getMySavedTracks({'limit': 50, 'offset': num}).then( data => {
-        console.log('tracksDATA', data)
-        dispatch({ type: FETCH_TRACKS, data: data})
-      }).catch(e => {
-        dispatch({ type: FETCH_TRACKS_FAILURE, error: e});
-      });
+    
+    for(var i = 0; i < 5; i++){
+      spotifyApi.getMySavedTracks({'limit': 50, 'offset': i*50}).then( data => {
+          console.log('heyho')        
+          dispatch({ type: FETCH_TRACKS, data: data})        
+        })
+        .catch(e => {
+          dispatch({ type: FETCH_TRACKS_FAILURE, error: e});
+        });
+    }
+    
+    // let x;
+    // spotifyApi.getMySavedTracks({'limit': 50, 'offset': 50}).then(d => {
+    //   x = d;
+    // })
+    
+    
+    // console.log('xxxxx', x)
+    
+    
+    // spotifyApi.getMySavedTracks({'limit': 50, 'offset': num}).then( data => {        
+    //     dispatch({ type: FETCH_TRACKS, data: data})        
+    //   })
+    //   .catch(e => {
+    //     dispatch({ type: FETCH_TRACKS_FAILURE, error: e});
+    //   });
   };
 }
 
-// export function getMyTracks() {
-//   return spotifyApi.getMySavedTracks().then( tracks => {
-//     return {
-//       type: FETCH_TRACKS,
-//       data: data
-//     }
-//   })
-// }
 
 

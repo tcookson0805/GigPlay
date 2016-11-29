@@ -4,7 +4,10 @@ import { bindActionCreators } from 'redux';
 // import { getMyInfo, setTokens, getMyTracks, getMyArtists, getMyPlaylists, getPlaylistTracks }   from '../actions/actions';
 import { getMyInfo, setTokens, getMyTracks }   from '../actions/actions';
 const _ = require('underscore');
-let num = 0;
+
+
+let artistArray = [];
+let artistObj = {}
 
 /**
  * Our user page
@@ -16,27 +19,19 @@ class User extends Component {
     super(props);
     this.state = {
       total: 0,
-      artists: []
+      artists: [],
+      artistsObj: {},
+      num: 0,
+      tracks: {}
     }
   }
  
-
   componentWillMount() {
     const {dispatch, params} = this.props;
     const {accessToken, refreshToken} = params;
-    // dispatch(setTokens({accessToken, refreshToken}));
-    // dispatch(getMyInfo());
-    // dispatch(getMyTracks(num));
     this.props.setTokens({accessToken, refreshToken});
     this.props.getMyInfo();
-    this.props.getMyTracks(num);
-  }
-
-  componentDidMount(){
-    // console.log('================')
-    // console.log('componentDidMount')
-    // const {total} = this.props.tracks
-    // console.log('total', total)
+    this.props.getMyTracks(this.state.num);
   }
   
   componentWillReceiveProps(nextProps) {
@@ -44,28 +39,35 @@ class User extends Component {
     console.log('componentWillReceiveProps')
     console.log('nextProps', nextProps);
 
+    this.setState({total: nextProps.tracks.total})
     
-    if(nextProps.tracks.total){
-      this.setState({total: nextProps.tracks.total})
-    }
+    const arr = nextProps.tracks.items
     
-    
-    if(nextProps.tracks.items){
-      let artistList = nextProps.tracks.items.map(function(item, index) {
-        return item.track.artists[0].name;
-      })
-      this.setState({artists : artistList})
+    arr.forEach(function(item, index){
       
+      let artistName = item.track.artists[0].name;
       
+      artistArray.push(artistName)
+      artistObj[artistName] = artistObj[artistName] + 1 || 1;
       
-    }
+    });
     
+    this.setState({tracks: nextProps.tracks})
+    // this.setState({num: newNum})
+    this.setState({artists: _.uniq(artistArray)})
+    this.setState({artistsObj: artistObj})
   }
+
   
   componentDidUpdate(prevProps, prevState) {
     console.log('================');
     console.log('componentDidUpdate')
     console.log('this.state', this.state)
+    // console.log('prevProps', prevProps);
+    // console.log('prevState', prevState);
+
+
+
   }
   
  
