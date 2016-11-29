@@ -1,11 +1,19 @@
 import {
-  SPOTIFY_TOKENS, SPOTIFY_ME_BEGIN, SPOTIFY_ME_SUCCESS, SPOTIFY_ME_FAILURE, FETCH_TRACKS, FETCH_ARTISTS, FETCH_PLAYLISTS, FETCH_PLAYLIST_TRACKS
+  SPOTIFY_TOKENS, SPOTIFY_ME_BEGIN, SPOTIFY_ME_SUCCESS, SPOTIFY_ME_FAILURE, FETCH_TRACKS_BEGIN, FETCH_TRACKS, FETCH_TRACKS_FAILURE
 } from '../actions/actions';
 
 /** The initial state; no tokens and no user info */
 const initialState = {
-  artists: null,
-  tracks: null,
+  tracks: {
+    trackLoading: false,
+    href: null,
+    items: [],
+    limit: null,
+    next: null,
+    offset: null,
+    previous: null,
+    total: 0
+  },
   accessToken: null,
   refreshToken: null,
   user: {
@@ -49,27 +57,20 @@ function authReducer (state = initialState, action) {
   // currently no failure state :(
   case SPOTIFY_ME_FAILURE:
     return state;
+  
+  case FETCH_TRACKS_BEGIN:
+    return Object.assign({}, state, {
+      user: Object.assign({}, state.tracks, {trackLoading: true})
+    });
     
   case FETCH_TRACKS:
     return Object.assign({}, state, {
-      tracks: Object.assign({}, state.tracks, action.payload)
-    })
-
-  case FETCH_ARTISTS:
-    return Object.assign({}, state, {
-      artists: Object.assign({}, state.artists, action.payload)
-    })
-    
-  case FETCH_PLAYLISTS:
-    return Object.assign({}, state, {
-      playlists: Object.assign({}, state.playlists, action.payload)
-    })
-    
-  case FETCH_PLAYLIST_TRACKS:
-    return Object.assign({}, state, {
-      playlists: Object.assign({}, state.playlists, action.payload)
-    })
+      tracks: Object.assign({}, state.tracks, action.data, {trackLoading: false})
+    });
   
+  case FETCH_TRACKS_FAILURE:
+    return state;
+
   default:
     return state;
   }

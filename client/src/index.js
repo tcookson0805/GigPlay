@@ -16,7 +16,7 @@ import App from './components/app';
 import Login from './components/login';
 import User from './components/user';
 import Error from './components/error';
-
+import Main from './components/main';
 
 // Sync dispatched route actions to the history
 
@@ -35,6 +35,7 @@ class Root extends Component {
             <Route path="/user/:accessToken/:refreshToken" component={User} />
             <Route path="/error/:errorMsg" component={Error} />
           </Route>
+          <Route path="/main" component={Main} />
         </Router>
       </Provider>
     );

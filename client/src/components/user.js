@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect }      from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getMyInfo, setTokens, getMyTracks, getMyArtists, getMyPlaylists, getPlaylistTracks }   from '../actions/actions';
+// import { getMyInfo, setTokens, getMyTracks, getMyArtists, getMyPlaylists, getPlaylistTracks }   from '../actions/actions';
+import { getMyInfo, setTokens, getMyTracks }   from '../actions/actions';
+const _ = require('underscore');
+let num = 0;
 
 /**
  * Our user page
@@ -11,37 +14,75 @@ class User extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      total: 0,
+      artists: []
+    }
   }
  
- 
+
   componentWillMount() {
     const {dispatch, params} = this.props;
     const {accessToken, refreshToken} = params;
-    dispatch(setTokens({accessToken, refreshToken}));
-    dispatch(getMyInfo());
-    dispatch(getMyTracks());
-    // dispatch(getMyArtists());
-    dispatch(getMyPlaylists());
-    dispatch(getPlaylistTracks());
+    // dispatch(setTokens({accessToken, refreshToken}));
+    // dispatch(getMyInfo());
+    // dispatch(getMyTracks(num));
+    this.props.setTokens({accessToken, refreshToken});
+    this.props.getMyInfo();
+    this.props.getMyTracks(num);
   }
 
+  componentDidMount(){
+    // console.log('================')
+    // console.log('componentDidMount')
+    // const {total} = this.props.tracks
+    // console.log('total', total)
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    console.log('================')
+    console.log('componentWillReceiveProps')
+    console.log('nextProps', nextProps);
+
+    
+    if(nextProps.tracks.total){
+      this.setState({total: nextProps.tracks.total})
+    }
+    
+    
+    if(nextProps.tracks.items){
+      let artistList = nextProps.tracks.items.map(function(item, index) {
+        return item.track.artists[0].name;
+      })
+      this.setState({artists : artistList})
+      
+      
+      
+    }
+    
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+    console.log('================');
+    console.log('componentDidUpdate')
+    console.log('this.state', this.state)
+  }
+  
  
   /** When we mount, get the tokens from react-router and initiate loading the info */
-  componentDidMount() {
-    console.log('component did mount');
-    console.log('this.props', this.props)
-  }
 
   /** Render the user's info */
   render() {
-    const { accessToken, refreshToken, user } = this.props;
+    const { accessToken, refreshToken, user, tracks } = this.props;
     const { loading, display_name, images, id, email, external_urls, href, country, product } = user;
+    const { trackLoading, items, total, offset } = tracks
     const imageUrl = images[0] ? images[0].url : "";
+  
     // if we're still loading, indicate such
     if (loading) {
       return <h2>Loading...</h2>;
     }
-    
+  
     return (
       <div className="user">
         <h2>{`Logged in as ${display_name}`}</h2>
@@ -58,20 +99,32 @@ class User extends Component {
             <li><span>Product: </span><span>{product}</span></li>
           </ul>
         </div>
-        <div className="user-artists">
-        
+        <div>
+          <ul>
+            {items.map(function(item, index) {
+              return (
+                <li key={index}>{item.track.artists[0].name}</li>
+              )
+            })}
+          </ul>
+        </div>
+        <div>
+          
         </div>
       </div>
     );
+
   }
 }
 
 function mapStateToProps(state) {
-  const { accessToken, refreshToken, user } = state.auth
-  return { accessToken, refreshToken, user}
+  const { accessToken, refreshToken, user, tracks } = state.auth;
+  return { accessToken, refreshToken, user, tracks }
 }
 
-
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ getMyInfo, setTokens, getMyTracks }, dispatch);
+}
 
 // export default connect(state => state)(User);
-export default connect(mapStateToProps)(User);
+export default connect(mapStateToProps, mapDispatchToProps)(User);
