@@ -82,25 +82,25 @@ export function getMyTracks(offset) {
   };
 }
 
-// export const FETCH_CONCERTS = 'FETCH_CONCERTS';
+export const FETCH_CONCERTS = 'FETCH_CONCERTS';
 
-// const TICKETMASTER_ROOT = 'https://app.ticketmaster.com/discovery/v2/'
-// const TICKETMASTER_KEY = 'p4iiDkyq3OFMKaCcAZoK5RGnoOGbExwd';
-// const TICKETMASTER_SECRET = 'eZN3erRaBDLnWBH3';
+const TICKETMASTER_ROOT = 'https://app.ticketmaster.com/discovery/v2/'
+const TICKETMASTER_KEY = 'p4iiDkyq3OFMKaCcAZoK5RGnoOGbExwd';
+const TICKETMASTER_SECRET = 'eZN3erRaBDLnWBH3';
 
-// const TICKETMASTER_REQUEST = 'https://app.ticketmaster.com/discovery/v2/events.json?keyword=devjam&source=universe&countryCode=US&apikey=p4iiDkyq3OFMKaCcAZoK5RGnoOGbExwd'
+const TICKETMASTER_REQUEST = 'https://app.ticketmaster.com/discovery/v2/events.json?keyword=devjam&source=universe&countryCode=US&apikey=p4iiDkyq3OFMKaCcAZoK5RGnoOGbExwd'
 
-// export function getConcerts(keyword) {
-//   const url = `${TICKETMASTER_ROOT}events.json?keyword=${keyword}&source=universe&countryCode=US&apikey=${TICKETMASTER_KEY}`
-//   const request = axios.get(url);
+export function getConcerts(keyword) {
+  const url = `${TICKETMASTER_ROOT}events.json?keyword=${keyword}&source=universe&countryCode=US&apikey=${TICKETMASTER_KEY}`
+  const request = axios.get(url);
   
-//   console.log('Request:', request);
+  console.log('Request:', request);
   
-//   return {
-//     type: FETCH_CONCERTS,
-//     data: request
-//   }
+  return {
+    type: FETCH_CONCERTS,
+    data: request
+  }
 
-// }
+}
 
 
