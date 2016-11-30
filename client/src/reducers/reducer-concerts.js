@@ -10,7 +10,7 @@ const initialState = {
 /**
  * Our reducer
  */
-function concertReducer (state = initialState, action) {
+function concertsReducer (state = initialState, action) {
   switch (action.type) {
   // when we get the tokens... set the tokens!
   case FETCH_CONCERTS:
@@ -22,4 +22,4 @@ function concertReducer (state = initialState, action) {
   }
 }
 
-export default authReducer;
+export default concertsReducer;
