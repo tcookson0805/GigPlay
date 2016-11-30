@@ -1,9 +1,14 @@
 import {
-  SPOTIFY_TOKENS, SPOTIFY_ME_BEGIN, SPOTIFY_ME_SUCCESS, SPOTIFY_ME_FAILURE, FETCH_TRACKS_BEGIN, FETCH_TRACKS, FETCH_TRACKS_FAILURE
+  SPOTIFY_TOKENS, SPOTIFY_ME_BEGIN, SPOTIFY_ME_SUCCESS, SPOTIFY_ME_FAILURE, FETCH_TRACKS
 } from '../actions/actions';
 
 /** The initial state; no tokens and no user info */
 const initialState = {
+  totalTracks: 0,
+  trackCalls: 0,
+  artistsArray: [],
+  artistsObj: {},
+  loading: false,
   tracks: {
     trackLoading: false,
     href: null,
@@ -57,19 +62,15 @@ function authReducer (state = initialState, action) {
   // currently no failure state :(
   case SPOTIFY_ME_FAILURE:
     return state;
-  
-  case FETCH_TRACKS_BEGIN:
-    return Object.assign({}, state, {
-      user: Object.assign({}, state.tracks, {trackLoading: true})
-    });
     
   case FETCH_TRACKS:
     return Object.assign({}, state, {
-      tracks: Object.assign({}, state.tracks, action.data, {trackLoading: false})
+      totalTracks: action.data.totalTracks,
+      trackCalls: action.data.trackCalls,
+      artistsArray: action.data.artistsArray,
+      artistsObj: Object.assign({}, state.artistsObj, action.data.artistsObj),
+      tracks: Object.assign({}, state.tracks, action.data.tracks)
     });
-  
-  case FETCH_TRACKS_FAILURE:
-    return state;
 
   default:
     return state;

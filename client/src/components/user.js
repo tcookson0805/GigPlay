@@ -5,10 +5,6 @@ import { bindActionCreators } from 'redux';
 import { getMyInfo, setTokens, getMyTracks }   from '../actions/actions';
 const _ = require('underscore');
 
-
-let artistArray = [];
-let artistObj = {}
-
 /**
  * Our user page
  * Displays the user's information
@@ -18,66 +14,37 @@ class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      total: 0,
-      artists: [],
+      totalTracks: 0,
+      trackCalls: 0,
+      artistsArray: [],
       artistsObj: {},
-      num: 0,
-      tracks: {}
+      tracks: {},
     }
   }
  
+  /** When we mount, get the tokens from react-router and initiate loading the info */
   componentWillMount() {
     const {dispatch, params} = this.props;
     const {accessToken, refreshToken} = params;
     this.props.setTokens({accessToken, refreshToken});
     this.props.getMyInfo();
-    this.props.getMyTracks(this.state.num);
+    this.props.getMyTracks();
   }
   
   componentWillReceiveProps(nextProps) {
-    console.log('================')
-    console.log('componentWillReceiveProps')
-    console.log('nextProps', nextProps);
-
-    this.setState({total: nextProps.tracks.total})
-    
-    const arr = nextProps.tracks.items
-    
-    arr.forEach(function(item, index){
-      
-      let artistName = item.track.artists[0].name;
-      
-      artistArray.push(artistName)
-      artistObj[artistName] = artistObj[artistName] + 1 || 1;
-      
-    });
-    
-    this.setState({tracks: nextProps.tracks})
-    // this.setState({num: newNum})
-    this.setState({artists: _.uniq(artistArray)})
-    this.setState({artistsObj: artistObj})
+    this.setState({
+      totalTracks: nextProps.totalTracks, 
+      trackCalls: nextProps.trackCalls, 
+      artistsArray: nextProps.artistsArray,
+      artistsObj: nextProps.artistsObj,
+      tracks: nextProps.tracks
+    })  
   }
-
-  
-  componentDidUpdate(prevProps, prevState) {
-    console.log('================');
-    console.log('componentDidUpdate')
-    console.log('this.state', this.state)
-    // console.log('prevProps', prevProps);
-    // console.log('prevState', prevState);
-
-
-
-  }
-  
- 
-  /** When we mount, get the tokens from react-router and initiate loading the info */
 
   /** Render the user's info */
   render() {
-    const { accessToken, refreshToken, user, tracks } = this.props;
+    const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj  } = this.props;
     const { loading, display_name, images, id, email, external_urls, href, country, product } = user;
-    const { trackLoading, items, total, offset } = tracks
     const imageUrl = images[0] ? images[0].url : "";
   
     // if we're still loading, indicate such
@@ -103,15 +70,14 @@ class User extends Component {
         </div>
         <div>
           <ul>
-            {items.map(function(item, index) {
-              return (
-                <li key={index}>{item.track.artists[0].name}</li>
-              )
-            })}
           </ul>
         </div>
         <div>
-          
+          <ul>
+            {artistsArray.map(function(artist, index) {
+              return <li key={index}>{artist}</li>
+            })}
+          </ul>
         </div>
       </div>
     );
@@ -120,13 +86,12 @@ class User extends Component {
 }
 
 function mapStateToProps(state) {
-  const { accessToken, refreshToken, user, tracks } = state.auth;
-  return { accessToken, refreshToken, user, tracks }
+  const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj } = state.auth;
+  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ getMyInfo, setTokens, getMyTracks }, dispatch);
 }
 
-// export default connect(state => state)(User);
 export default connect(mapStateToProps, mapDispatchToProps)(User);

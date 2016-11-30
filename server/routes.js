@@ -8,7 +8,6 @@ const CLIENT_SECRET = '1de418828c0b43b98419310e94b482de';
 const REDIRECT_URI = 'http://localhost:3000/callback';
 const STATE_KEY = 'spotify_auth_state';
 
-
 const scopes = ['user-read-private', 'user-read-email', 'user-follow-read', 'user-library-read'];
 
 const credentials = {
