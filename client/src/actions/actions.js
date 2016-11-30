@@ -48,9 +48,14 @@ export function getMyTracks(offset) {
       tracks.items.forEach(function(item, index) {
         let artistName = item.track.artists[0].name;
         artistsArray.push(artistName);
-        artistsObj[artistName] = {
-          'songs': artistsObj[artistName] + 1 || 1,
-          'ticketmaster_id': null
+        
+        if(artistsObj[artistName]){
+          artistsObj[artistName].songs = artistsObj[artistName].songs + 1
+        } else {
+          artistsObj[artistName] = {
+            'songs': 1,
+            'ticketmaster_id': null
+          }
         }
       })
       
@@ -68,7 +73,16 @@ export function getMyTracks(offset) {
             let artistName = item.track.artists[0].name;
             allTracks.push(item)
             artistsArray.push(artistName);
-            artistsObj[artistName] = artistsObj[artistName] + 1 || 1;
+            
+            if(artistsObj[artistName]){
+              artistsObj[artistName].songs = artistsObj[artistName].songs + 1
+            } else {
+              artistsObj[artistName] = {
+                'songs': 1,
+                'ticketmaster_id': null
+              }
+            }
+            
           })
           return { artistsArray, artistsObj, allTracks }
         }).then ( obj => {
@@ -88,17 +102,35 @@ const TICKETMASTER_ROOT = 'https://app.ticketmaster.com/discovery/v2/'
 const TICKETMASTER_KEY = 'p4iiDkyq3OFMKaCcAZoK5RGnoOGbExwd';
 const TICKETMASTER_SECRET = 'eZN3erRaBDLnWBH3';
 
-const TICKETMASTER_REQUEST = 'https://app.ticketmaster.com/discovery/v2/events.json?keyword=devjam&source=universe&countryCode=US&apikey=p4iiDkyq3OFMKaCcAZoK5RGnoOGbExwd'
+// const TICKETMASTER_REQUEST = 'https://app.ticketmaster.com/discovery/v2/events.json?keyword=devjam&source=universe&countryCode=US&apikey=p4iiDkyq3OFMKaCcAZoK5RGnoOGbExwd'
 
 export function getConcerts(keyword) {
-  const url = `${TICKETMASTER_ROOT}events.json?keyword=${keyword}&source=universe&countryCode=US&apikey=${TICKETMASTER_KEY}`
-  const request = axios.get(url);
+  return dispatch => {
+    
+    
+    
+    
+    const url = `${TICKETMASTER_ROOT}events.json?keyword=${keyword}&apikey=${TICKETMASTER_KEY}`
+  // const request = axios.get(url).then(function(response) { console.log(response)})
   
-  console.log('Request:', request);
+  // console.log('Request:', request);
   
-  return {
-    type: FETCH_CONCERTS,
-    data: request
+  // dispatch({
+  //   type: FETCH_CONCERTS,
+  //   data: request
+  // })
+  
+    axios.get(url).then( response => {
+      console.log('data', data)
+      const data = response.data._embedded.events
+      dispatch({
+        type: FETCH_CONCERTS,
+        data: data
+      })
+      
+    })
+  
+  
   }
 
 }

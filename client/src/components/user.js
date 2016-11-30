@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect }      from 'react-redux';
 import { bindActionCreators } from 'redux';
 // import { getMyInfo, setTokens, getMyTracks, getMyArtists, getMyPlaylists, getPlaylistTracks }   from '../actions/actions';
-import { getMyInfo, setTokens, getMyTracks }   from '../actions/actions';
+import { getMyInfo, setTokens, getMyTracks, getConcerts }   from '../actions/actions';
 const _ = require('underscore');
 
 /**
@@ -29,6 +29,7 @@ class User extends Component {
     this.props.setTokens({accessToken, refreshToken});
     this.props.getMyInfo();
     this.props.getMyTracks();
+    this.props.getConcerts('adele');
   }
   
   componentWillReceiveProps(nextProps) {
@@ -91,7 +92,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getMyInfo, setTokens, getMyTracks }, dispatch);
+  return bindActionCreators({ getMyInfo, setTokens, getMyTracks, getConcerts }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);
