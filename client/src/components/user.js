@@ -9,6 +9,9 @@ const _ = require('underscore');
  * Our user page
  * Displays the user's information
  */
+ 
+const list = ["Pearl Jam", "Toto", "Dave Matthews Band", "WALK THE MOON", "Mike Posner", "Coldplay", "Foo Fighters", "Eddie Vedder", "Jimmy Fallon", "Jessi Malay"]
+ 
 class User extends Component {
 
   constructor(props) {
@@ -19,6 +22,7 @@ class User extends Component {
       artistsArray: [],
       artistsObj: {},
       tracks: {},
+      runGetConcerts: false
     }
   }
  
@@ -29,7 +33,6 @@ class User extends Component {
     this.props.setTokens({accessToken, refreshToken});
     this.props.getMyInfo();
     this.props.getMyTracks();
-    this.props.getConcerts('adele');
   }
   
   componentWillReceiveProps(nextProps) {
@@ -39,8 +42,29 @@ class User extends Component {
       artistsArray: nextProps.artistsArray,
       artistsObj: nextProps.artistsObj,
       tracks: nextProps.tracks
-    })  
+    })
+    // console.log('nextProps.totalTracks', nextProps.totalTracks);
+    // console.log('nextProps.tracksLoaded', nextProps.tracksLoaded);
+    if(nextProps.totalTracks === nextProps.tracksLoaded && this.state.runGetConcerts === false){
+      this.setState({runGetConcerts: true})
+      console.log('nextProps', nextProps)
+      this.props.getConcerts(nextProps.artistsArray);
+    }
   }
+  
+  componentWillUpdate(nextProps, nextState) {
+    // console.log('this.props', this.props)
+    // console.log('nextProps', nextProps); 
+  }
+  
+  componentDidUpdate(prevProps, prevState){
+    
+    // console.log('prevProps', prevProps);
+    // console.log('this.props', this.props);
+    // console.log('prevState', prevState);
+    // console.log('this.state', this.state);
+  }
+  
 
   /** Render the user's info */
   render() {
@@ -48,6 +72,7 @@ class User extends Component {
     const { loading, display_name, images, id, email, external_urls, href, country, product } = user;
     const imageUrl = images[0] ? images[0].url : "";
   
+    // console.log('render this.props', this.props)
     // if we're still loading, indicate such
     if (loading) {
       return <h2>Loading...</h2>;
@@ -87,8 +112,9 @@ class User extends Component {
 }
 
 function mapStateToProps(state) {
-  const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj } = state.auth;
-  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj }
+  const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = state.auth;
+  const { data, concertsList } = state.concerts;
+  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, data, concertsList }
 }
 
 function mapDispatchToProps(dispatch) {

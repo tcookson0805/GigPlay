@@ -9,6 +9,7 @@ const initialState = {
   artistsArray: [],
   artistsObj: {},
   loading: false,
+  tracksLoaded: false,
   tracks: {
     trackLoading: false,
     href: null,
@@ -69,9 +70,10 @@ function authReducer (state = initialState, action) {
       trackCalls: action.data.trackCalls,
       artistsArray: action.data.artistsArray,
       artistsObj: Object.assign({}, state.artistsObj, action.data.artistsObj),
-      tracks: Object.assign({}, state.tracks, action.data.tracks)
+      tracks: Object.assign({}, state.tracks, action.data.tracks),
+      tracksLoaded: action.data.tracksLoaded
     });
-
+  
   default:
     return state;
   }
