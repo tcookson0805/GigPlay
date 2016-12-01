@@ -34,8 +34,8 @@ class Root extends Component {
             <IndexRoute component={Login} />
             <Route path="/user/:accessToken/:refreshToken" component={User} />
             <Route path="/error/:errorMsg" component={Error} />
+            <Route path="/main" component={Main} />
           </Route>
-          <Route path="/main" component={Main} />
         </Router>
       </Provider>
     );

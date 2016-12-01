@@ -1,0 +1,95 @@
+
+/* HEADER COMPONENT */
+
+.header {
+  border: 1px solid black;
+  background-color: #0e4193;
+  padding-top: 2em;
+}
+
+.search-box {
+  border: 1px solid black;
+}
+
+.search-form {
+  margin: 1em;
+}
+
+.search-form > .form-group {
+  margin: 0 1em;
+}
+
+/* ARTIST LIST COMPONENT*/
+
+.artist-list {
+  border: 0.1em solid black;
+  border-radius: 1em;
+  padding: 1em;
+  margin-top: 1em;
+}
+
+.artist-list > h5 {
+  text-align: center;
+}
+
+.artist-list > .list-group {
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 40em;
+}
+
+.artist {
+  margin: 1em;
+}
+
+
+/* MAP BOX COMPONENT */
+
+
+.map-box {
+  border: 0.1em solid black;
+  height: 30em;
+  margin-top: 1em;
+  overflow: auto;
+}
+
+.map {
+/*  position: relative;*/
+  width: 100%;
+}
+
+
+
+
+/* RESULTS COMPONENT */
+
+
+.results-box {
+  border: 1px solid blue;
+  height: 20em;
+}
+
+.results-box-header {
+  margin: 1em auto;
+  text-align: center;
+}
+
+.result-item {
+  margin: 1em;
+}
+
+.result-item-header {
+  
+}
+
+.result-item-date {
+  border-right: 0.1em solid black;
+  float: left;
+  margin: 0 2em;
+  padding-right: 1em;
+  
+}
+
+.result-item-info {
+  float: left;
+}

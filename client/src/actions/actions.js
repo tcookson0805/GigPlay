@@ -204,4 +204,19 @@ export function getConcerts(artistsArray) {
   }
 }
 
+const MAP_ROOT_URL = 'https://maps.googleapis.com/maps/api/geocode/json?'
+const MAP_API_KEY = 'AIzaSyDOW-uZgD8XhxaRqeVfQB_c62UCthL3PGU'
+
+export const FETCH_CITY = 'FETCH_CITY'
+
+export function fetchCity(city) {
+
+  const request = axios.get(`${MAP_ROOT_URL}address=${city}&key=${MAP_API_KEY}`)
+    
+  return {
+    type: FETCH_CITY,
+    payload: request
+  }
+  
+}
 
