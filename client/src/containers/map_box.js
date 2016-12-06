@@ -9,9 +9,8 @@ class MapBox extends Component {
   }
   
   render() {
-    console.log('map-box props', this.props);
     return (
-      <div className="map-box col-md-12">
+      <div className="col-md-12 map-box">
         <ConcertMap />
       </div>
     )

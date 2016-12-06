@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+// require("css!../../style/style.css");
+
 
 /**
  * Main app component
@@ -10,7 +12,7 @@ export default class SpotifyLogin extends Component {
     const {children} = this.props;
 
     return (
-      <div className="container">
+      <div className="container-fluid">
         <div className="spotify-login">
           <div className="page-content">
             {children}

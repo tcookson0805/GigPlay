@@ -10,7 +10,6 @@ import { createHistory } from 'history';
 
 import rootReducer from './reducers/index';
 
-
 // Components
 import App from './components/app';
 import Login from './components/login';
@@ -24,6 +23,9 @@ const middleware = applyMiddleware(thunk);
 const store = createStore(rootReducer, middleware)
 const history = syncHistoryWithStore(hashHistory, store)
 
+// import '../style/style.less';
+import '../style/style.css';
+// require("css!../style/style.css");
 
 class Root extends Component {
   render() {
@@ -33,8 +35,8 @@ class Root extends Component {
           <Route path="/" component={App}>
             <IndexRoute component={Login} />
             <Route path="/user/:accessToken/:refreshToken" component={User} />
-            <Route path="/error/:errorMsg" component={Error} />
             <Route path="/main" component={Main} />
+            <Route path="/error/:errorMsg" component={Error} />
           </Route>
         </Router>
       </Provider>

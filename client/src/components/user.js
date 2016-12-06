@@ -12,7 +12,7 @@ const _ = require('underscore');
  * Displays the user's information
  */
  
-const testList = ["Pearl Jam", "Toto", "Dave Matthews Band", "WALK THE MOON", "Mike Posner", "Coldplay", "Foo Fighters", "Eddie Vedder", "Jimmy Fallon", "Jessi Malay"]
+const testList = ["The Lumineers"]
  
 class User extends Component {
 
@@ -53,15 +53,21 @@ class User extends Component {
     });
     if(nextProps.totalTracks === nextProps.tracksLoaded && this.state.runGetConcerts === false){
       this.setState({runGetConcerts: true})
-      console.log('nextProps', nextProps)
-      this.props.getConcerts(testList);
+      // console.log('nextProps', nextProps)
+      
+      // ########################################################
+      // this.props.getConcerts(testList);
       // this.props.getConcerts(nextProps.artistsArray);
+      // ########################################################
+
     }
   }
     
 
   /** Render the user's info */
   render() {
+    
+    // console.log('this.props.location', this.props.location);
     const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj  } = this.props;
     const { loading, display_name, images, id, email, external_urls, href, country, product } = user;
     const imageUrl = images[0] ? images[0].url : "";
@@ -89,13 +95,6 @@ class User extends Component {
         </div>
         <div>
           <button onClick={this.goToMainPage}>Go To Main Page</button>
-        </div>
-        <div>
-          <ul>
-            {artistsArray.map(function(artist, index) {
-              return <li key={index}>{artist}</li>
-            })}
-          </ul>
         </div>
       </div>
     );

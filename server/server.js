@@ -19,7 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
   const webpack = require('webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
-  const config = require('../webpack.config');
+  const config = require('../webpack/dev.config');
 
   // setup middleware
   const compiler = webpack(config);
@@ -32,6 +32,7 @@ app.use(morgan('dev'))
   .use(cookieParser())
   .use(bodyParser())
   .use(bodyParser.urlencoded({ extended: false}))
+  .use(express.static(path.resolve(__dirname, '../client')))
   .use(express.static(path.resolve(__dirname, '../public')))
   .use('/', routes);
   

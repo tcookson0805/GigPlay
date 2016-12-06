@@ -4,11 +4,12 @@ import SearchBox from '../containers/search_box';
 
 const Header = (props) => {
   
+  console.log('HEADER - props', props);
+  
   return (
     <div className="header col-md-12">
       <div className="row">
-        <div className="col-md-3"></div>
-        <SearchBox />
+        Concert Spots
       </div>
     </div>
   )

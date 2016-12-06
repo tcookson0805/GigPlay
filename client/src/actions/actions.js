@@ -137,14 +137,14 @@ export function getConcerts(artistsArray) {
       const attractionsUrl = `${TICKETMASTER_ROOT}attractions.json?keyword=${artistName}&apikey=${TICKETMASTER_KEY}`
       
       axios.get(attractionsUrl).then( response => {
-        console.log('response.data', response.data)
+        // console.log('response.data', response.data)
         if(response.data._embedded){
           let attractions = response.data._embedded.attractions
           
           attractions.forEach(function(item, index) {
             if(item.name === artistName && item.url){
               // console.log('data', response.data._embedded.attractions)
-              console.log('attractionsIndex', index)
+              // console.log('attractionsIndex', index)
               payload[artistName].ticketmaster_id = response.data._embedded.attractions[index].id;
               payload[artistName].ticketmaster_images = response.data._embedded.attractions[index].images;
               payload[artistName].ticketmaster_url = response.data._embedded.attractions[index].url;
@@ -164,7 +164,7 @@ export function getConcerts(artistsArray) {
         if(id !== null){
           axios.get(eventUrl).then( events => {
             artistsDone++
-            console.log('events', events)
+            // console.log('events', events)
             if(events.data._embedded){
               const eventsArr = events.data._embedded.events
               payload[artistName].eventsArray = eventsArr
@@ -190,9 +190,9 @@ export function getConcerts(artistsArray) {
                 'payload': payload,
                 'concertsList': concertsList 
               }
-              console.log('data', data);
-              console.log('payload', payload);
-              console.log('FINISHED!!!!')
+              // console.log('data', data);
+              // console.log('payload', payload);
+              // console.log('FINISHED!!!!')
               dispatch({'type': FETCH_CONCERTS, data: data});          
             }
           })

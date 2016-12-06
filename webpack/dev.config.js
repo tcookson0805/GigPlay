@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const combineLoaders = require('webpack-combine-loaders');
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -17,7 +18,11 @@ module.exports = {
     loaders: [
       { test: /\.svg$/, loaders: ['raw-loader']},
       // take all less files, compile them, and bundle them in with our js bundle
-      { test: /\.less$/, loader: 'style!css!autoprefixer?browsers=last 2 version!less' },
+      { test: /\.less$/, loader: 'style-loader!css-loader'},
+      { 
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -44,6 +49,6 @@ module.exports = {
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoErrorsPlugin()
   ],
 };

@@ -11,6 +11,8 @@ class Main extends Component {
 
   constructor(props) {
     super(props);
+    
+    // console.log('this.props', this.props)
     this.state = {}
   }
 
@@ -21,15 +23,19 @@ class Main extends Component {
         <div className="row">
           <Header />
         </div>
-        <div className='row'>
+        <div className='row hero'>
+          <div className="col-md-3">
+            <ArtistList />
+          </div>
+          <div className="col-md-1"></div>
+          
           <div className="col-md-7">
             <div className="row">
               <MapBox />
               <ResultsBox />
             </div>
           </div>
-          <div className="col-md-1"></div>
-          <ArtistList />
+
         </div>
       </div>
     )

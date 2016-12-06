@@ -3,6 +3,7 @@
 const router = require('express').Router();
 var SpotifyWebApi = require('spotify-web-api-node');
 
+
 const CLIENT_ID = '2e8e732f389f42c7b5fa335619368511';
 const CLIENT_SECRET = '1de418828c0b43b98419310e94b482de';
 const REDIRECT_URI = 'http://localhost:3000/callback';
