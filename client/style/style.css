@@ -87,18 +87,31 @@ ul {
   margin-top: 1em;
 }
 
-.artist-list > h5 {
+.artist-list > h2 {
   text-align: center;
+  font-weight: bold;
 }
 
 .artist-list > .list-group {
   overflow: hidden;
   overflow-y: scroll;
-  height: 43em;
+  height: 15em;
+}
+
+.list-group-item {
+  border: 0.1em solid black;
+  float: left;
 }
 
 .artist {
   margin: 1em;
+  cursor: pointer;
+}
+
+.artistSelected {
+  margin: 1em;
+  cursor: pointer;
+  background-color: red;
 }
 
 
@@ -114,7 +127,7 @@ ul {
 
 .map-box {
   border: 0.1em solid black;
-  height: 20em;
+  height: 40em;
   margin-top: 1em;
   overflow: auto;
   color: blue;
@@ -123,8 +136,16 @@ ul {
 .map {
   position: relative;
   width: 100%;
+
 }
 
+.map-info-window {
+  color: black;
+}
+
+.map-info-window h1 {
+  margin-bottom: 0.5em;
+}
 
 /* RESULTS COMPONENT */
 
@@ -155,14 +176,22 @@ ul {
 }
 
 .result-item-date {
-
-  float: left;
+  border-right: 0.1em solid black;
   margin: 0 1em;
+}
+
+.result-item-artist {
+  text-align: center;
+  font-weight: bold;
 }
 
 .result-item-info {
   border-left: 0.1em solid black;
   padding-left: 2em;
   float: left;
-  text-align: center;
+}
+
+.result-item-img {
+  width: 10%;
+  height: 10%;
 }

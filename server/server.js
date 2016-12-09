@@ -5,11 +5,16 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const firebase = require('firebase');
 const routes = require('./routes');
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+
+
+
+
 
 // if we're developing, use webpack middleware for module hot reloading
 if (process.env.NODE_ENV !== 'production') {

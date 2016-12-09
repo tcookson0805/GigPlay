@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import { Map, Marker, InfoWindow, GoogleApiComponent } from 'google-maps-react'
+import base from '../../../config/firebase';
 
 // import GoogleMap from 'google-map-react';
 
 const googleApiKey = 'AIzaSyCuNBC8C1JNqGkZfHuUHjjEbMa-aooZMoc';
-
 
 
 import { fetchCity } from '../actions/actions'
@@ -16,9 +15,6 @@ class ConcertMap extends Component {
     
   constructor(props){
     super(props);
-  
-    console.log('this.props', this.props)
-  
     this.state = {
       google: window.google,
       zoom: 4,
@@ -27,36 +23,143 @@ class ConcertMap extends Component {
         lng: -95.712891
       },
       style: {
-        width: '56em',
-        height: '20em',
+        width: '91%',
+        height: '70%',
         position: 'relative'
-      }
+      },
+      showingInfoWindow: false,
+      activeMarker: {},
+      selectedPlace: {},
+      artistsArray: [],
+      concertsDisplayList: []
+    }
+    
+    this.onMarkerClick = this.onMarkerClick.bind(this);
+    this.onMapClicked = this.onMapClicked.bind(this);
+    this.loadFirebaseEndpoint = this.loadFirebaseEndpoint.bind(this);
+  }
+  
+  loadFirebaseEndpoint(endpoint){
+    base.fetch(endpoint, {
+      context: this
+    }).then(data => {
+      console.log('DATA', data)
+      this.setState({
+        artistsArray: data.artistsArray,
+        concertsDisplayList: data.concertsDisplayList
+      })
+    })
+  } 
+  
+  componentWillMount(){
+    // this.setState({concertsList: this.props.concertsList})
+    this.loadFirebaseEndpoint('users/tcookson0805');    
+
+  }
+  
+  componentDidMount(){
+  }
+  
+  onMarkerClick(props, marker, e){
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true
+    });
+  }
+
+  onMapClicked(props) {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null
+      })
     }
   }
 
-  render() {
-    console.log('this.props', this.props)
+  refreshMarkers(){
     
-    return (
+  }
+
+  render() {
+    
+    let that = this;
+    
+    if(!this.state.concertsDisplayList){
+      return <div>loading.....</div>
+    }
+    
+    return(
       <div className="row">
         <div className="map">
-          <Map google={this.state.google} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style}>
-
-          </Map>                    
+          <Map google={this.state.google} onClick={this.onMapClicked} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style}>
+           {this.state.concertsDisplayList.map(function(concert, index) {
+              return (
+                <Marker
+                  onClick={that.onMarkerClick}
+                  artist={concert.artist}
+                  venue={concert.venue}
+                  city={concert.city}
+                  state={concert.state}
+                  date={concert.date}
+                  time={concert.time} 
+                  position={{'lat':concert.lat, 'lng':concert.long}}
+                  event={concert.event}
+                  url={concert.url} 
+                  key={index} 
+                />
+              )
+            })}
+            <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
+                <div className='map-info-window'>
+                  <h1><strong>{this.state.selectedPlace.artist}</strong></h1>
+                  <p>{this.state.selectedPlace.event}</p>
+                  
+                  <div>
+                    <strong>Venue:</strong> {this.state.selectedPlace.venue}
+                  </div>
+                  <div><strong>Date:</strong> {this.state.selectedPlace.date}</div>
+                  <div><strong>Time:</strong> {this.state.selectedPlace.time}</div>
+                  <div>
+                    <a href={this.state.selectedPlace.url} target="_blank">
+                      <img src="../../style/images/ticket2.png" height="40em" alt=""/>
+                    </a>
+                  </div>
+                </div>
+            </InfoWindow> 
+          </Map>                 
         </div>
       </div>
     )
     
-    // return (
+    // return(
     //   <div className="row">
     //     <div className="map">
-    //       <Map google={this.state.google} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style}>
-    //       {this.props.concertsList.map(function(concert, index) {
-    //         return (
-    //           <Marker name={concert.artist} position={{'lat':concert.lat, 'lng':concert.long}} key={index} />
-    //         )
-    //       })}
-    //       </Map>                    
+    //       <Map google={this.state.google} onClick={this.onMapClicked} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style}>
+    //        {this.state.concertsDisplayList.map(function(concert, index) {
+    //           return (
+    //             <Marker
+    //               onClick={that.onMarkerClick}
+    //               artist={concert.artist}
+    //               venue={concert.venue}
+    //               city={concert.city}
+    //               state={concert.state}
+    //               date={concert.date}
+    //               time={concert.time} 
+    //               position={{'lat':concert.lat, 'lng':concert.long}} 
+    //               key={index} 
+    //             />
+    //           )
+    //         })}
+    //         <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
+    //             <div className='map-info-window'>
+    //               <h1><strong>{this.state.selectedPlace.artist}</strong></h1>
+    //               <p><strong>Venue:</strong> {this.state.selectedPlace.venue}</p>
+    //               <p><strong>Date:</strong> {this.state.selectedPlace.date}</p>
+    //               <p><strong>Time:</strong> {this.state.selectedPlace.time}</p>
+    //             </div>
+    //         </InfoWindow> 
+    //       </Map>                 
     //     </div>
     //   </div>
     // )
@@ -64,15 +167,10 @@ class ConcertMap extends Component {
 }
 
 
-// function mapStateToProps(state){
-//   return { city: state.city } 
-// }
-
 function mapStateToProps(state) {
   const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = state.auth;
   const { data, concertsList } = state.concerts;
   return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, data, concertsList }
 }
 
-// export default GoogleApiComponent({apiKey: 'AIzaSyCuNBC8C1JNqGkZfHuUHjjEbMa-aooZMoc'})(ConcertMap)
 export default connect(mapStateToProps)(ConcertMap);

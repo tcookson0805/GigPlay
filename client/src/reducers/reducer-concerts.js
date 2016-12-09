@@ -17,8 +17,12 @@ function concertsReducer (state = initialState, action) {
     console.log('heeeeeeyyyy')
     console.log('action.data', action.data)
     return Object.assign({}, state, {
-      data: action.data.payload,
-      concertsList: action.data.concertsList
+      concertsList: action.data.concertsList,
+      concertsDisplayList: action.data.concertsDisplayList,
+      artistsObjTM: action.data.artistsObjTM,
+      artistsIdArray: action.data.artistsIdArray,
+      artistsIdString: action.data.artistsIdString,
+      saveToFirebase: true
     });
 
   default:

@@ -1,38 +1,63 @@
 import React, { Component } from 'react';
 import { connect }      from 'react-redux';
 import { bindActionCreators } from 'redux';
-// import { getMyInfo, setTokens, getMyTracks, getMyArtists, getMyPlaylists, getPlaylistTracks }   from '../actions/actions';
 import { getMyInfo, setTokens, getMyTracks, getConcerts }   from '../actions/actions';
 import { routeActions } from 'react-router-redux';
+import base from '../../../config/firebase';
 
 const _ = require('underscore');
-
-/**
- * Our user page
- * Displays the user's information
- */
- 
-const testList = ["The Lumineers"]
+// const testList = ["The Lumineers", "Coldplay", "Drake", "Empire of the Sun"]
+const testList = ["Empire of the Sun"]
  
 class User extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      tracks: {},
       totalTracks: 0,
       trackCalls: 0,
       artistsArray: [],
       artistsObj: {},
-      tracks: {},
-      runGetConcerts: false
+      runGetConcerts: false,
+      saveToFirebase: false,
+      concertsList: [],
+      concertsDisplayList: [], 
+      artistsObjTM: {}, 
+      artistsIdArray: [], 
+      artistsIdString: ''
     }
-    
     this.goToMainPage = this.goToMainPage.bind(this);
+    this.loadFirebaseEndpoint = this.loadFirebaseEndpoint.bind(this);
+    this.removeFirebaseEndpoint = this.removeFirebaseEndpoint.bind(this);
   }
  
   goToMainPage(evet) {
     this.props.router.push('/main');
   }
+ 
+ //////// FIREBASE RELATED FUNCTIONS  ////////
+ 
+  removeFirebaseEndpoint(endpoint){
+    base.remove(endpoint, function(err) {
+      if(!err){
+        Router.transitionTo('dashboard');
+      }
+    })
+  }
+  
+  loadFirebaseEndpoint(endpoint){
+    base.fetch(endpoint, {
+      context: this
+    }).then(data => {
+      console.log('DATA', data)
+      this.setState({
+        artistsArray: data.artistsArray,
+        concertsDisplayList: data.concertsDisplayList
+      })
+    })
+  } 
+ 
  
   /** When we mount, get the tokens from react-router and initiate loading the info */
   componentWillMount() {
@@ -41,36 +66,93 @@ class User extends Component {
     this.props.setTokens({accessToken, refreshToken});
     this.props.getMyInfo();
     this.props.getMyTracks();
+    
+    // this.loadFirebaseEndpoint('users/tcookson0805');    
+    // this.removeFirebaseEndpoint('users/tcookson0805');
   }
   
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      totalTracks: nextProps.totalTracks, 
-      trackCalls: nextProps.trackCalls, 
-      artistsArray: nextProps.artistsArray,
-      artistsObj: nextProps.artistsObj,
-      tracks: nextProps.tracks
-    });
-    if(nextProps.totalTracks === nextProps.tracksLoaded && this.state.runGetConcerts === false){
-      this.setState({runGetConcerts: true})
-      // console.log('nextProps', nextProps)
+
+    if(this.props.user.id !== null){
+      this.setState({
+        tracks: nextProps.tracks,
+        totalTracks: nextProps.totalTracks, 
+        trackCalls: nextProps.trackCalls, 
+        artistsArray: nextProps.artistsArray,
+        artistsObj: nextProps.artistsObj,
+
+      // }, () => {
+        
+        // NEED THIS ONE FOR MAIN ////////
+        // base.syncState(`users/${this.props.user.id}/artistsArray`, {
+        //   context: this,
+        //   state: 'artistsArray',
+        //   asArray: true
+        // });
+        
+        // base.syncState(`users/${this.props.user.id}/artistsObj`, {
+        //   context: this,
+        //   state: 'artistsObj'
+        // });
+        
+        // base.syncState(`users/${this.props.user.id}/concertsList`, {
+        //   context: this,
+        //   state: 'concertsList'
+        // });
+        
+        // NEED THIS ONE FOR MAIN ///////
+        // base.syncState(`users/${this.props.user.id}/concertsDisplayList`, {
+        //   context: this,
+        //   state: 'concertsDisplayList'
+        // });
+        
+        // base.syncState(`users/${this.props.user.id}/artistsObjTM`, {
+        //   context: this,
+        //   state: 'artistsObjTM'
+        // });
+        
+        // base.syncState(`users/${this.props.user.id}/artistsIdArray`, {
+        //   context: this,
+        //   state: 'artistsIdArray'
+        // });
+        
+        // base.syncState(`users/${this.props.user.id}/artistsIdString`, {
+        //   context: this,
+        //   state: 'artistsIdString'
+        // });
       
+      });
+    }
+    
+    if(nextProps.saveToFirebase){
+      this.setState({  
+        concertsList: nextProps.concertsList,
+        concertsDisplayList: nextProps.concertsDisplayList, 
+        artistsObjTM: nextProps.artistsObjTM, 
+        artistsIdArray: nextProps.artistsIdArray, 
+        artistsIdString: nextProps.artistsIdString,
+        saveToFirebase: nextProps.saveToFirebase 
+      })   
+    }
+    
+    if(nextProps.totalTracks === nextProps.tracksLoaded && this.state.runGetConcerts === false){   
+      this.setState({runGetConcerts: true})
+
       // ########################################################
-      // this.props.getConcerts(testList);
+      this.props.getConcerts(testList);
       // this.props.getConcerts(nextProps.artistsArray);
       // ########################################################
+    } 
 
-    }
   }
-    
 
   /** Render the user's info */
   render() {
-    
-    // console.log('this.props.location', this.props.location);
-    const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj  } = this.props;
+
+    const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsIdString, artistsIdArray, artistsObj, saveToFirebase  } = this.props;
     const { loading, display_name, images, id, email, external_urls, href, country, product } = user;
     const imageUrl = images[0] ? images[0].url : "";
+    
   
     // if we're still loading, indicate such
     if (loading) {
@@ -103,8 +185,8 @@ class User extends Component {
 
 function mapStateToProps(state) {
   const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = state.auth;
-  const { data, concertsList } = state.concerts;
-  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, data, concertsList }
+  const { concertsList, concertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, saveToFirebase } = state.concerts;
+  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, concertsList, concertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, saveToFirebase }
 }
 
 function mapDispatchToProps(dispatch) {

@@ -7,6 +7,7 @@ const initialState = {
   totalTracks: 0,
   trackCalls: 0,
   artistsArray: [],
+  artistsIdArray: [],
   artistsObj: {},
   loading: false,
   tracksLoaded: false,
@@ -66,11 +67,11 @@ function authReducer (state = initialState, action) {
     
   case FETCH_TRACKS:
     return Object.assign({}, state, {
+      tracks: Object.assign({}, state.tracks, action.data.tracks),
       totalTracks: action.data.totalTracks,
       trackCalls: action.data.trackCalls,
       artistsArray: action.data.artistsArray,
       artistsObj: Object.assign({}, state.artistsObj, action.data.artistsObj),
-      tracks: Object.assign({}, state.tracks, action.data.tracks),
       tracksLoaded: action.data.tracksLoaded
     });
   
