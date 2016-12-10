@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-
 class Artist extends Component {
   
   constructor(props) {
@@ -39,6 +38,7 @@ class Artist extends Component {
   }
   
   render() {
+
     return (
       <li className="artist list-group-item" style={this.state.style} onClick={this.handleClick}>
         {this.props.name}
@@ -49,23 +49,9 @@ class Artist extends Component {
 
 
 function mapStateToProps(state) {
-  const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = state.auth;
-  const { data, concertsList } = state.concerts;
-  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, data, concertsList }
+  const { concertsDisplayList } = state.concerts
+  return { concertsDisplayList}
 }
 
+
 export default connect(mapStateToProps)(Artist);
-
-
-
-// const Artist = (props) => {
-  
-//   return (
-//     <li className="artist list-group-item">
-//       {props.name}
-//     </li>
-//   )
-  
-// }
-
-// export default Artist;

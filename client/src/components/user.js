@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect }      from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getMyInfo, setTokens, getMyTracks, getConcerts }   from '../actions/actions';
+import { getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase }   from '../actions/actions';
 import { routeActions } from 'react-router-redux';
 import base from '../../../config/firebase';
 
@@ -58,7 +58,6 @@ class User extends Component {
     })
   } 
  
- 
   /** When we mount, get the tokens from react-router and initiate loading the info */
   componentWillMount() {
     const {dispatch, params} = this.props;
@@ -66,7 +65,7 @@ class User extends Component {
     this.props.setTokens({accessToken, refreshToken});
     this.props.getMyInfo();
     this.props.getMyTracks();
-    
+    this.props.getConcertsFirebase(this, 'users/tcookson0805');
     // this.loadFirebaseEndpoint('users/tcookson0805');    
     // this.removeFirebaseEndpoint('users/tcookson0805');
   }
@@ -139,7 +138,7 @@ class User extends Component {
       this.setState({runGetConcerts: true})
 
       // ########################################################
-      this.props.getConcerts(testList);
+      // this.props.getConcerts(testList);
       // this.props.getConcerts(nextProps.artistsArray);
       // ########################################################
     } 
@@ -190,7 +189,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getMyInfo, setTokens, getMyTracks, getConcerts, routeActions }, dispatch);
+  return bindActionCreators({ getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase, routeActions }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);

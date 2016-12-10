@@ -8,7 +8,6 @@ import base from '../../../config/firebase';
 
 const googleApiKey = 'AIzaSyCuNBC8C1JNqGkZfHuUHjjEbMa-aooZMoc';
 
-
 import { fetchCity } from '../actions/actions'
 
 class ConcertMap extends Component {
@@ -30,35 +29,13 @@ class ConcertMap extends Component {
       showingInfoWindow: false,
       activeMarker: {},
       selectedPlace: {},
-      artistsArray: [],
       concertsDisplayList: []
     }
     
     this.onMarkerClick = this.onMarkerClick.bind(this);
     this.onMapClicked = this.onMapClicked.bind(this);
-    this.loadFirebaseEndpoint = this.loadFirebaseEndpoint.bind(this);
   }
-  
-  loadFirebaseEndpoint(endpoint){
-    base.fetch(endpoint, {
-      context: this
-    }).then(data => {
-      console.log('DATA', data)
-      this.setState({
-        artistsArray: data.artistsArray,
-        concertsDisplayList: data.concertsDisplayList
-      })
-    })
-  } 
-  
-  componentWillMount(){
-    // this.setState({concertsList: this.props.concertsList})
-    this.loadFirebaseEndpoint('users/tcookson0805');    
 
-  }
-  
-  componentDidMount(){
-  }
   
   onMarkerClick(props, marker, e){
     this.setState({
@@ -77,23 +54,20 @@ class ConcertMap extends Component {
     }
   }
 
-  refreshMarkers(){
-    
-  }
 
   render() {
     
     let that = this;
     
-    if(!this.state.concertsDisplayList){
-      return <div>loading.....</div>
+    if(!this.props.concertsDisplayList){
+      return <div>loading....</div>
     }
     
     return(
       <div className="row">
         <div className="map">
           <Map google={this.state.google} onClick={this.onMapClicked} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style}>
-           {this.state.concertsDisplayList.map(function(concert, index) {
+           {this.props.concertsDisplayList.map(function(concert, index) {
               return (
                 <Marker
                   onClick={that.onMarkerClick}
@@ -131,46 +105,12 @@ class ConcertMap extends Component {
         </div>
       </div>
     )
-    
-    // return(
-    //   <div className="row">
-    //     <div className="map">
-    //       <Map google={this.state.google} onClick={this.onMapClicked} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style}>
-    //        {this.state.concertsDisplayList.map(function(concert, index) {
-    //           return (
-    //             <Marker
-    //               onClick={that.onMarkerClick}
-    //               artist={concert.artist}
-    //               venue={concert.venue}
-    //               city={concert.city}
-    //               state={concert.state}
-    //               date={concert.date}
-    //               time={concert.time} 
-    //               position={{'lat':concert.lat, 'lng':concert.long}} 
-    //               key={index} 
-    //             />
-    //           )
-    //         })}
-    //         <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
-    //             <div className='map-info-window'>
-    //               <h1><strong>{this.state.selectedPlace.artist}</strong></h1>
-    //               <p><strong>Venue:</strong> {this.state.selectedPlace.venue}</p>
-    //               <p><strong>Date:</strong> {this.state.selectedPlace.date}</p>
-    //               <p><strong>Time:</strong> {this.state.selectedPlace.time}</p>
-    //             </div>
-    //         </InfoWindow> 
-    //       </Map>                 
-    //     </div>
-    //   </div>
-    // )
   }  
 }
 
-
 function mapStateToProps(state) {
-  const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = state.auth;
-  const { data, concertsList } = state.concerts;
-  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, data, concertsList }
+  const { concertsDisplayList } = state.concerts;
+  return { concertsDisplayList };
 }
 
 export default connect(mapStateToProps)(ConcertMap);

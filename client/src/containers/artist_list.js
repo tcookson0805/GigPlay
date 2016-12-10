@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import base from '../../../config/firebase';
-
+import { getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase }   from '../actions/actions';
 
 import Artist from '../components/artist';
 
@@ -10,39 +10,17 @@ class ArtistList extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.loadFirebaseEndpoint = this.loadFirebaseEndpoint.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
-  
-  loadFirebaseEndpoint(endpoint){
-    base.fetch(endpoint, {
-      context: this
-    }).then(data => {
-      console.log('DATA', data)
-      this.setState({
-        artistsArray: data.artistsArray,
-        concertsDisplayList: data.concertsDisplayList
-      })
-    })
-  } 
-  
-  componentWillMount() {
-    this.loadFirebaseEndpoint('users/tcookson0805');    
-  }
-  
+
   componentWillReceiveProps(nextProps) {
-    // if(nextProps) {
-    //   this.setState({artistArray: nextProps.artistArray})
-    // }
+    console.log('nextProps', nextProps)
   }
-  
-  handleClick(){
-    console.log('hey')
-  }
-  
+
   render() {
+    
+    console.log('this.props', this.props)
         
-    if(!this.state.artistsArray){
+    if(!this.props.artistsArray){
       return <div>loading...</div>
     }
     const that = this;
@@ -50,8 +28,8 @@ class ArtistList extends Component {
       <div className='artist-list col-md-12'>
         <h2>Artists</h2>
         <ul className='list-group'>
-          { this.state.artistsArray.map(function(artist, index) {
-            return <Artist name={artist} key={index} onClick={that.handleClick} className="artist" />
+          { this.props.artistsArray.map(function(artist, index) {
+            return <Artist name={artist} key={index} className="artist" />
           })}
         </ul>
       </div>
@@ -61,10 +39,13 @@ class ArtistList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = state.auth;
-  const { data, concertsList } = state.concerts;
-  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, data, concertsList }
+  const { artistsArray } = state.concerts;
+  return { artistsArray }
 }
 
-export default connect(mapStateToProps)(ArtistList);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArtistList);
 // export default ArtistList;

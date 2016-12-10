@@ -9,51 +9,16 @@ class ResultsBox extends Component {
   
   constructor(props) {
     super(props);
+    console.log('props', props)
     this.state = {};
-    this.loadFirebaseEndpoint = this.loadFirebaseEndpoint.bind(this);
-  }
-  
-  loadFirebaseEndpoint(endpoint){
-    base.fetch(endpoint, {
-      context: this
-    }).then(data => {
-      console.log('DATA', data)
-      this.setState({
-        artistsArray: data.artistsArray,
-        concertsDisplayList: data.concertsDisplayList
-      })
-    })
-  }
-  
-  componentWillMount(){
-    // if(this.props.concertsDisplayList){
-    //   this.setState({concertsDisplayList: this.props.concertsDisplayList});
-    // }
-    this.loadFirebaseEndpoint('users/tcookson0805');    
   }
    
   render() {
       
-    if(!this.state.concertsDisplayList){
+    if(!this.props.concertsDisplayList){
       return <div>loading....</div>
     }
     
-    // return (
-    //   <div className="results-box col-md-8">
-    //     <div className="row">
-    //       <div className="results-box-header col-md-12">
-    //         Results
-    //       </div>
-    //     </div>
-    //     <div className="row">
-    //       <div className="col-md-12 results-group">
-    //         {this.state.concertsDisplayList.map(function(concert, index) {              
-    //           return <ResultItem artist={concert.artist} date={concert.date} city={concert.city} state={concert.state} time={concert.time} venue={concert.venue} key={index} />
-    //         })}
-    //       </div>
-    //     </div>
-    //   </div>
-    // )
     return (
       <div className="results-box col-md-12">
         <div className="row">
@@ -63,7 +28,7 @@ class ResultsBox extends Component {
         </div>
         <div className="row">
           <div className="col-md-12 results-group">
-            {this.state.concertsDisplayList.map(function(concert, index) {              
+            {this.props.concertsDisplayList.map(function(concert, index) {              
               return (
                 <ResultItem 
                   artist={concert.artist} 
@@ -86,9 +51,8 @@ class ResultsBox extends Component {
 }
 
 function mapStateToProps(state) {
-  const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = state.auth;
-  const { data, concertsList } = state.concerts;
-  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, data, concertsList }
+  const { concertsDisplayList } = state.concerts;
+  return { concertsDisplayList }
 }
 
 export default connect(mapStateToProps)(ResultsBox);

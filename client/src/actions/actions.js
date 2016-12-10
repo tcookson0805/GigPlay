@@ -1,5 +1,7 @@
 import axios from 'axios'
 import Spotify from 'spotify-web-api-js';
+import base from '../../../config/firebase';
+
 const _ = require('underscore');
 const spotifyApi = new Spotify();
 
@@ -194,6 +196,7 @@ export function getConcerts(artistsArray) {
                 let venue = item._embedded.venues[0].name ? item._embedded.venues[0].name : '';
                 let event = item.name || '';
                 let url = item.url;
+                let display = true;
                 
                 //loop over item._embedded.attractions to grab correct artist name
                 attractions.forEach(function(attraction, index) {
@@ -213,7 +216,7 @@ export function getConcerts(artistsArray) {
                 })
                 
                 if(!duplicate){
-                  concertsDisplayList.push({artist, city, state, date, lat, long, time, venue, event, url})
+                  concertsDisplayList.push({artist, city, state, date, lat, long, time, venue, event, url, display})
                 }
                 
             })
@@ -237,6 +240,27 @@ export function getConcerts(artistsArray) {
     }
   }
 }
+
+export const FETCH_CONCERTS_FIREBASE = 'FETCH_CONCERTS_FIREBASE'
+
+export function getConcertsFirebase(context, endpoint){
+  
+  return dispatch => {
+    base.fetch(endpoint, {
+      context: context
+    }).then(data => {
+      console.log('DATA', data)
+      const payload = {
+        artistsArray: data.artistsArray,
+        concertsDisplayList: data.concertsDisplayList
+      }
+      dispatch({'type': FETCH_CONCERTS_FIREBASE, data: payload});
+    })
+    
+  }
+}
+
+
 
 const MAP_ROOT_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
 const MAP_API_KEY = 'AIzaSyDOW-uZgD8XhxaRqeVfQB_c62UCthL3PGU';

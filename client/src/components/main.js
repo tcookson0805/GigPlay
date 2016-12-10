@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect }      from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase }   from '../actions/actions';
 
 import Header from './header';
 import MapBox from '../containers/map_box';
@@ -12,34 +13,18 @@ class Main extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      artistsArray: [],
+      concertsDisplayList: []
+    }
   }
-
+  
+  componentWillMount(){
+    this.props.getConcertsFirebase(this, 'users/tcookson0805')
+  }
+  
   render() {
-    
-    // return (
-    //   <div>
-    //     <div className="row">
-    //       <Header />
-    //     </div>
-    //     <div className='row hero'>
-    //       <div className="col-md-3">
-    //         <ArtistList />
-    //       </div>
-    //       <div className="col-md-1"></div>
-          
-    //       <div className="col-md-7">
-    //         <div className="row">
-    //           <MapBox />
-    //           <ResultsBox />
-    //         </div>
-    //       </div>
-
-    //     </div>
-    //   </div>
-    // )
-    
-  return (
+    return (
       <div>
         <div className="row">
           <Header />
@@ -53,7 +38,7 @@ class Main extends Component {
             </div>
             <div className="row">
               <div className="col-md-12">
-                <MapBox />            
+                <MapBox />
               </div>
             </div>
             <div className="row">
@@ -64,15 +49,18 @@ class Main extends Component {
           </div>
         </div>
       </div>
-    )
-    
+    ) 
   } 
-  
 }
 
 function mapStateToProps(state) {
-  const { accessToken, refreshToken, user, tracks } = state.auth
-  return { accessToken, refreshToken, user, tracks }
-}  
+  const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = state.auth;
+  const { concertsList, concertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, saveToFirebase } = state.concerts;
+  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, concertsList, concertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, saveToFirebase }
+}
 
-export default connect(mapStateToProps)(Main);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
