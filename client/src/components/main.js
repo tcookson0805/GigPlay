@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect }      from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase }   from '../actions/actions';
+import { getMyInfo, setTokens, getMyTracks, getConcerts }   from '../actions/actions';
+import { getConcertsFirebase } from '../actions/firebase-actions';
 
 import Header from './header';
 import MapBox from '../containers/map_box';

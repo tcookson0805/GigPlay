@@ -10,10 +10,10 @@ export const SPOTIFY_TOKENS = 'SPOTIFY_TOKENS';
 export const SPOTIFY_ME_BEGIN = 'SPOTIFY_ME_BEGIN';
 export const SPOTIFY_ME_SUCCESS = 'SPOTIFY_ME_SUCCESS';
 export const SPOTIFY_ME_FAILURE = 'SPOTIFY_ME_FAILURE';
-
 export const FETCH_TRACKS = 'FETCH_TRACKS';
 
-/** set the app's access and refresh tokens */
+
+// /** set the app's access and refresh tokens */
 export function setTokens({accessToken, refreshToken}) {
   console.log('set Tokens ran')
   if (accessToken) {
@@ -36,6 +36,7 @@ export function getMyInfo() {
     });
   };
 }
+
 
 export function getMyTracks(offset) {
   return dispatch => {
@@ -142,10 +143,7 @@ export function getConcerts(artistsArray) {
       axios.get(attractionsUrl).then( response => {
 
         if(response.data._embedded){
-          let attractions = response.data._embedded.attractions
-          
-          // console.log('actions ----- attractions.length', attractions.length)
-          
+          let attractions = response.data._embedded.attractions          
           attractions.forEach(function(item, index) {
 
             // KEY CHECK POINT
@@ -227,13 +225,7 @@ export function getConcerts(artistsArray) {
             _.sortBy(concertsDisplayList['totalList'], 'date');
 
             const payload = { concertsList, artistsObjTM, artistsIdArray, artistsIdString, concertsDisplayList }
-            console.log('concertsDisplayList', concertsDisplayList);
-            console.log('concertsList', concertsList)
-            console.log('artistsObjTM', artistsObjTM)
-            console.log('artistsIdArray', artistsIdArray);
-            console.log('artistsIdString', artistsIdString);
-            console.log('events', evts);
-            console.log('payload', payload);
+
             
             dispatch({'type': FETCH_CONCERTS, data: payload});  
             
@@ -244,80 +236,7 @@ export function getConcerts(artistsArray) {
   }
 }
 
-export const FETCH_CONCERTS_FIREBASE = 'FETCH_CONCERTS_FIREBASE'
 
-export function getConcertsFirebase(context, endpoint){
-  
-  return dispatch => {
-    base.fetch(endpoint, {
-      context: context
-    }).then(data => {
-      console.log('DATA', data)
-      const payload = {
-        artistsArray: data.artistsArray,
-        concertsDisplayList: data.concertsDisplayList
-      }
-      dispatch({'type': FETCH_CONCERTS_FIREBASE, data: payload});
-    })
-    
-  }
-}
-
-export const UPDATE_CONCERTS_FIREBASE = 'UPDATE_CONCERTS_FIREBASE'
-
-
-export function updateConcertsDisplayList( endpoint, context, artistName, selected) {
-  
-  return dispatch => {
-    base.fetch(endpoint, {
-      context: context
-    }).then(data => {
-      
-      if(!data.concertsDisplayList.filteredList){
-        data.concertsDisplayList['filteredList'] = []
-      }
-      return data
-    }).then(data => {
-      let payload = data
-      
-      const remove = selected;
-      console.log('remove', remove)
-      
-      if(!remove){
-        let hold = payload.concertsDisplayList.filteredList
-        payload.concertsDisplayList.totalList.forEach(function(item, index) {
-          if(item.artist === artistName){
-            hold.push(item);
-          }
-        })
-        payload.concertsDisplayList.filteredList = hold;
-        return payload;
-      } else {
-        const hold = _.filter(payload.concertsDisplayList.filteredList, function(item){ return item.artist !== artistName })
-        payload.concertsDisplayList.filteredList = hold;
-        return payload;
-      }
-    
-    }).then( data => {
-      // putting filteredList in chronological order  
-      let payload = data
-      let hold = _.sortBy(payload.concertsDisplayList.filteredList, 'date');
-      payload.concertsDisplayList.filteredList = hold
-      return payload
-      
-    }).then( data => {
-      let payload = data
-      base.post(endpoint, {
-        data: {
-          artistsArray: data.artistsArray,
-          concertsDisplayList: data.concertsDisplayList
-        }
-      })
-      dispatch({'type': UPDATE_CONCERTS_FIREBASE, data: payload});
-    })
-  }
-
-}
 
 
 const MAP_ROOT_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';

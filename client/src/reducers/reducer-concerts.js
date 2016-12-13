@@ -1,6 +1,7 @@
-import {
-  FETCH_CONCERTS, FETCH_CONCERTS_FIREBASE, UPDATE_CONCERTS_FIREBASE, REMOVE_FILTERED_CONCERTS_FIREBASE
-} from '../actions/actions';
+import { FETCH_CONCERTS } from '../actions/actions';
+
+import { FETCH_CONCERTS_FIREBASE, UPDATE_CONCERTS_FIREBASE } from '../actions/firebase-actions';
+
 
 /** The initial state; no tokens and no user info */
 const initialState = {

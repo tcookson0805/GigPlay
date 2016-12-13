@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import base from '../../../config/firebase';
-import { getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase }   from '../actions/actions';
+import { getMyInfo, setTokens, getMyTracks, getConcerts }   from '../actions/actions';
+import { getConcertsFirebase } from '../actions/firebase-actions';
 
 import Artist from '../components/artist';
 
