@@ -9,16 +9,25 @@ class ResultsBox extends Component {
   
   constructor(props) {
     super(props);
-    console.log('props', props)
     this.state = {};
   }
    
   render() {
-      
+    console.log('RESULT BOX ------ this.props', this.props)
+    
+    let list;
+     
     if(!this.props.concertsDisplayList){
       return <div>loading....</div>
     }
     
+    if(this.props.concertsDisplayList.filteredList && this.props.concertsDisplayList.filteredList.length){
+      list = this.props.concertsDisplayList.filteredList
+    } else {
+      list = this.props.concertsDisplayList.totalList
+    }
+    
+
     return (
       <div className="results-box col-md-12">
         <div className="row">
@@ -28,21 +37,25 @@ class ResultsBox extends Component {
         </div>
         <div className="row">
           <div className="col-md-12 results-group">
-            {this.props.concertsDisplayList.map(function(concert, index) {              
-              return (
-                <ResultItem 
-                  artist={concert.artist} 
-                  date={concert.date} 
-                  city={concert.city} 
-                  state={concert.state} 
-                  time={concert.time} 
-                  venue={concert.venue}
-                  url={concert.url}
-                  event={concert.event}
-                  key={index} 
-                />
-              )
-            })}
+            { 
+              list.map(function(concert, index) {
+                if(concert.display){
+                  return (
+                    <ResultItem 
+                      artist={concert.artist} 
+                      date={concert.date} 
+                      city={concert.city} 
+                      state={concert.state} 
+                      time={concert.time} 
+                      venue={concert.venue}
+                      url={concert.url}
+                      event={concert.event}
+                      key={index} 
+                    />
+                  )
+                }              
+              })
+            }
           </div>
         </div>
       </div>
@@ -51,8 +64,8 @@ class ResultsBox extends Component {
 }
 
 function mapStateToProps(state) {
-  const { concertsDisplayList } = state.concerts;
-  return { concertsDisplayList }
+  const { concertsDisplayList, filteredConcertsDisplayList} = state.concerts;
+  return { concertsDisplayList, filteredConcertsDisplayList }
 }
 
 export default connect(mapStateToProps)(ResultsBox);

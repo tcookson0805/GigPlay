@@ -54,20 +54,30 @@ class ConcertMap extends Component {
     }
   }
 
+  componentWillUpdate(nextProps) {
+    console.log('MAP nextProps', nextProps)
+  }
 
   render() {
     
     let that = this;
+    let list;
     
     if(!this.props.concertsDisplayList){
       return <div>loading....</div>
+    }
+    
+    if(this.props.concertsDisplayList.filteredList && this.props.concertsDisplayList.filteredList.length){
+      list = this.props.concertsDisplayList.filteredList
+    } else {
+      list = this.props.concertsDisplayList.totalList
     }
     
     return(
       <div className="row">
         <div className="map">
           <Map google={this.state.google} onClick={this.onMapClicked} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style}>
-           {this.props.concertsDisplayList.map(function(concert, index) {
+           {list.map(function(concert, index) {
               return (
                 <Marker
                   onClick={that.onMarkerClick}
@@ -109,8 +119,8 @@ class ConcertMap extends Component {
 }
 
 function mapStateToProps(state) {
-  const { concertsDisplayList } = state.concerts;
-  return { concertsDisplayList };
+  const { concertsDisplayList, filteredConcertsDisplayList } = state.concerts;
+  return { concertsDisplayList, filteredConcertsDisplayList };
 }
 
 export default connect(mapStateToProps)(ConcertMap);

@@ -23,6 +23,10 @@ class Main extends Component {
     this.props.getConcertsFirebase(this, 'users/tcookson0805')
   }
   
+  componentWillReceiveProps(nextProps){
+    console.log('MAIN ------ nextProps', nextProps);
+  }
+  
   render() {
     return (
       <div>
@@ -55,8 +59,8 @@ class Main extends Component {
 
 function mapStateToProps(state) {
   const { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = state.auth;
-  const { concertsList, concertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, saveToFirebase } = state.concerts;
-  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, concertsList, concertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, saveToFirebase }
+  const { concertsList, concertsDisplayList, filteredConcertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, saveToFirebase } = state.concerts;
+  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, concertsList, concertsDisplayList, filteredConcertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, saveToFirebase }
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { updateConcertsDisplayList } from '../actions/actions';
 
 class Artist extends Component {
   
@@ -16,18 +17,19 @@ class Artist extends Component {
   }
   
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps)
+    console.log('ARTIST nextProps', nextProps)
   }
   
   handleClick(){
+
     if(!this.state.selected){
       this.setState({
         selected: true,
         style: {
           'backgroundColor': 'red'
         }
-      })
-    } else {
+      }) 
+    } else {      
       this.setState({
         selected: false,
         style: {
@@ -35,10 +37,11 @@ class Artist extends Component {
         }
       })
     }
+    this.props.updateConcertsDisplayList('users/tcookson0805', this, this.props.name, this.state.selected);
   }
   
   render() {
-
+  
     return (
       <li className="artist list-group-item" style={this.state.style} onClick={this.handleClick}>
         {this.props.name}
@@ -53,5 +56,9 @@ function mapStateToProps(state) {
   return { concertsDisplayList}
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ updateConcertsDisplayList }, dispatch);
+}
 
-export default connect(mapStateToProps)(Artist);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Artist);

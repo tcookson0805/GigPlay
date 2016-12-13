@@ -13,12 +13,12 @@ class ArtistList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps)
+    console.log('ARTIST LIST ------ nextProps', nextProps)
   }
 
   render() {
     
-    console.log('this.props', this.props)
+    console.log('ARTIST LIST ------- render this.props', this.props)
         
     if(!this.props.artistsArray){
       return <div>loading...</div>

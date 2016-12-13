@@ -118,7 +118,10 @@ export function getConcerts(artistsArray) {
     
     let artistsObjTM = {}
     let concertsList = [];
-    let concertsDisplayList = [];
+    let concertsDisplayList = {
+      totalList: [],
+      filteredList: []
+    };
     let artistsIdArray = [];
     let artistsDone = 0;
     const artistsNum = artistsArray.length
@@ -144,7 +147,7 @@ export function getConcerts(artistsArray) {
           // console.log('actions ----- attractions.length', attractions.length)
           
           attractions.forEach(function(item, index) {
-            
+
             // KEY CHECK POINT
             // The attractions we receive is an array that includes attractions that don't always exactly match the name
             // of the artist and sometimes, even when they do, they are duplicates. When we have duplicates, it appears that
@@ -209,19 +212,19 @@ export function getConcerts(artistsArray) {
                 // This is just to eliminate duplication of concerts since Ticketmaster sends back
                 // a separate event for each different ticket package for the same concert
                 let duplicate = false;
-                concertsDisplayList.forEach(function(concert, index) {
+                concertsDisplayList['totalList'].forEach(function(concert, index) {
                   if(concert.artist === artist && concert.city === city && concert.date === date){
                     duplicate = true
                   }
                 })
                 
                 if(!duplicate){
-                  concertsDisplayList.push({artist, city, state, date, lat, long, time, venue, event, url, display})
+                  concertsDisplayList['totalList'].push({artist, city, state, date, lat, long, time, venue, event, url, display})
                 }
                 
             })
             
-            _.sortBy(concertsDisplayList, 'date');
+            _.sortBy(concertsDisplayList['totalList'], 'date');
 
             const payload = { concertsList, artistsObjTM, artistsIdArray, artistsIdString, concertsDisplayList }
             console.log('concertsDisplayList', concertsDisplayList);
@@ -260,6 +263,61 @@ export function getConcertsFirebase(context, endpoint){
   }
 }
 
+export const UPDATE_CONCERTS_FIREBASE = 'UPDATE_CONCERTS_FIREBASE'
+
+
+export function updateConcertsDisplayList( endpoint, context, artistName, selected) {
+  
+  return dispatch => {
+    base.fetch(endpoint, {
+      context: context
+    }).then(data => {
+      
+      if(!data.concertsDisplayList.filteredList){
+        data.concertsDisplayList['filteredList'] = []
+      }
+      return data
+    }).then(data => {
+      let payload = data
+      
+      const remove = selected;
+      console.log('remove', remove)
+      
+      if(!remove){
+        let hold = payload.concertsDisplayList.filteredList
+        payload.concertsDisplayList.totalList.forEach(function(item, index) {
+          if(item.artist === artistName){
+            hold.push(item);
+          }
+        })
+        payload.concertsDisplayList.filteredList = hold;
+        return payload;
+      } else {
+        const hold = _.filter(payload.concertsDisplayList.filteredList, function(item){ return item.artist !== artistName })
+        payload.concertsDisplayList.filteredList = hold;
+        return payload;
+      }
+    
+    }).then( data => {
+      // putting filteredList in chronological order  
+      let payload = data
+      let hold = _.sortBy(payload.concertsDisplayList.filteredList, 'date');
+      payload.concertsDisplayList.filteredList = hold
+      return payload
+      
+    }).then( data => {
+      let payload = data
+      base.post(endpoint, {
+        data: {
+          artistsArray: data.artistsArray,
+          concertsDisplayList: data.concertsDisplayList
+        }
+      })
+      dispatch({'type': UPDATE_CONCERTS_FIREBASE, data: payload});
+    })
+  }
+
+}
 
 
 const MAP_ROOT_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
