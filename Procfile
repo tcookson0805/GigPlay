@@ -1,1 +1,1 @@
-web: server/server.js --inline
+web: server/server.js
