@@ -65,11 +65,13 @@ export function getMyTracks(offset) {
           }
         }
       })
+      
 
       return { tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded};
       
-    }).then( data => {
-      
+    })
+    
+    .then( data => {  
       let { tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = data
       const allTracks = tracks.items
       let arrayHold = [];
@@ -96,12 +98,17 @@ export function getMyTracks(offset) {
           
           return { artistsArray, artistsObj, allTracks, tracksLoaded }
           
-        }).then ( obj => {
+        })
+        .then ( obj => {
     
           const tracks = obj.allTracks    
-          const artistsArray = _.uniq(obj.artistsArray);
-         
+          const artistsArrayUniq = _.uniq(obj.artistsArray);
+          console.log('artistsArrayUniq',artistsArrayUniq)
+          const artistsArray = _.sortBy(artistsArrayUniq)
+          artistsArray.unshift('ALL ARTISTS')
+          console.log('artistsArray', artistsArray)
           let payload = {artistsArray, artistsObj, totalTracks, trackCalls, tracks, tracksLoaded}
+
           dispatch({'type': FETCH_TRACKS, 'data': payload})
         })
       }
@@ -110,25 +117,29 @@ export function getMyTracks(offset) {
 }
 
 export const FETCH_CONCERTS = 'FETCH_CONCERTS';
-
 import { TICKETMASTER_ROOT, TICKETMASTER_KEY, TICKETMASTER_SECRET, TICKETMASTER_REQUEST } from '../../../config/ticketmaster';
 
 export function getConcerts(artistsArray) {
   
   return dispatch => {
     
+    // setting up info to be returned
     let artistsObjTM = {}
     let concertsList = [];
     let concertsDisplayList = {
       totalList: [],
-      filteredList: []
+      totalObj: {},
+      filteredList: [],
+      filteredObj: {}
     };
     let artistsIdArray = [];
     let artistsDone = 0;
     const artistsNum = artistsArray.length
-    // console.log('action ---- artistsArray', artistsArray)
-    // console.log('action ---- artistsNum', artistsNum)
+
+    // looping through each artist
     for(var i = 0; i < artistsNum; i++) {
+      
+      // creating key for each artist set to object that will contain their ticketmaster info in artistsObjTM
       let artistName = artistsArray[i];
       artistsObjTM[artistName] = {
         ticketmaster_id: null,
@@ -138,10 +149,18 @@ export function getConcerts(artistsArray) {
         eventsArray: []
       }
       
+      // adding key for each artist set to array that will include their events (if they have any) in 
+      // the totalObj in our concertsDisplayList
+      concertsDisplayList.totalObj[artistName] = [];
+      
+      // creating the proper url to make each ticketmaster request
       const attractionsUrl = `${TICKETMASTER_ROOT}attractions.json?keyword=${artistName}&apikey=${TICKETMASTER_KEY}`
       
+      // making our ticketmaster request
       axios.get(attractionsUrl).then( response => {
-
+        
+        // making sure the response we get has a data._embedded property
+        // which is where all relevant attractions info will be contained 
         if(response.data._embedded){
           let attractions = response.data._embedded.attractions          
           attractions.forEach(function(item, index) {
@@ -156,7 +175,6 @@ export function getConcerts(artistsArray) {
             // come back later and see what is going on.
             
             if(item.name === artistName && item.url){
-
               artistsIdArray.push(response.data._embedded.attractions[index].id)
               artistsObjTM[artistName].ticketmaster_id = response.data._embedded.attractions[index].id;
               artistsObjTM[artistName].ticketmaster_images = response.data._embedded.attractions[index].images || [];
@@ -170,18 +188,18 @@ export function getConcerts(artistsArray) {
       })
       .then( data => {
         
+        // Important step....by making sure that we have gotten all the artists information first before making
+        // our request to ticketmaster, we can use that information to create an id string of all the artists and
+        // send ONE batched call to ticketmaster to get all events. This means we only send one request for all artists
+        // instead of one request for each artist.
+        
         if(artistsDone === artistsNum) {
-          // console.log('heyheyhey')
-          // console.log('artistsIdArray', artistsIdArray)
-          let page = 1
-          const artistsIdString = artistsIdArray.toString()
-          
-          // console.log('artistsIdString', artistsIdString)
+          const artistsIdString = artistsIdArray.toString()          
           const eventUrl = `${TICKETMASTER_ROOT}events.json?attractionId=${artistsIdString}&apikey=${TICKETMASTER_KEY}&size=500`
           const eventUrl2 = `${TICKETMASTER_ROOT}events.json?attractionId=${artistsIdString}&apikey=${TICKETMASTER_KEY}&size=500&page=1`          
 
+          // Sending our request to ticketmaster
           axios.get(eventUrl).then( evts => {
-            
             
             evts.data._embedded.events.forEach(function(item, index) {        
                 concertsList.push(item)
@@ -217,18 +235,13 @@ export function getConcerts(artistsArray) {
                 })
                 
                 if(!duplicate){
-                  concertsDisplayList['totalList'].push({artist, city, state, date, lat, long, time, venue, event, url, display})
-                }
-                
+                  concertsDisplayList['totalList'].push({artist, city, state, date, lat, long, time, venue, event, url, display});
+                  concertsDisplayList['totalObj'][artist].push({artist, city, state, date, lat, long, time, venue, event, url, display});
+                }  
             })
-            
             _.sortBy(concertsDisplayList['totalList'], 'date');
-
             const payload = { concertsList, artistsObjTM, artistsIdArray, artistsIdString, concertsDisplayList }
-
-            
             dispatch({'type': FETCH_CONCERTS, data: payload});  
-            
           })
         }
       }) 
@@ -237,21 +250,16 @@ export function getConcerts(artistsArray) {
 }
 
 
-
-
 const MAP_ROOT_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
 const MAP_API_KEY = 'AIzaSyDOW-uZgD8XhxaRqeVfQB_c62UCthL3PGU';
 
 export const FETCH_CITY = 'FETCH_CITY';
 
 export function fetchCity(city) {
-
   const request = axios.get(`${MAP_ROOT_URL}address=${city}&key=${MAP_API_KEY}`)
-    
   return {
     type: FETCH_CITY,
     payload: request
   }
-  
 }
 

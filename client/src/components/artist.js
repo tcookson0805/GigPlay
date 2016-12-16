@@ -1,7 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateConcertsDisplayList } from '../actions/firebase-actions';
+import { getConcertsFirebase, updateConcertsDisplayList, resetConcertsDisplayList, addToFilteredFirebase } from '../actions/firebase-actions';
+
+const _ = require('underscore');
+
+const selectedStyle = {
+  'backgroundColor': 'black',
+  'color': 'white'
+}
+const unSelectedStyle = {
+  'backgroundColor': '#545A60',
+  'color': 'white'
+}
 
 class Artist extends Component {
   
@@ -10,55 +21,103 @@ class Artist extends Component {
     this.state={
       selected: false,
       style: {
-        'backgroundColor': 'white'
-      }
+        'backgroundColor': 'white',
+        'color': 'black',
+        'cursor': 'default'
+      },
+      concertNumber: 0,
+      allArtistsComponent: false,
     };
     this.handleClick = this.handleClick.bind(this);
+    this.setArtistComponent = this.setArtistComponent.bind(this);
   }
   
-  componentWillReceiveProps(nextProps) {
-    console.log('ARTIST nextProps', nextProps)
+  setArtistComponent(nextProps, artistName){
+    if(nextProps.concertsDisplayListFirebase.filteredList.length){
+      if(this.state.allArtistsComponent){
+        this.setState({
+          'style': unSelectedStyle,
+          'selected': false,
+          'concertNumber': nextProps.concertsDisplayListFirebase.totalList.length
+        })
+      }
+      if(nextProps.concertsDisplayListFirebase.filteredObj[artistName]){
+        this.setState({
+          'style': selectedStyle,
+          'selected': true,
+          'concertNumber': nextProps.concertsDisplayListFirebase.totalObj[artistName].length
+        })
+      }
+    }else{
+      if(this.state.allArtistsComponent){
+        this.setState({
+          'style': selectedStyle,
+          'selected': true,
+          'concertNumber': nextProps.concertsDisplayListFirebase.totalList.length
+        })
+      }
+      if(nextProps.concertsDisplayListFirebase.totalObj[artistName]){
+        this.setState({
+          'style': unSelectedStyle,
+          'selected': false,
+          'concertNumber': nextProps.concertsDisplayListFirebase.totalObj[artistName].length
+        })
+      }
+    }
   }
   
-  handleClick(){
-
-    if(!this.state.selected){
+  handleClick(){    
+    if(this.props.name === 'ALL ARTISTS'){
+      this.props.resetConcertsDisplayList('users/tcookson0805', this)
+    } else {
+      if(this.state.concertNumber === 0){
+        return
+      }else{
+        this.setState({
+          selected: !this.state.selected,
+        })
+        this.props.updateConcertsDisplayList('users/tcookson0805', this, this.props.name, this.state.selected)      
+      }
+    }
+  }
+  
+  componentWillMount(){
+    if(this.props.name === 'ALL ARTISTS'){
       this.setState({
-        selected: true,
-        style: {
-          'backgroundColor': 'red'
-        }
-      }) 
-    } else {      
-      this.setState({
-        selected: false,
-        style: {
-          'backgroundColor': 'white'
-        }
+        'allArtistsComponent': true,
+        'style': selectedStyle,
       })
     }
-    this.props.updateConcertsDisplayList('users/tcookson0805', this, this.props.name, this.state.selected);
   }
   
-  render() {
+  componentWillReceiveProps(nextProps){  
+    this.setArtistComponent(nextProps, this.props.name);
+  }
+
   
+  render() {
+    
+    const { concertsDisplayList, concertsDisplayListFirebase } = this.props;
+    const x = <li>Hello</li>
+    
     return (
       <li className="artist list-group-item" style={this.state.style} onClick={this.handleClick}>
-        {this.props.name}
+        {this.props.name} ({this.state.concertNumber})
       </li>
     )
+    
   }
 }
 
 
 function mapStateToProps(state) {
   const { concertsDisplayList } = state.concerts
-  return { concertsDisplayList}
+  const { concertsDisplayListFirebase } = state.firebase
+  return { concertsDisplayList, concertsDisplayListFirebase }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ updateConcertsDisplayList }, dispatch);
+  return bindActionCreators({ getConcertsFirebase, updateConcertsDisplayList, resetConcertsDisplayList, addToFilteredFirebase }, dispatch);
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Artist);

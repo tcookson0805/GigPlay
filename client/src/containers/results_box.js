@@ -15,48 +15,48 @@ class ResultsBox extends Component {
   render() {
     console.log('RESULT BOX ------ this.props', this.props)
     
+    const { concertsDisplayList } = this.props
+    
+    console.log('concertsDisplayList', concertsDisplayList);
+    console.log('this.concertsDisplayList', concertsDisplayList);
     let list;
      
-    if(!this.props.concertsDisplayList){
+    if(!concertsDisplayList){
       return <div>loading....</div>
     }
     
-    if(this.props.concertsDisplayList.filteredList && this.props.concertsDisplayList.filteredList.length){
-      list = this.props.concertsDisplayList.filteredList
+    if(concertsDisplayList.filteredList && concertsDisplayList.filteredList.length){
+      list = concertsDisplayList.filteredList
     } else {
-      list = this.props.concertsDisplayList.totalList
+      list = concertsDisplayList.totalList
     }
     
 
     return (
       <div className="results-box col-md-12">
-        <div className="row">
-          <div className="results-box-header col-md-12">
-            Results
-          </div>
+        <div className="results-box-header">
+          <h2>SHOWS FROM YOUR FAVORITE ARTISTS</h2>
         </div>
-        <div className="row">
-          <div className="col-md-12 results-group">
-            { 
-              list.map(function(concert, index) {
-                if(concert.display){
-                  return (
-                    <ResultItem 
-                      artist={concert.artist} 
-                      date={concert.date} 
-                      city={concert.city} 
-                      state={concert.state} 
-                      time={concert.time} 
-                      venue={concert.venue}
-                      url={concert.url}
-                      event={concert.event}
-                      key={index} 
-                    />
-                  )
-                }              
-              })
-            }
-          </div>
+        <div className="results-group">
+          { 
+            list.map(function(concert, index) {
+              if(concert.display){
+                return (
+                  <ResultItem 
+                    artist={concert.artist} 
+                    date={concert.date} 
+                    city={concert.city} 
+                    state={concert.state} 
+                    time={concert.time} 
+                    venue={concert.venue}
+                    url={concert.url}
+                    event={concert.event}
+                    key={index} 
+                  />
+                )
+              }              
+            })
+          }
         </div>
       </div>
     )
@@ -64,8 +64,14 @@ class ResultsBox extends Component {
 }
 
 function mapStateToProps(state) {
-  const { concertsDisplayList, filteredConcertsDisplayList} = state.concerts;
-  return { concertsDisplayList, filteredConcertsDisplayList }
+  let { concertsDisplayList, filteredConcertsDisplayList} = state.concerts;
+  let { concertsDisplayListFirebase } = state.firebase;
+  
+  if(!concertsDisplayList){
+    concertsDisplayList = concertsDisplayListFirebase;
+  }
+  
+  return { concertsDisplayList }
 }
 
 export default connect(mapStateToProps)(ResultsBox);

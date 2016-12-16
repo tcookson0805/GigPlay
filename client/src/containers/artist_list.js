@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import base from '../../../config/firebase';
 import { getMyInfo, setTokens, getMyTracks, getConcerts }   from '../actions/actions';
-import { getConcertsFirebase } from '../actions/firebase-actions';
+import { getArtistsArrayFirebase } from '../actions/firebase-actions';
 
 import Artist from '../components/artist';
 
@@ -12,27 +12,37 @@ class ArtistList extends Component {
     super(props);
     this.state = {};
   }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('ARTIST LIST ------ nextProps', nextProps)
+  
+  componentWillMount() {
+    // this.props.getArtistsArrayFirebase(this,'users/tcookson0805')
   }
 
   render() {
     
+    let { artistsArray, artistsArrayFirebase } = this.props
+    
     console.log('ARTIST LIST ------- render this.props', this.props)
-        
-    if(!this.props.artistsArray){
+    
+    if(!artistsArray && artistsArrayFirebase){
+      artistsArray = artistsArrayFirebase
+    }
+            
+    if(!artistsArray){
       return <div>loading...</div>
     }
+    
     const that = this;
     return (
       <div className='artist-list col-md-12'>
-        <h2>Artists</h2>
-        <ul className='list-group'>
-          { this.props.artistsArray.map(function(artist, index) {
+        <div className="artist-list-header">
+          <h2>FILTER BY ARTIST</h2>
+        </div>
+        <div className='list-group'>
+          <div></div>
+          { artistsArray.map(function(artist, index) {
             return <Artist name={artist} key={index} className="artist" />
           })}
-        </ul>
+        </div>
       </div>
     )
   }
@@ -40,13 +50,13 @@ class ArtistList extends Component {
 }
 
 function mapStateToProps(state) {
-  const { artistsArray } = state.concerts;
-  return { artistsArray }
+  let { artistsArray, concertsDisplayList } = state.tracks;
+  let { artistsArrayFirebase, concertsDisplayListFirebase } = state.firebase;  
+  return { artistsArray, artistsArrayFirebase, concertsDisplayList, concertsDisplayListFirebase }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase }, dispatch);
+  return bindActionCreators({ getMyInfo, setTokens, getMyTracks, getConcerts, getArtistsArrayFirebase }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArtistList);
-// export default ArtistList;

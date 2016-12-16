@@ -6,7 +6,8 @@ import base from '../../../config/firebase';
 
 // import GoogleMap from 'google-map-react';
 
-const googleApiKey = 'AIzaSyCuNBC8C1JNqGkZfHuUHjjEbMa-aooZMoc';
+import googleApiKey from '../../../config/google';
+
 
 import { fetchCity } from '../actions/actions'
 
@@ -22,9 +23,11 @@ class ConcertMap extends Component {
         lng: -95.712891
       },
       style: {
-        width: '91%',
-        height: '70%',
-        position: 'relative'
+
+      },
+      containerStyle: {
+        height: '40em',
+        width: '100%'
       },
       showingInfoWindow: false,
       activeMarker: {},
@@ -55,28 +58,34 @@ class ConcertMap extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    console.log('MAP nextProps', nextProps)
+    // console.log('MAP nextProps', nextProps)
   }
 
   render() {
     
+    let { concertsDisplayList, concertsDisplayListFirebase } = this.props;
+    
+    if(!concertsDisplayList){
+      concertsDisplayList = concertsDisplayListFirebase;
+    }
+    
     let that = this;
     let list;
     
-    if(!this.props.concertsDisplayList){
+    if(!concertsDisplayList){
       return <div>loading....</div>
     }
     
-    if(this.props.concertsDisplayList.filteredList && this.props.concertsDisplayList.filteredList.length){
-      list = this.props.concertsDisplayList.filteredList
+    if(concertsDisplayList.filteredList && concertsDisplayList.filteredList.length){
+      list = concertsDisplayList.filteredList
     } else {
-      list = this.props.concertsDisplayList.totalList
+      list = concertsDisplayList.totalList
     }
     
     return(
       <div className="row">
         <div className="map">
-          <Map google={this.state.google} onClick={this.onMapClicked} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style}>
+          <Map google={this.state.google} onClick={this.onMapClicked} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style} containerStyle={this.state.containerStyle}>
            {list.map(function(concert, index) {
               return (
                 <Marker
@@ -120,7 +129,8 @@ class ConcertMap extends Component {
 
 function mapStateToProps(state) {
   const { concertsDisplayList, filteredConcertsDisplayList } = state.concerts;
-  return { concertsDisplayList, filteredConcertsDisplayList };
+  const { concertsDisplayListFirebase } = state.firebase;
+  return { concertsDisplayList, filteredConcertsDisplayList, concertsDisplayListFirebase };
 }
 
 export default connect(mapStateToProps)(ConcertMap);
