@@ -119,6 +119,14 @@ export function getMyTracks(offset) {
 export const FETCH_CONCERTS = 'FETCH_CONCERTS';
 import { TICKETMASTER_ROOT, TICKETMASTER_KEY, TICKETMASTER_SECRET, TICKETMASTER_REQUEST } from '../../../config/ticketmaster';
 
+if(!TICKETMASTER_ROOT){
+  const TICKETMASTER_ROOT = process.env.TICKETMASTER_ROOT; 
+  const TICKETMASTER_KEY = process.env.TICKETMASTER_KEY;
+  const TICKETMASTER_SECRET = process.env.TICKETMASTER_SECRET;
+  const TICKETMASTER_REQUEST = process.env.TICKETMASTER_REQUEST;
+}
+
+
 export function getConcerts(artistsArray) {
   
   return dispatch => {

@@ -33,36 +33,38 @@ class Artist extends Component {
   }
   
   setArtistComponent(nextProps, artistName){
-    const filteredList = nextProps.concertsDisplayListFirebase.filteredList || [];
-    if(filteredList.length){
-      if(this.state.allArtistsComponent){
-        this.setState({
-          'style': unSelectedStyle,
-          'selected': false,
-          'concertNumber': nextProps.concertsDisplayListFirebase.totalList.length
-        })
-      }
-      if(nextProps.concertsDisplayListFirebase.filteredObj && nextProps.concertsDisplayListFirebase.filteredObj[artistName]){
-        this.setState({
-          'style': selectedStyle,
-          'selected': true,
-          'concertNumber': nextProps.concertsDisplayListFirebase.totalObj[artistName].length
-        })
-      }
-    }else{
-      if(this.state.allArtistsComponent){
-        this.setState({
-          'style': selectedStyle,
-          'selected': true,
-          'concertNumber': nextProps.concertsDisplayListFirebase.totalList.length
-        })
-      }
-      if(nextProps.concertsDisplayListFirebase.totalObj[artistName]){
-        this.setState({
-          'style': unSelectedStyle,
-          'selected': false,
-          'concertNumber': nextProps.concertsDisplayListFirebase.totalObj[artistName].length
-        })
+    if(nextProps.concertsDisplayListFirebase){
+      const filteredList = nextProps.concertsDisplayListFirebase.filteredList || [];
+      if(filteredList.length){
+        if(this.state.allArtistsComponent){
+          this.setState({
+            'style': unSelectedStyle,
+            'selected': false,
+            'concertNumber': nextProps.concertsDisplayListFirebase.totalList.length
+          })
+        }
+        if(nextProps.concertsDisplayListFirebase.filteredObj && nextProps.concertsDisplayListFirebase.filteredObj[artistName]){
+          this.setState({
+            'style': selectedStyle,
+            'selected': true,
+            'concertNumber': nextProps.concertsDisplayListFirebase.totalObj[artistName].length
+          })
+        }
+      }else{
+        if(this.state.allArtistsComponent){
+          this.setState({
+            'style': selectedStyle,
+            'selected': true,
+            'concertNumber': nextProps.concertsDisplayListFirebase.totalList.length
+          })
+        }
+        if(nextProps.concertsDisplayListFirebase.totalObj[artistName]){
+          this.setState({
+            'style': unSelectedStyle,
+            'selected': false,
+            'concertNumber': nextProps.concertsDisplayListFirebase.totalObj[artistName].length
+          })
+        }
       }
     }
   }

@@ -1,6 +1,23 @@
 import axios from 'axios'
 import Spotify from 'spotify-web-api-js';
 import base from '../../../config/firebase';
+import Rebase from 're-base';
+
+const FIREBASE_KEY = process.env.FIREBASE_KEY 
+const FIREBASE_AUTH_DOMAIN = process.env.FIREBASE_AUTH_DOMAIN
+const FIREBASE_DATABASE_URL = process.env.FIREBASE_DATABASE_URL
+const FIREBASE_STORAGE_BUCKET = process.env.FIREBASE_STORAGE_BUCKET
+const FIREBASE_MESSAGING_SENDER_ID = process.env.FIREBASE_MESSAGING_SENDER_ID
+
+if(!base) {
+  const base = Rebase.createClass({
+    apiKey: FIREBASE_KEY,
+    authDomain: FIREBASE_AUTH_DOMAIN,
+    databaseURL: FIREBASE_DATABASE_URL,
+    storageBucket: FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: FIREBASE_MESSAGING_SENDER_ID
+  });
+}
 
 const _ = require('underscore');
 const spotifyApi = new Spotify();

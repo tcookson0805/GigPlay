@@ -3,17 +3,23 @@
 const router = require('express').Router();
 var SpotifyWebApi = require('spotify-web-api-node');
 
-var SPOTIFY_CLIENT_ID = require('../config/spotify').SPOTIFY_CLIENT_ID
-var SPOTIFY_CLIENT_SECRET = require('../config/spotify').SPOTIFY_CLIENT_SECRET
-var SPOTIFY_REDIRECT_URI = require('../config/spotify').SPOTIFY_REDIRECT_URI
-var SPOTIFY_STATE_KEY = require('../config/spotify').SPOTIFY_STATE_KEY
+var SPOTIFY_CONFIG_CLIENT_ID = require('../config/spotify').SPOTIFY_CLIENT_ID
+var SPOTIFY_CONFIG_CLIENT_SECRET = require('../config/spotify').SPOTIFY_CLIENT_SECRET
+var SPOTIFY_CONFIG_REDIRECT_URI = require('../config/spotify').SPOTIFY_REDIRECT_URI
+var SPOTIFY_CONFIG_STATE_KEY = require('../config/spotify').SPOTIFY_STATE_KEY
 
 const scopes = ['user-read-private', 'user-read-email', 'user-follow-read', 'user-library-read'];
 
+const ID  = process.env.SPOTIFY_CLIENT_ID || SPOTIFY_CONFIG_CLIENT_ID;
+const SECRET = process.env.SPOTIFY_CLIENT_SECRET || SPOTIFY_CONFIG_CLIENT_SECRET;
+const URI = process.env.SPOTIFY_REDIRECT_URI || SPOTIFY_CONFIG_REDIRECT_URI
+const KEY = process.env.SPOTIFY_STATE_KEY || SPOTIFY_CONFIG_STATE_KEY;
+
+
 const credentials = {
-  clientId : SPOTIFY_CLIENT_ID,
-  clientSecret : SPOTIFY_CLIENT_SECRET,
-  redirectUri : SPOTIFY_REDIRECT_URI
+  clientId : ID,
+  clientSecret : SECRET,
+  redirectUri : URI
 }
 
 const spotifyApi = new SpotifyWebApi(credentials);
@@ -26,19 +32,19 @@ const generateRandomString = (N) => {
 router.get('/login', (req, res) => {
   const state = generateRandomString(16)
   const authorize = spotifyApi.createAuthorizeURL(scopes, state);
-  res.cookie(SPOTIFY_STATE_KEY, state);
+  res.cookie(KEY, state);
   res.redirect(authorize);
 })
 
 router.get('/callback', (req, res) => {
   const { code, state} = req.query;
-  const storedState = req.cookies ? req.cookies[SPOTIFY_STATE_KEY] : null;
+  const storedState = req.cookies ? req.cookies[KEY] : null;
   
   if(state === null || state !== storedState) {
     res.redirect('/#/error/state mismatch');
   } else {
     
-    res.clearCookie(SPOTIFY_STATE_KEY);
+    res.clearCookie(KEY);
     
     spotifyApi.authorizationCodeGrant(code)
       .then( (data) => {
@@ -65,6 +71,8 @@ router.get('/callback', (req, res) => {
   }
   
 })
+
+
 
 
 module.exports = router;
