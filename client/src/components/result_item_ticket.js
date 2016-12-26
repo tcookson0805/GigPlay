@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 
 const ResultItemTicket = (props) => {
-  console.log('props', props)
   
   return (
     <div className="result-item row">

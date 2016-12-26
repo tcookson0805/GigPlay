@@ -33,7 +33,6 @@ export default class Login extends Component {
           <div className="login-video">
             <video src="../../style/videos/Cheer-Up/MP4/Cheer-Up.mp4" autoPlay loop></video>
           </div>
-          asdfasdfa
         </div>
         <div className="row">
           <div className="col-md-4">

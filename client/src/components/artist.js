@@ -33,7 +33,8 @@ class Artist extends Component {
   }
   
   setArtistComponent(nextProps, artistName){
-    if(nextProps.concertsDisplayListFirebase.filteredList.length){
+    const filteredList = nextProps.concertsDisplayListFirebase.filteredList || [];
+    if(filteredList.length){
       if(this.state.allArtistsComponent){
         this.setState({
           'style': unSelectedStyle,
@@ -41,7 +42,7 @@ class Artist extends Component {
           'concertNumber': nextProps.concertsDisplayListFirebase.totalList.length
         })
       }
-      if(nextProps.concertsDisplayListFirebase.filteredObj[artistName]){
+      if(nextProps.concertsDisplayListFirebase.filteredObj && nextProps.concertsDisplayListFirebase.filteredObj[artistName]){
         this.setState({
           'style': selectedStyle,
           'selected': true,
@@ -66,9 +67,12 @@ class Artist extends Component {
     }
   }
   
-  handleClick(){    
+  handleClick(){ 
+    console.log('hey')
+    const endpoint = 'users/' + this.props.user.id
+    
     if(this.props.name === 'ALL ARTISTS'){
-      this.props.resetConcertsDisplayList('users/tcookson0805', this)
+      this.props.resetConcertsDisplayList(endpoint, this)
     } else {
       if(this.state.concertNumber === 0){
         return
@@ -76,7 +80,7 @@ class Artist extends Component {
         this.setState({
           selected: !this.state.selected,
         })
-        this.props.updateConcertsDisplayList('users/tcookson0805', this, this.props.name, this.state.selected)      
+        this.props.updateConcertsDisplayList(endpoint, this, this.props.name, this.state.selected)      
       }
     }
   }
@@ -112,8 +116,9 @@ class Artist extends Component {
 
 function mapStateToProps(state) {
   const { concertsDisplayList } = state.concerts
-  const { concertsDisplayListFirebase } = state.firebase
-  return { concertsDisplayList, concertsDisplayListFirebase }
+  const { concertsDisplayListFirebase, userInfoFirebase } = state.firebase
+  const user = userInfoFirebase;
+  return { concertsDisplayList, concertsDisplayListFirebase, user }
 }
 
 function mapDispatchToProps(dispatch) {

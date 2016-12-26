@@ -202,15 +202,20 @@ export function getConcerts(artistsArray) {
           axios.get(eventUrl).then( evts => {
             
             evts.data._embedded.events.forEach(function(item, index) {        
-                concertsList.push(item)
-                
+              const location = item._embedded.venues[0].location || {};
+              console.log('location', location)
+              if(location.hasOwnProperty('latitude') && location.hasOwnProperty('longitude')) {
+
+                concertsList.push(item)                
+                const location = item._embedded.venues[0].location                
                 const attractions = item._embedded.attractions
                 let artist
                 let city = item._embedded.venues[0].city ? item._embedded.venues[0].city.name : '';
                 let state = item._embedded.venues[0].state ? item._embedded.venues[0].state.name : '';
                 let date = item.dates.start.localDate;
-                let lat = item._embedded.venues[0].location ? item._embedded.venues[0].location.latitude : undefined;
-                let long = item._embedded.venues[0].location ? item._embedded.venues[0].location.longitude : undefined;
+                
+                let lat = location.latitude ? location.latitude : null;
+                let long = location.longitude ? location.longitude : null;
                 let time = item.dates.start.localTime || 'tbd'
                 let venue = item._embedded.venues[0].name ? item._embedded.venues[0].name : '';
                 let event = item.name || '';
@@ -238,6 +243,9 @@ export function getConcerts(artistsArray) {
                   concertsDisplayList['totalList'].push({artist, city, state, date, lat, long, time, venue, event, url, display});
                   concertsDisplayList['totalObj'][artist].push({artist, city, state, date, lat, long, time, venue, event, url, display});
                 }  
+            
+              }
+            
             })
             _.sortBy(concertsDisplayList['totalList'], 'date');
             const payload = { concertsList, artistsObjTM, artistsIdArray, artistsIdString, concertsDisplayList }

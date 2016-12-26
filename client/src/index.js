@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-router';
 import { syncHistoryWithStore, routeReducer }     from 'react-router-redux';
 import { createHistory } from 'history';
+import {persistStore, autoRehydrate} from 'redux-persist';
 
 import rootReducer from './reducers/index';
 
@@ -20,8 +21,9 @@ import Main from './components/main';
 // Sync dispatched route actions to the history
 
 const middleware = applyMiddleware(thunk);
-const store = createStore(rootReducer, middleware)
+const store = createStore(rootReducer, middleware, autoRehydrate())
 const history = syncHistoryWithStore(hashHistory, store)
+persistStore(store);
 
 // import '../style/style.less';
 import '../style/style.css';

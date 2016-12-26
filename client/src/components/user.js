@@ -94,7 +94,7 @@ class User extends Component {
         artistsIdArray: nextProps.artistsIdArray, 
         artistsIdString: nextProps.artistsIdString,
         getConcertsRan: nextProps.getConcertsRan 
-      })
+      });
     }
 
     if(nextProps.totalTracks && nextProps.totalTracks === nextProps.tracksLoaded && this.state.runGetConcerts === false){   
@@ -109,9 +109,15 @@ class User extends Component {
   }
   
   componentDidUpdate(prevProps, prevState){
+    
+    
     if(this.state.getConcertsRan){
       this.goToMainPage();
     }
+  }
+  
+  componentWillUnmount() {
+    
   }
   
 
@@ -132,28 +138,6 @@ class User extends Component {
         </div>
       </div>
     )
-  
-    // return (
-    //   <div className="user">
-    //     <h2>{`Logged in as ${display_name}`}</h2>
-    //     <div className="user-content">
-    //       <img src={imageUrl} />
-    //       <ul>
-    //         <li><span>Display name: </span><span>{display_name}</span></li>
-    //         <li><span>Id: </span><span>{id}</span></li>
-    //         <li><span>Email: </span><span>{email}</span></li>
-    //         <li><span>Spotify URI: </span><span><a href={external_urls.spotify}>{external_urls.spotify}</a></span></li>
-    //         <li><span>Link: </span><span><a href={href}>{href}</a></span></li>
-    //         <li><span>Profile Image: </span><span><a href={imageUrl}>{imageUrl}</a></span></li>
-    //         <li><span>Country: </span><span>{country}</span></li>
-    //         <li><span>Product: </span><span>{product}</span></li>
-    //       </ul>
-    //     </div>
-    //     <div>
-    //       <button onClick={this.goToMainPage}>Go To Main Page</button>
-    //     </div>
-    //   </div>
-    // );
   }
 }
 

@@ -17,27 +17,49 @@ class Main extends Component {
     this.state = {
       artistsArray: [],
       concertsDisplayList: {},
-      userInfo: {}
+      userInfo: {},
+      loaded: false
     }
   }
   
   componentWillMount(){
-    this.props.getArtistsArrayFirebase(this,'users/tcookson0805')
-    this.props.getConcertsFirebase(this,'users/tcookson0805')
-    this.props.getUserInfoFirebase(this,'users/tcookson0805')
+    console.log('MAIN ----- componentWillMount this.props', this.props)
+    
+    if(this.props.user.id){
+      console.log('this.props', this.props)
+      const endpoint = 'users/' + this.props.user.id
+      this.props.getArtistsArrayFirebase(this, endpoint)
+      this.props.getConcertsFirebase(this, endpoint)
+      this.props.getUserInfoFirebase(this, endpoint)
+      this.setState({loaded: true});
+    }
 
   }
   
   componentDidMount() {
     // console.log(this.props)
+    console.log('MAIN ----- componentDidMount this.props', this.props)
+
   }
   
   componentWillReceiveProps(nextProps){
+    console.log('MAIN ===== nextProps', nextProps)
+    console.log('MAIN ----- componentWillReceiveProps this.props', this.props)
+    if(nextProps.user.id && !this.state.loaded){
+      console.log('RUN THE STUFF HERE!!!')
+      console.log('this.props', this.props)
+      const endpoint = 'users/' + nextProps.user.id
+      this.props.getArtistsArrayFirebase(this, endpoint)
+      this.props.getConcertsFirebase(this, endpoint)
+      this.props.getUserInfoFirebase(this, endpoint)
+      this.setState({loaded: true});
+    }    
+
     // console.log('MAIN ------ nextProps', nextProps);
   }
   
   render() {
-    
+    console.log('MAIN ====== render this.props', this.props)
     return (
       <div>
         <div className="row">

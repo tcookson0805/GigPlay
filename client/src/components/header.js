@@ -12,22 +12,13 @@ class Header extends Component {
     super(props)
   }
   
-  componentWillMount() {
-    // console.log('this.props.user.display_name', this.props.user.display_name )
-    // this.props.getUserInfoFirebase(this,'users/tcookson0805')
-  }
-  
-  componentWillReceiveProps(nextProps){
-    // console.log('nexProps', nextProps)
-  }
-  
   render(){
   
-    let { user, userInfoFirebase } = this.props
+    let { user } = this.props
     
-    if(!user.display_name){
-      user = userInfoFirebase
-    }
+    // if(!user.display_name){
+    //   user = userInfoFirebase
+    // }
     // console.log('user', user)
     // console.log('userInfoFirebase', userInfoFirebase)
     
@@ -63,9 +54,10 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state.auth
+  // const { user } = state.auth
   const { userInfoFirebase } = state.firebase
-  return { user, userInfoFirebase }
+  const user = userInfoFirebase
+  return { user }
 }
 
 function mapDispatchToProps(dispatch) {
