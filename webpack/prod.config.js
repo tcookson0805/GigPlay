@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
+  devtool: 'source-map',
   entry: [
     'babel-polyfill',
     path.join(__dirname, '../client/index'),
@@ -9,7 +10,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '../public/'),
     filename: 'bundle.js',
-    publicPath: '/',
+    publicPath: '/public/',
   },
   module: {
     loaders: [
