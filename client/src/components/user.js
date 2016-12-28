@@ -5,6 +5,7 @@ import { getMyInfo, setTokens, getMyTracks, getConcerts}   from '../actions/acti
 import { getConcertsFirebase } from '../actions/firebase-actions';
 import { routeActions } from 'react-router-redux';
 import base from '../../../config/firebase';
+
 import Loading from 'react-loading'
 
 const _ = require('underscore');
@@ -21,6 +22,7 @@ class User extends Component {
       trackCalls: 0,
       artistsArray: [],
       artistsObj: {},
+      getConcertsRan: false,
       runGetConcerts: false,
       concertsList: [],
       concertsDisplayList: {}, 
@@ -34,58 +36,84 @@ class User extends Component {
     }
 
     this.goToMainPage = this.goToMainPage.bind(this);
-
   }
  
   goToMainPage(evet) {
-    this.props.router.push('/main');
+    let endpoint = '/main/' + this.props.user.id
+    this.props.router.push(endpoint);
   }
- 
-  /** When we mount, get the tokens from react-router and initiate loading the info */
-  componentWillMount() {
+  
+  getData(){
     const {dispatch, params} = this.props;
     const {accessToken, refreshToken} = params;
-    this.props.setTokens({accessToken, refreshToken});
+    this.props.setTokens({accessToken, refreshToken})
     this.props.getMyInfo();
     this.props.getMyTracks();
-    // this.props.getConcertsFirebase(this, 'users/tcookson0805');
   }
   
-  componentDidMount(){
-    console.log(' DID MOUNT this.props', this.props)
+  syncFirebase() {
+    this.ref = base.syncState(`users/${this.props.user.id}/userInfo`, {
+      context: this,
+      state: 'userInfo'
+    });
+    
+    this.ref = base.syncState(`users/${this.props.user.id}/artistsArray`, {
+      context: this,
+      state: 'artistsArray',
+      asArray: true
+    });
+    
+    this.ref = base.syncState(`users/${this.props.user.id}/concertsDisplayList`, {
+      context: this,
+      state: 'concertsDisplayList'
+    });
   }
-  
+ 
+  componentWillMount() {
+    // running getData function to trigger setTokens, getMyInfo, and getMyTracks functions
+    this.getData();    
+  }
+    
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps)
-    console.log('this.state', this.state);
-    if(this.props.user.id !== null){
+    // set state for userInfo
+    if(!this.state.userInfo.id && nextProps.user.id){
       this.setState({
-        userInfo: nextProps.user,
-        tracks: nextProps.tracks,
-        totalTracks: nextProps.totalTracks, 
-        trackCalls: nextProps.trackCalls, 
-        artistsArray: nextProps.artistsArray,
-        artistsObj: nextProps.artistsObj
-      });
-      
-      this.ref = base.syncState(`users/${this.props.user.id}/userInfo`, {
-        context: this,
-        state: 'userInfo'
-      });
-      
-      this.ref = base.syncState(`users/${this.props.user.id}/artistsArray`, {
-        context: this,
-        state: 'artistsArray',
-        asArray: true
-      });
-      
-      this.ref = base.syncState(`users/${this.props.user.id}/concertsDisplayList`, {
-        context: this,
-        state: 'concertsDisplayList'
+        userInfo: nextProps.user
       });
     }
     
+    // set state for tracks, totalTracks, and trackCalls
+    if(!this.state.totalTracks && nextProps.totalTracks){
+      this.setState({
+        tracks: nextProps.tracks,
+        totalTracks: nextProps.totalTracks,
+        trackCalls: nextProps.trackCalls
+      })
+    }
 
+    // setting state for artistArray and artistObj
+    if(nextProps.artistsArray){
+      this.setState({
+        artistsArray: nextProps.artistsArray,
+        artistsObj: nextProps.artistsObj
+      })
+    }
+
+    // syncing to firebase once we know user id
+    if(this.props.user.id){
+      this.syncFirebase();
+    }
+    
+    // running getConcerts function once we have entire artistsArray
+    if(nextProps.totalTracks && nextProps.totalTracks === nextProps.tracksLoaded && this.state.runGetConcerts === false){         
+      this.setState({runGetConcerts: true})
+      // ########################################################
+      // this.props.getConcerts(testList);
+      this.props.getConcerts(nextProps.artistsArray);
+      // ########################################################
+    }
+    
+    // setting state for concertsList, etc, 
     if(nextProps.getConcertsRan){
       this.setState({
         concertsList: nextProps.concertsList,
@@ -96,31 +124,17 @@ class User extends Component {
         getConcertsRan: nextProps.getConcertsRan 
       });
     }
-
-    if(nextProps.totalTracks && nextProps.totalTracks === nextProps.tracksLoaded && this.state.runGetConcerts === false){   
-      this.setState({runGetConcerts: true})
-      console.log('hey ho')
-      // ########################################################
-      // this.props.getConcerts(testList);
-      this.props.getConcerts(nextProps.artistsArray);
-      // ########################################################
-    } 
-
+    
   }
   
   componentDidUpdate(prevProps, prevState){
-    
-    
-    if(this.state.getConcertsRan){
+    // sending to Main Page once getConcerts function is ran    
+    if(this.state.getConcertsRan && !prevState.getConcertsRan){
+      console.log('ALL CONCERT INFO RECEIVED!!!!')
       this.goToMainPage();
     }
   }
   
-  componentWillUnmount() {
-    
-  }
-  
-
   /** Render the user's info */
   render() {
 

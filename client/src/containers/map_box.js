@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-
 import ConcertMap from '../components/map'
-import GettingStartedExample from '../components/map_2';
 
 class MapBox extends Component {
   
@@ -15,9 +13,7 @@ class MapBox extends Component {
         <ConcertMap />
       </div>
     )
-  }
-  
+  }  
 }
-
 
 export default MapBox;

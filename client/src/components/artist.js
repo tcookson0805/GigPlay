@@ -14,22 +14,25 @@ const unSelectedStyle = {
   'color': 'white'
 }
 
+const noStyle = {
+  'backgroundColor': 'white',
+  'color': 'black',
+  'cursor': 'default'
+}
+
 class Artist extends Component {
   
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       selected: false,
-      style: {
-        'backgroundColor': 'white',
-        'color': 'black',
-        'cursor': 'default'
-      },
+      style: null,
       concertNumber: 0,
       allArtistsComponent: false,
     };
     this.handleClick = this.handleClick.bind(this);
     this.setArtistComponent = this.setArtistComponent.bind(this);
+
   }
   
   setArtistComponent(nextProps, artistName){
@@ -70,8 +73,11 @@ class Artist extends Component {
   }
   
   handleClick(){ 
-    console.log('hey')
-    const endpoint = 'users/' + this.props.user.id
+    console.log('clicked!!')
+    const { user, userInfoFirebase } = this.props;
+    const userInfo = userInfoFirebase;
+    const endpoint = 'users/' + userInfo.id
+    console.log('endpoint', endpoint)
     
     if(this.props.name === 'ALL ARTISTS'){
       this.props.resetConcertsDisplayList(endpoint, this)
@@ -87,28 +93,69 @@ class Artist extends Component {
     }
   }
   
+  
   componentWillMount(){
+    const { concertsDisplayList, concertsDisplayListFirebase, name } = this.props;
+    const list = concertsDisplayListFirebase;
+    const concertNumber = list.totalObj[name] ? list.totalObj[name].length : list.totalList.length;
+
     if(this.props.name === 'ALL ARTISTS'){
       this.setState({
         'allArtistsComponent': true,
         'style': selectedStyle,
+        'concertNumber': list.totalList.length
       })
+    } else {
+      if(!concertNumber){
+        this.setState({
+          'style': noStyle,
+          'concertNumber': 0
+        })
+      } else {
+        this.setState({
+          'style': unSelectedStyle,
+          'concertNumber': concertNumber
+        })
+      }
     }
+  
   }
   
-  componentWillReceiveProps(nextProps){  
+  componentWillReceiveProps(nextProps){
+    console.log('ARTIST ------ nextProps', nextProps)  
     this.setArtistComponent(nextProps, this.props.name);
   }
 
   
-  render() {
+  render() {    
+    const { concertsDisplayList, concertsDisplayListFirebase, name } = this.props;
+    // const list = concertsDisplayList.totalList.length ? concertsDisplayList : concertsDisplayListFirebase;
+    const list = concertsDisplayListFirebase;
+    console.log('LIST', list);
+    console.log('name', name);
+    let concertNumber;
     
-    const { concertsDisplayList, concertsDisplayListFirebase } = this.props;
+    if(name === 'ALL ARTISTS'){
+      console.log('RIGHT IN HERE FUCKER')
+      console.log(list.totalList.length)
+      concertNumber = list.totalList.length;
+    } else {
+      if(list.totalObj[name]){
+        concertNumber = list.totalObj[name].length;
+      } else {
+        concertNumber = 0;
+      }
+    }
+    
     const x = <li>Hello</li>
+    
+    if(!this.state.style){
+      return <li></li>
+    }
     
     return (
       <li className="artist list-group-item" style={this.state.style} onClick={this.handleClick}>
-        {this.props.name} ({this.state.concertNumber})
+        {name} ({concertNumber})
       </li>
     )
     
@@ -117,10 +164,10 @@ class Artist extends Component {
 
 
 function mapStateToProps(state) {
+  const { user } = state.auth
   const { concertsDisplayList } = state.concerts
   const { concertsDisplayListFirebase, userInfoFirebase } = state.firebase
-  const user = userInfoFirebase;
-  return { concertsDisplayList, concertsDisplayListFirebase, user }
+  return { concertsDisplayList, concertsDisplayListFirebase, user, userInfoFirebase }
 }
 
 function mapDispatchToProps(dispatch) {

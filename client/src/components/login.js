@@ -11,13 +11,7 @@ export default class Login extends Component {
   constructor(props) {
     super(props);
   }
-  
-  componentWillMount(){
-  }
-  
-  componentDidMount(){  
-  }
-  
+    
   render() {
     
     const videos = [{
@@ -25,10 +19,8 @@ export default class Login extends Component {
       type:"video/mp4"
     }]
 
-    
     return (
       <div className="login">
-      
         <div className="login-background">
           <div className="login-video">
             <video src="../../style/videos/Cheer-Up/MP4/Cheer-Up.mp4" autoPlay loop></video>
@@ -50,10 +42,8 @@ export default class Login extends Component {
             </div>
           </div>
         </div>
-
       </div>
     );
     
-  
   }
 }

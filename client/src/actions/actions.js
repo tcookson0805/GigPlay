@@ -1,6 +1,8 @@
 import axios from 'axios'
 import Spotify from 'spotify-web-api-js';
-import base from '../../../config/firebase';
+// import base from '../../../config/firebase';
+var base = require('../../../config/firebase') || undefined;
+
 
 const _ = require('underscore');
 const spotifyApi = new Spotify();
@@ -211,7 +213,7 @@ export function getConcerts(artistsArray) {
             
             evts.data._embedded.events.forEach(function(item, index) {        
               const location = item._embedded.venues[0].location || {};
-              console.log('location', location)
+              // console.log('location', location)
               if(location.hasOwnProperty('latitude') && location.hasOwnProperty('longitude')) {
 
                 concertsList.push(item)                

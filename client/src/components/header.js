@@ -9,22 +9,30 @@ import { getUserInfoFirebase } from '../actions/firebase-actions';
 class Header extends Component {
   
   constructor(props){
-    super(props)
+    super(props);
+  }
+  
+  componentWillMount() {
+    console.log('HEADER ------ this.props', this.props)
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    console.log('HEADER ------ this.props', this.props)
+    console.log('HEADER ------ nextProps', nextProps)
   }
   
   render(){
   
-    let { user } = this.props
+    let { user, userInfoFirebase } = this.props
     
-    // if(!user.display_name){
-    //   user = userInfoFirebase
-    // }
-    // console.log('user', user)
-    // console.log('userInfoFirebase', userInfoFirebase)
+    let userInfo = user.display_name ? user : userInfoFirebase
     
-    if(!user){
+    console.log('HEADER ------ userInfo', userInfo)
+    
+    if(!userInfo){
       return <div></div>
     }
+    
 
     return (
       <div className="header col-md-12">
@@ -37,11 +45,11 @@ class Header extends Component {
               
               <div className="header-user-pic">
                 <img src="../../style/images/Spotify_Icon_RGB_Green.png" alt="" className="header-user-pic-spotify" />
-                <img src={user.images[0].url} alt="" className="header-user-pic-image" />
+                <img src={userInfo.images[0].url} alt="" className="header-user-pic-image" />
               </div>
               
               <div className="header-user-dropdown">
-                {user.display_name}
+                {userInfo.display_name}
               </div>
             </div>
           </div>
@@ -54,10 +62,9 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-  // const { user } = state.auth
+  const { user } = state.auth
   const { userInfoFirebase } = state.firebase
-  const user = userInfoFirebase
-  return { user }
+  return { user, userInfoFirebase }
 }
 
 function mapDispatchToProps(dispatch) {

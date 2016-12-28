@@ -15,22 +15,35 @@ class ResultsBox extends Component {
   render() {
     console.log('RESULT BOX ------ this.props', this.props)
     
-    const { concertsDisplayList } = this.props
+    const { concertsDisplayList, concertsDisplayListFirebase } = this.props
     
     console.log('concertsDisplayList', concertsDisplayList);
-    console.log('this.concertsDisplayList', concertsDisplayList);
-    let list;
+    console.log('concertsDisplayListFirebase', concertsDisplayListFirebase);
+    let list = concertsDisplayList ? concertsDisplayList : concertsDisplayListFirebase
+    let displayList;
      
-    if(!concertsDisplayList){
+    if(!list){
       return <div>loading....</div>
     }
     
-    if(concertsDisplayList.filteredList && concertsDisplayList.filteredList.length){
-      list = concertsDisplayList.filteredList
+    if(list.filteredList && list.filteredList.length){
+      displayList = list.filteredList
     } else {
-      list = concertsDisplayList.totalList
+      displayList = list.totalList
     }
     
+    if(!this.props.concertsDisplayListFirebase){
+      return (
+        <div className="results-box col-md-12">
+          <div className="results-box-header">
+            <h2>SHOWS FROM YOUR FAVORITE ARTISTS</h2>
+          </div>
+          <div className="results-group">
+            Loading...
+          </div>
+        </div>
+        )
+    }
 
     return (
       <div className="results-box col-md-12">
@@ -39,7 +52,7 @@ class ResultsBox extends Component {
         </div>
         <div className="results-group">
           { 
-            list.map(function(concert, index) {
+            displayList.map(function(concert, index) {
               if(concert.display){
                 return (
                   <ResultItem 
@@ -67,11 +80,12 @@ function mapStateToProps(state) {
   let { concertsDisplayList, filteredConcertsDisplayList} = state.concerts;
   let { concertsDisplayListFirebase } = state.firebase;
   
-  if(!concertsDisplayList){
-    concertsDisplayList = concertsDisplayListFirebase;
+  if(concertsDisplayListFirebase && !concertsDisplayListFirebase.filteredList) {
+    concertsDisplayListFirebase['filteredList'] = [];
+    concertsDisplayListFirebase['filteredObj'] = {};
   }
   
-  return { concertsDisplayList }
+  return { concertsDisplayList, concertsDisplayListFirebase }
 }
 
 export default connect(mapStateToProps)(ResultsBox);

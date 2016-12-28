@@ -70,8 +70,7 @@ router.get('/callback', (req, res) => {
       
   }
   
-})
-
+});
 
 
 

@@ -13,10 +13,6 @@ class ArtistList extends Component {
     this.state = {};
   }
   
-  componentWillMount() {
-    // this.props.getArtistsArrayFirebase(this,'users/tcookson0805')
-  }
-
   render() {
     
     let { artistsArray, artistsArrayFirebase } = this.props
@@ -27,8 +23,17 @@ class ArtistList extends Component {
       artistsArray = artistsArrayFirebase
     }
             
-    if(!artistsArray){
-      return <div>loading...</div>
+    if(!this.props.concertsDisplayListFirebase){
+      return (
+        <div className='artist-list col-md-12'>
+          <div className="artist-list-header">
+            <h2>FILTER BY ARTIST</h2>
+          </div>
+          <div className='list-group'>
+            Loading ...
+          </div>
+        </div>
+      )
     }
     
     const that = this;

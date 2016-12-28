@@ -40,6 +40,7 @@
     "react-router-redux": "^4.0.7",
     "react-transform-hmr": "^1.0.4",
     "react-video-cover": "^1.0.2",
+    "reactfire": "^1.0.0",
     "redux": "^3.6.0",
     "redux-form": "^6.2.1",
     "redux-persist": "^4.0.1",

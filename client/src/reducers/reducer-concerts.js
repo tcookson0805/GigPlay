@@ -10,8 +10,7 @@ function concertsReducer (state = initialState, action) {
   switch (action.type) {
 
   case FETCH_CONCERTS:
-    console.log('heeeeeeyyyy')
-    console.log('action.data', action.data)
+    console.log('FETCH_CONCERTS action.data', action.data)
     return Object.assign({}, state, {
       concertsList: action.data.concertsList,
       concertsDisplayList: action.data.concertsDisplayList,

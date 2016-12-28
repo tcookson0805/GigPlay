@@ -21,9 +21,9 @@ import Main from './components/main';
 // Sync dispatched route actions to the history
 
 const middleware = applyMiddleware(thunk);
-const store = createStore(rootReducer, middleware, autoRehydrate())
-const history = syncHistoryWithStore(hashHistory, store)
-persistStore(store);
+const store = createStore(rootReducer, middleware);
+const history = syncHistoryWithStore(hashHistory, store);
+
 
 // import '../style/style.less';
 import '../style/style.css';
@@ -37,7 +37,7 @@ class Root extends Component {
           <Route path="/" component={App}>
             <IndexRoute component={Login} />
             <Route path="/user/:accessToken/:refreshToken" component={User} />
-            <Route path="/main" component={Main} />
+            <Route path="/main/:userId" component={Main} />
             <Route path="/error/:errorMsg" component={Error} />
           </Route>
         </Router>
