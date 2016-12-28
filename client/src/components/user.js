@@ -4,7 +4,9 @@ import { bindActionCreators } from 'redux';
 import { getMyInfo, setTokens, getMyTracks, getConcerts}   from '../actions/actions';
 import { getConcertsFirebase } from '../actions/firebase-actions';
 import { routeActions } from 'react-router-redux';
-import base from '../../../config/firebase';
+// import base from '../../../config/firebase';
+
+console.log(process.env.FIREBASE_AUTH_DOMAIN);
 
 import Loading from 'react-loading'
 
