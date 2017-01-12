@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getConcertsFirebase, updateConcertsDisplayList, resetConcertsDisplayList, addToFilteredFirebase } from '../actions/firebase-actions';
+import { getConcertsFirebase, updateConcertsDisplayList, resetConcertsDisplayList, addToFilteredFirebase, removeFromFilteredFirebase } from '../actions/firebase-actions';
 
 const _ = require('underscore');
 
@@ -14,148 +14,98 @@ const unSelectedStyle = {
   'color': 'white'
 }
 
-const noStyle = {
-  'backgroundColor': 'white',
-  'color': 'black',
-  'cursor': 'default'
-}
 
 class Artist extends Component {
   
   constructor(props) {
     super(props);
     this.state = {
-      selected: false,
-      style: null,
-      concertNumber: 0,
-      allArtistsComponent: false,
-    };
-    this.handleClick = this.handleClick.bind(this);
-    this.setArtistComponent = this.setArtistComponent.bind(this);
+      allArtistComponent: false,
+      name: null,
+      concerts: null,
+      selected: false
+    }
+  }
 
-  }
-  
-  setArtistComponent(nextProps, artistName){
-    if(nextProps.concertsDisplayListFirebase){
-      const filteredList = nextProps.concertsDisplayListFirebase.filteredList || [];
-      if(filteredList.length){
-        if(this.state.allArtistsComponent){
-          this.setState({
-            'style': unSelectedStyle,
-            'selected': false,
-            'concertNumber': nextProps.concertsDisplayListFirebase.totalList.length
-          })
-        }
-        if(nextProps.concertsDisplayListFirebase.filteredObj && nextProps.concertsDisplayListFirebase.filteredObj[artistName]){
-          this.setState({
-            'style': selectedStyle,
-            'selected': true,
-            'concertNumber': nextProps.concertsDisplayListFirebase.totalObj[artistName].length
-          })
-        }
-      }else{
-        if(this.state.allArtistsComponent){
-          this.setState({
-            'style': selectedStyle,
-            'selected': true,
-            'concertNumber': nextProps.concertsDisplayListFirebase.totalList.length
-          })
-        }
-        if(nextProps.concertsDisplayListFirebase.totalObj[artistName]){
-          this.setState({
-            'style': unSelectedStyle,
-            'selected': false,
-            'concertNumber': nextProps.concertsDisplayListFirebase.totalObj[artistName].length
-          })
-        }
-      }
-    }
-  }
-  
-  handleClick(){ 
-    console.log('clicked!!')
-    const { user, userInfoFirebase } = this.props;
-    const userInfo = userInfoFirebase;
-    const endpoint = 'users/' + userInfo.id
-    console.log('endpoint', endpoint)
-    
-    if(this.props.name === 'ALL ARTISTS'){
-      this.props.resetConcertsDisplayList(endpoint, this)
-    } else {
-      if(this.state.concertNumber === 0){
-        return
-      }else{
-        this.setState({
-          selected: !this.state.selected,
-        })
-        this.props.updateConcertsDisplayList(endpoint, this, this.props.name, this.state.selected)      
-      }
-    }
-  }
-  
-  
+
   componentWillMount(){
-    const { concertsDisplayList, concertsDisplayListFirebase, name } = this.props;
-    const list = concertsDisplayListFirebase;
-    const concertNumber = list.totalObj[name] ? list.totalObj[name].length : list.totalList.length;
-
-    if(this.props.name === 'ALL ARTISTS'){
-      this.setState({
-        'allArtistsComponent': true,
-        'style': selectedStyle,
-        'concertNumber': list.totalList.length
-      })
-    } else {
-      if(!concertNumber){
-        this.setState({
-          'style': noStyle,
-          'concertNumber': 0
-        })
-      } else {
-        this.setState({
-          'style': unSelectedStyle,
-          'concertNumber': concertNumber
-        })
-      }
-    }
+    // console.log('ARTIST ------ componentWillMount this.props', this.props);
+    
+    const name = this.props.name;
+    const concerts = this.props.concerts;
+    const displayList = this.props.concertsDisplayListFirebase || this.props.concertsDisplayList
+    
+    this.setState({
+      name: name,
+      concerts: concerts,
+      style: unSelectedStyle
+    })
+    this.handleClick = this.handleClick.bind(this);
+  }
   
+  handleClick(){
+    console.log('clicked');
+    const { name, user, userInfoFirebase } = this.props;
+    const id = userInfoFirebase ? userInfoFirebase.id : user.id;
+    const endpoint = 'users/' + id;
+    const selected = this.state.selected
+  
+
+    if(selected){
+      this.setState({
+        selected: false,
+        style: unSelectedStyle
+      })
+      this.props.removeFromFilteredFirebase(endpoint, this, name)
+    } else {
+      this.setState({
+        selected: true,
+        style: selectedStyle
+      })
+      this.props.addToFilteredFirebase(endpoint, this, name);
+    }
+
+
+    // this.props.updateConcertsDisplayList(endpoint, this, name, this.state.selected)    
+
+
+  }
+
+  componentDidMount() {
+    // console.log('ARTIST ------ componentDidMount state', this.state)  
+    // console.log('ARTIST ------ componentDidMount props', this.props)  
   }
   
   componentWillReceiveProps(nextProps){
-    console.log('ARTIST ------ nextProps', nextProps)  
-    this.setArtistComponent(nextProps, this.props.name);
+    // console.log('ARTIST ------ nextProps', nextProps)
+
+    const { name } = this.props;
+    
+
+    if(nextProps.concertsDisplayListFirebase){
+      if(nextProps.concertsDisplayListFirebase.filteredObj[name]) {
+        this.setState({
+          selected: true,
+          style: selectedStyle
+        })
+      } else {
+        this.setState({
+          selected: false,
+          style: unSelectedStyle
+        })
+      }
+    }  
   }
 
   
-  render() {    
-    const { concertsDisplayList, concertsDisplayListFirebase, name } = this.props;
-    // const list = concertsDisplayList.totalList.length ? concertsDisplayList : concertsDisplayListFirebase;
-    const list = concertsDisplayListFirebase;
-    console.log('LIST', list);
-    console.log('name', name);
-    let concertNumber;
-    
-    if(name === 'ALL ARTISTS'){
-      console.log('RIGHT IN HERE FUCKER')
-      console.log(list.totalList.length)
-      concertNumber = list.totalList.length;
-    } else {
-      if(list.totalObj[name]){
-        concertNumber = list.totalObj[name].length;
-      } else {
-        concertNumber = 0;
-      }
-    }
-    
-    const x = <li>Hello</li>
-    
-    if(!this.state.style){
-      return <li></li>
-    }
-    
+  render() {
+    // console.log('ARTIST ------ RENDER state', this.state)  
+    // console.log('ARTIST ------ RENDER props', this.props) 
+    const { name, concerts } = this.props;
+
     return (
       <li className="artist list-group-item" style={this.state.style} onClick={this.handleClick}>
-        {name} ({concertNumber})
+        {name} ({concerts.length})
       </li>
     )
     
@@ -171,7 +121,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getConcertsFirebase, updateConcertsDisplayList, resetConcertsDisplayList, addToFilteredFirebase }, dispatch);
+  return bindActionCreators({ getConcertsFirebase, updateConcertsDisplayList, resetConcertsDisplayList, addToFilteredFirebase, removeFromFilteredFirebase }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Artist);
