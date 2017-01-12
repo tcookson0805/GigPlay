@@ -3,23 +3,23 @@
 const router = require('express').Router();
 var SpotifyWebApi = require('spotify-web-api-node');
 
-// var SPOTIFY_CONFIG_CLIENT_ID = require('../config/spotify').SPOTIFY_CLIENT_ID
-// var SPOTIFY_CONFIG_CLIENT_SECRET = require('../config/spotify').SPOTIFY_CLIENT_SECRET
-// var SPOTIFY_CONFIG_REDIRECT_URI = require('../config/spotify').SPOTIFY_REDIRECT_URI
-// var SPOTIFY_CONFIG_STATE_KEY = require('../config/spotify').SPOTIFY_STATE_KEY
+var SPOTIFY_CONFIG_CLIENT_ID = require('../config/spotify').SPOTIFY_CLIENT_ID
+var SPOTIFY_CONFIG_CLIENT_SECRET = require('../config/spotify').SPOTIFY_CLIENT_SECRET
+var SPOTIFY_CONFIG_REDIRECT_URI = require('../config/spotify').SPOTIFY_REDIRECT_URI
+var SPOTIFY_CONFIG_STATE_KEY = require('../config/spotify').SPOTIFY_STATE_KEY
 
 const scopes = ['user-read-private', 'user-read-email', 'user-follow-read', 'user-library-read'];
 
-// const ID  = process.env.SPOTIFY_CLIENT_ID || SPOTIFY_CONFIG_CLIENT_ID;
-// const SECRET = process.env.SPOTIFY_CLIENT_SECRET || SPOTIFY_CONFIG_CLIENT_SECRET;
-// const URI = process.env.SPOTIFY_REDIRECT_URI || SPOTIFY_CONFIG_REDIRECT_URI
-// const KEY = process.env.SPOTIFY_STATE_KEY || SPOTIFY_CONFIG_STATE_KEY;
+const ID  = process.env.SPOTIFY_CLIENT_ID || SPOTIFY_CONFIG_CLIENT_ID;
+const SECRET = process.env.SPOTIFY_CLIENT_SECRET || SPOTIFY_CONFIG_CLIENT_SECRET;
+const URI = process.env.SPOTIFY_REDIRECT_URI || SPOTIFY_CONFIG_REDIRECT_URI;
+const KEY = process.env.SPOTIFY_STATE_KEY || SPOTIFY_CONFIG_STATE_KEY;
 
 
 const credentials = {
-  clientId : process.env.SPOTIFY_CLIENT_ID,
-  clientSecret : process.env.SPOTIFY_CLIENT_SECRET,
-  redirectUri : process.env.SPOTIFY_REDIRECT_URI
+  clientId : ID,
+  clientSecret : SECRET,
+  redirectUri : URI
 }
 
 const spotifyApi = new SpotifyWebApi(credentials);
@@ -61,7 +61,6 @@ router.get('/callback', (req, res) => {
         spotifyApi.getMe().then(({ body }) => {
           console.log(body);
         });
-
         
         res.redirect(`/#/user/${access_token}/${refresh_token}`);
       }).catch( (err) => {

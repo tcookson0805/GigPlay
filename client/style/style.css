@@ -177,6 +177,7 @@ ul {
   overflow: hidden;
   overflow-y: scroll;
   height: 62em;
+  display: inline-block;
 }
 
 .list-group-item {
@@ -202,6 +203,7 @@ ul {
   border-radius: 1em;
   font-weight: bold;
   font-size: 0.7em;
+  color: blue;
 }
 
 .artistSelected {
