@@ -1,4 +1,4 @@
-import { FETCH_CONCERTS_FIREBASE, UPDATE_CONCERTS_FIREBASE, FETCH_USER_INFO_FIREBASE, FETCH_ARTISTS_ARRAY_FIREBASE, ADD_TO_FILTERED_FIREBASE, RESET_CONCERTS_DISPLAY_LIST_FIREBASE } from '../actions/firebase-actions';
+import { FETCH_CONCERTS_FIREBASE, UPDATE_CONCERTS_FIREBASE, FETCH_USER_INFO_FIREBASE, FETCH_ARTISTS_ARRAY_FIREBASE, ADD_TO_FILTERED_FIREBASE, REMOVE_FROM_FILTERED_FIREBASE, RESET_CONCERTS_DISPLAY_LIST_FIREBASE } from '../actions/firebase-actions';
 
 const initialState = {
 
@@ -33,7 +33,13 @@ function concertsReducer (state = initialState, action) {
     });
   
   case ADD_TO_FILTERED_FIREBASE:
-    console.log('add to concerts firebase data', action.data)
+    console.log('ADD_TO_FILTERED_FIREBASE data', action.data)
+    return Object.assign({}, state, {
+      concertsDisplayListFirebase: action.data.concertsDisplayList,
+    });
+
+  case REMOVE_FROM_FILTERED_FIREBASE:
+    console.log('REMOVE_FROM_FILTERED_FIREBASE data', action.data)
     return Object.assign({}, state, {
       concertsDisplayListFirebase: action.data.concertsDisplayList,
     });
