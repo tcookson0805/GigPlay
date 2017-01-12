@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { getMyInfo, setTokens, getMyTracks, getConcerts}   from '../actions/actions';
 import { getConcertsFirebase } from '../actions/firebase-actions';
 import { routeActions } from 'react-router-redux';
-// import base from '../../../config/firebase';
+import base from '../../../config/firebase';
 
 console.log(process.env.FIREBASE_AUTH_DOMAIN);
 
@@ -18,23 +18,9 @@ class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userInfo: {},
-      tracks: {},
-      totalTracks: 0,
-      trackCalls: 0,
-      artistsArray: [],
-      artistsObj: {},
-      getConcertsRan: false,
-      runGetConcerts: false,
-      concertsList: [],
-      concertsDisplayList: {}, 
-      artistsObjTM: {}, 
-      artistsIdArray: [], 
-      artistsIdString: '',
-      style: {
-        'margin-left': '20em',
-        'border': '1em solid black'
-      }
+      accessToken: null,
+      refreshToken: null,
+      user: {}
     }
 
     this.goToMainPage = this.goToMainPage.bind(this);
@@ -50,91 +36,69 @@ class User extends Component {
     const {accessToken, refreshToken} = params;
     this.props.setTokens({accessToken, refreshToken})
     this.props.getMyInfo();
-    this.props.getMyTracks();
   }
   
-  syncFirebase() {
-    this.ref = base.syncState(`users/${this.props.user.id}/userInfo`, {
-      context: this,
-      state: 'userInfo'
-    });
+  // syncFirebase() {
+  //   this.ref = base.syncState(`users/${this.props.user.id}/userInfo`, {
+  //     context: this,
+  //     state: 'userInfo'
+  //   });
     
-    this.ref = base.syncState(`users/${this.props.user.id}/artistsArray`, {
-      context: this,
-      state: 'artistsArray',
-      asArray: true
-    });
+  //   this.ref = base.syncState(`users/${this.props.user.id}/artistsArray`, {
+  //     context: this,
+  //     state: 'artistsArray',
+  //     asArray: true
+  //   });
     
-    this.ref = base.syncState(`users/${this.props.user.id}/concertsDisplayList`, {
-      context: this,
-      state: 'concertsDisplayList'
-    });
-  }
+  //   this.ref = base.syncState(`users/${this.props.user.id}/concertsDisplayList`, {
+  //     context: this,
+  //     state: 'concertsDisplayList'
+  //   });
+  // }
  
   componentWillMount() {
     // running getData function to trigger setTokens, getMyInfo, and getMyTracks functions
-    this.getData();    
+    this.getData();
+    // console.log('Component Did Mount this.props', this.props)    
   }
     
   componentWillReceiveProps(nextProps) {
-    // set state for userInfo
-    if(!this.state.userInfo.id && nextProps.user.id){
+
+    if(nextProps.accessToken){
       this.setState({
-        userInfo: nextProps.user
+        accessToken: nextProps.accessToken
       });
     }
-    
-    // set state for tracks, totalTracks, and trackCalls
-    if(!this.state.totalTracks && nextProps.totalTracks){
+
+    if(nextProps.refreshToken){
       this.setState({
-        tracks: nextProps.tracks,
-        totalTracks: nextProps.totalTracks,
-        trackCalls: nextProps.trackCalls
+        refreshToken: nextProps.refreshToken
       })
     }
 
-    // setting state for artistArray and artistObj
-    if(nextProps.artistsArray){
+    if(nextProps.user.id){
       this.setState({
-        artistsArray: nextProps.artistsArray,
-        artistsObj: nextProps.artistsObj
+        user: nextProps.user
       })
     }
 
-    // syncing to firebase once we know user id
-    if(this.props.user.id){
-      this.syncFirebase();
-    }
-    
-    // running getConcerts function once we have entire artistsArray
-    if(nextProps.totalTracks && nextProps.totalTracks === nextProps.tracksLoaded && this.state.runGetConcerts === false){         
-      this.setState({runGetConcerts: true})
-      // ########################################################
-      // this.props.getConcerts(testList);
-      this.props.getConcerts(nextProps.artistsArray);
-      // ########################################################
-    }
-    
-    // setting state for concertsList, etc, 
-    if(nextProps.getConcertsRan){
-      this.setState({
-        concertsList: nextProps.concertsList,
-        concertsDisplayList: nextProps.concertsDisplayList, 
-        artistsObjTM: nextProps.artistsObjTM, 
-        artistsIdArray: nextProps.artistsIdArray, 
-        artistsIdString: nextProps.artistsIdString,
-        getConcertsRan: nextProps.getConcertsRan 
-      });
-    }
-    
+    // console.log('Component Will Receive Props this.props', this.props);
+    // console.log('Component Will Receive Props nextProps', nextProps);
+    // console.log('Component Will Receive Props this.state', this.state);
+
   }
   
   componentDidUpdate(prevProps, prevState){
-    // sending to Main Page once getConcerts function is ran    
-    if(this.state.getConcertsRan && !prevState.getConcertsRan){
-      console.log('ALL CONCERT INFO RECEIVED!!!!')
+
+    // console.log('Component Did Update this.props', this.props);
+    // console.log('Component Did Update prevProps', prevProps);
+    // console.log('Component Did Update prevState', prevState);
+    // console.log('Component Will Receive Props this.state', this.state);
+
+    if(this.state.user.id){
       this.goToMainPage();
     }
+
   }
   
   /** Render the user's info */
@@ -158,14 +122,12 @@ class User extends Component {
 }
 
 function mapStateToProps(state) {
-  const { accessToken, refreshToken, user } = state.auth;
-  const { tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded} = state.tracks
-  const { concertsList, concertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, getConcertsRan } = state.concerts;
-  return { accessToken, refreshToken, user, tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded, concertsList, concertsDisplayList, artistsObjTM, artistsIdArray, artistsIdString, getConcertsRan }
+  const { accessToken, refreshToken, user } = state.auth;  
+  return { accessToken, refreshToken, user }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getMyInfo, setTokens, getMyTracks, getConcerts, getConcertsFirebase, routeActions }, dispatch);
+  return bindActionCreators({ getMyInfo, setTokens, routeActions }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(User);
