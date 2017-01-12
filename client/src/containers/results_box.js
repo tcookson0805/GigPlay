@@ -13,13 +13,13 @@ class ResultsBox extends Component {
   }
    
   render() {
-    console.log('RESULT BOX ------ this.props', this.props)
+    // console.log('RESULT BOX ------ this.props', this.props)
     
     const { concertsDisplayList, concertsDisplayListFirebase } = this.props
     
-    console.log('concertsDisplayList', concertsDisplayList);
-    console.log('concertsDisplayListFirebase', concertsDisplayListFirebase);
-    let list = concertsDisplayList ? concertsDisplayList : concertsDisplayListFirebase
+    // console.log('concertsDisplayList', concertsDisplayList);
+    // console.log('concertsDisplayListFirebase', concertsDisplayListFirebase);
+    let list = concertsDisplayListFirebase || concertsDisplayList
     let displayList;
      
     if(!list){
@@ -31,8 +31,9 @@ class ResultsBox extends Component {
     } else {
       displayList = list.totalList
     }
-    
-    if(!this.props.concertsDisplayListFirebase){
+  
+  
+    if(!list){
       return (
         <div className="results-box col-md-12">
           <div className="results-box-header">
@@ -44,6 +45,8 @@ class ResultsBox extends Component {
         </div>
         )
     }
+
+    
 
     return (
       <div className="results-box col-md-12">
