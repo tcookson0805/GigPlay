@@ -6,6 +6,8 @@ import { getMyInfo, setTokens, getMyTracks, getConcerts }   from '../actions/act
 import { getArtistsArrayFirebase } from '../actions/firebase-actions';
 
 import Artist from '../components/artist';
+import ArtistAll from '../components/artist_all.js';
+import ArtistNone from '../components/artist_none.js';
 
 class ArtistList extends Component {
   constructor(props) {
@@ -13,17 +15,31 @@ class ArtistList extends Component {
     this.state = {};
   }
   
+  componentWillMount() {
+    console.log('ARTIST LIST ------- componentWillMount this.props', this.props)
+  }  
+
   render() {
     
-    let { artistsArray, artistsArrayFirebase } = this.props
+    const { artistsArray, artistsArrayFirebase, concertsDisplayList, concertsDisplayListFirebase } = this.props
     
     console.log('ARTIST LIST ------- render this.props', this.props)
     
-    if(!artistsArray && artistsArrayFirebase){
-      artistsArray = artistsArrayFirebase
+    const artistsList = artistsArrayFirebase || artistsArray;
+    const displayList = concertsDisplayListFirebase || concertsDisplayList;
+    let totalList;
+    let filteredList;
+    let filteredObj;
+    let totalObj;
+
+    if(displayList) {
+      totalList = displayList.totalList || [];
+      filteredList = displayList.filteredList || [];
+      filteredObj = displayList.filteredObj || {};
+      totalObj = displayList.totalObj || {}
     }
-            
-    if(!this.props.concertsDisplayListFirebase){
+
+    if(!displayList) {
       return (
         <div className='artist-list col-md-12'>
           <div className="artist-list-header">
@@ -33,10 +49,9 @@ class ArtistList extends Component {
             Loading ...
           </div>
         </div>
-      )
+      )    
     }
-    
-    const that = this;
+
     return (
       <div className='artist-list col-md-12'>
         <div className="artist-list-header">
@@ -44,19 +59,28 @@ class ArtistList extends Component {
         </div>
         <div className='list-group'>
           <div></div>
-          { artistsArray.map(function(artist, index) {
-            return <Artist name={artist} key={index} className="artist" />
+          { artistsList.map(function(artist, index) {
+            if(artist === 'ALL ARTISTS') {
+              return <ArtistAll name={artist} key={index} concerts={totalList} filtered={filteredObj[artist]} className="artist" />
+            } else {
+              if(!totalObj[artist] || !totalObj[artist].length){
+                return <ArtistNone name={artist} key={index} filtered={filteredObj[artist]} className="artist" />
+              } else {
+                return <Artist name={artist} key={index} concerts={totalObj[artist]} filtered={filteredObj[artist]} className="artist" />
+              } 
+            }
           })}
         </div>
       </div>
     )
   }
-  
+
 }
 
 function mapStateToProps(state) {
-  let { artistsArray, concertsDisplayList } = state.tracks;
-  let { artistsArrayFirebase, concertsDisplayListFirebase } = state.firebase;  
+  const { artistsArray } = state.tracks;
+  const { concertsDisplayList } = state.concerts;
+  const { artistsArrayFirebase, concertsDisplayListFirebase } = state.firebase;  
   return { artistsArray, artistsArrayFirebase, concertsDisplayList, concertsDisplayListFirebase }
 }
 
