@@ -3,10 +3,15 @@
 const router = require('express').Router();
 var SpotifyWebApi = require('spotify-web-api-node');
 
-var SPOTIFY_CONFIG_CLIENT_ID = require('../config/spotify').SPOTIFY_CLIENT_ID
-var SPOTIFY_CONFIG_CLIENT_SECRET = require('../config/spotify').SPOTIFY_CLIENT_SECRET
-var SPOTIFY_CONFIG_REDIRECT_URI = require('../config/spotify').SPOTIFY_REDIRECT_URI
-var SPOTIFY_CONFIG_STATE_KEY = require('../config/spotify').SPOTIFY_STATE_KEY
+if (process.env.NODE_ENV !== 'production') {
+
+  var SPOTIFY_CONFIG_CLIENT_ID = require('../config/spotify').SPOTIFY_CLIENT_ID
+  var SPOTIFY_CONFIG_CLIENT_SECRET = require('../config/spotify').SPOTIFY_CLIENT_SECRET
+  var SPOTIFY_CONFIG_REDIRECT_URI = require('../config/spotify').SPOTIFY_REDIRECT_URI
+  var SPOTIFY_CONFIG_STATE_KEY = require('../config/spotify').SPOTIFY_STATE_KEY
+  
+} 
+
 
 const scopes = ['user-read-private', 'user-read-email', 'user-follow-read', 'user-library-read'];
 
