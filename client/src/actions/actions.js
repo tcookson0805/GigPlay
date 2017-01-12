@@ -1,8 +1,7 @@
 import axios from 'axios'
 import Spotify from 'spotify-web-api-js';
-// import base from '../../../config/firebase';
-var base = require('../../../config/firebase') || undefined;
-
+import base from '../../../config/firebase';
+// var base = require('../../../config/firebase') || undefined;
 
 const _ = require('underscore');
 const spotifyApi = new Spotify();
@@ -30,8 +29,10 @@ export function setTokens({accessToken, refreshToken}) {
 /* get the user's info from the /me api */
 export function getMyInfo() { 
   return dispatch => {
+    console.log('getMyInfo running')
     dispatch({ type: SPOTIFY_ME_BEGIN});
     spotifyApi.getMe().then(data => {
+      // console.log('getMyInfo data', data)
       dispatch({ type: SPOTIFY_ME_SUCCESS, data: data });
     }).catch(e => {
       dispatch({ type: SPOTIFY_ME_FAILURE, error: e });
@@ -40,13 +41,107 @@ export function getMyInfo() {
 }
 
 
+// export const FETCH_SPOTIFY = 'FETCH_SPOTIFY';
+
+// export function getSpotify(){
+
+//   return dispatch => {
+
+//     console.log('getSpotify is running');
+
+//     let totalTracks;
+//     let trackCalls;
+
+//     spotifyApi.getMySavedTracks().then( tracks => {
+//       totalTracks = tracks.total
+//       trackCalls = Math.ceil(tracks.total / 50);
+
+//       console.log('tracks', tracks);
+//       console.log('totalTracks', totalTracks);
+//       console.log('trackCalls', trackCalls);
+
+
+//       return {totalTracks, trackCalls}
+//     })
+
+//     .then( data => {
+//       let totalCalls = data.trackCalls;
+//       let trackArray = [];
+//       let tracker = 0
+
+
+//       for(var i = 0; i < trackCalls; i++) {
+//         spotifyApi.getMySavedTracks({'limit': 50, 'offset': i*50}).then( tracks => {
+//           tracker ++
+//           // console.log('i', i)
+//           // console.log('all TRACKS', tracks)
+//           trackArray.push(tracks.items)         
+//           trackArray = _.flatten(trackArray);
+//           return {trackArray, tracker, trackCalls}
+//         })
+
+//         .then ( data => {
+//           let trackArray = _.flatten(data.trackArray);
+//           let tracker = data.tracker;
+//           let totalCalls = data.trackCalls;
+
+//           // console.log('DADADATATA', data)
+
+//           if(tracker === totalCalls){
+//             return { trackArray }
+//           } else {
+            
+//           } 
+
+//         })
+
+//         .then( data => {
+//           console.log('data', data)
+//           // const trackArray = data.trackArray;
+
+//           // let artistsArray = [];
+//           // let artistsObj = {}
+
+//           // for(var i = 0; i < trackArray.length; i++){
+            
+//           //   let artistName = trackArray[i].track.artists[0].name
+//           //   artistsArray.push(artistName);
+//           //   artistObj['artistName'] = trackArray[i].track
+
+//           // }
+          
+//           // return { artistsArray, artistsObj}
+
+//         })
+
+//         .then( data => {
+
+//           console.log('data', data)
+          
+
+//         })
+
+//       }
+
+//     })
+
+
+//   }
+
+
+// }
+
+
+
 export function getMyTracks(offset) {
   return dispatch => {
+    
+    console.log('getMyTracks running')
     
     let tracksLoaded = 0;
         
     spotifyApi.getMySavedTracks({'limit': 50}).then( tracks => {
-
+      // console.log('getMySavedTracks first call', tracks);
       const totalTracks  = tracks.total;
       const trackCalls  = Math.ceil(tracks.total / 50);
       const artistsArray = [];
@@ -54,8 +149,12 @@ export function getMyTracks(offset) {
       
       tracks.items.forEach(function(item, index) {
         tracksLoaded++
+        // console.log(item.track.artists[0].name)
         
-        let artistName = item.track.artists[0].name.replace('.','').replace('$','').replace('#','').replace('[','').replace(']','');            
+        let artistNameFirst = item.track.artists[0].name.replace('.','').replace('$','').replace('#','').replace('[','').replace(']','');            
+        let artistName = artistNameFirst.replace('.','').replace('$','').replace('#','').replace('[','').replace(']','');
+        
+        // console.log(artistName)
         artistsArray.push(artistName);
 
         if(artistsObj[artistName]){
@@ -73,18 +172,23 @@ export function getMyTracks(offset) {
       
     })
     
-    .then( data => {  
+    .then( data => {
+      
+      // console.log('getMySavedTracks first call return', data)
+        
       let { tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = data
       const allTracks = tracks.items
       let arrayHold = [];
       let objHold = {}
 
-      for(var i = 1; i < trackCalls; i++) {
+      for(var i = 1; i <= trackCalls; i++) {
         spotifyApi.getMySavedTracks({'limit': 50, 'offset': i*50}).then( info => {
           info.items.forEach(function(item, index) {
             tracksLoaded++
             
-            let artistName = item.track.artists[0].name.replace('.','').replace('$','').replace('#','').replace('[','').replace(']',''); 
+            let artistNameFirst = item.track.artists[0].name.replace('.','').replace('$','').replace('#','').replace('[','').replace(']',''); 
+            let artistName = artistNameFirst.replace('.','').replace('$','').replace('#','').replace('[','').replace(']','');
+
             allTracks.push(item)
             artistsArray.push(artistName);
             
@@ -102,16 +206,23 @@ export function getMyTracks(offset) {
           
         })
         .then ( obj => {
-    
+          
+          // console.log('getMySavedTracks last call return', obj);
+          
           const tracks = obj.allTracks    
           const artistsArrayUniq = _.uniq(obj.artistsArray);
-          console.log('artistsArrayUniq',artistsArrayUniq)
+          // console.log('artistsArrayUniq',artistsArrayUniq)
           const artistsArray = _.sortBy(artistsArrayUniq)
           artistsArray.unshift('ALL ARTISTS')
-          console.log('artistsArray', artistsArray)
+          // console.log('artistsArray', artistsArray)
           let payload = {artistsArray, artistsObj, totalTracks, trackCalls, tracks, tracksLoaded}
+          
+          // console.log('getMySaved Tracks final payload', payload);
 
-          dispatch({'type': FETCH_TRACKS, 'data': payload})
+          if(payload.tracks.length === payload.totalTracks){
+            dispatch({'type': FETCH_TRACKS, 'data': payload})            
+          }
+
         })
       }
     })
@@ -133,6 +244,8 @@ export function getConcerts(artistsArray) {
   
   return dispatch => {
     
+    console.log('getConcerts starting to run');
+
     // setting up info to be returned
     let artistsObjTM = {}
     let concertsList = [];
@@ -144,7 +257,7 @@ export function getConcerts(artistsArray) {
     };
     let artistsIdArray = [];
     let artistsDone = 0;
-    const artistsNum = artistsArray.length
+    const artistsNum = artistsArray.length;
 
     // looping through each artist
     for(var i = 0; i < artistsNum; i++) {
@@ -198,6 +311,8 @@ export function getConcerts(artistsArray) {
       })
       .then( data => {
         
+        // console.log('getConcerts first run', data);
+
         // Important step....by making sure that we have gotten all the artists information first before making
         // our request to ticketmaster, we can use that information to create an id string of all the artists and
         // send ONE batched call to ticketmaster to get all events. This means we only send one request for all artists
@@ -258,7 +373,9 @@ export function getConcerts(artistsArray) {
             
             })
             _.sortBy(concertsDisplayList['totalList'], 'date');
+            concertsDisplayList.totalObj['ALL ARTISTS'] = concertsDisplayList.totalList;
             const payload = { concertsList, artistsObjTM, artistsIdArray, artistsIdString, concertsDisplayList }
+            // console.log('getConcerts payload', payload);
             dispatch({'type': FETCH_CONCERTS, data: payload});  
           })
         }
