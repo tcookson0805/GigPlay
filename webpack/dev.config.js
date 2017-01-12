@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const combineLoaders = require('webpack-combine-loaders');
 
 module.exports = {
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
     'babel-polyfill',
