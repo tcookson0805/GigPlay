@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import base from '../../../config/firebase';
 import { getMyInfo, setTokens, getMyTracks, getConcerts }   from '../actions/actions';
 import { getArtistsArrayFirebase } from '../actions/firebase-actions';
+import Loading from 'react-loading'
 
 import Artist from '../components/artist';
 import ArtistAll from '../components/artist_all.js';
@@ -46,7 +47,16 @@ class ArtistList extends Component {
             <h2>FILTER BY ARTIST</h2>
           </div>
           <div className='list-group'>
-            Loading ...
+
+
+            <div className="loading">
+              Loading 
+            </div>
+            
+            <div className="loader">
+              <Loading type="bars" color="e3e3e3" height={10} width={10} color={`#1ED760`} />
+            </div>
+            
           </div>
         </div>
       )    
