@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import loginSVG from '../log_in.svg';
 import BackgroundVideo from 'react-background-video';
 
-/**
- * Our login page
- * Has a login button that hit's the login url
- */
+
 export default class Login extends Component {
   
   constructor(props) {

@@ -67,7 +67,7 @@ class ConcertMap extends Component {
     let { concertsDisplayList, concertsDisplayListFirebase } = this.props;
     
     let displayList = concertsDisplayListFirebase || concertsDisplayList;
-
+    console.log('displayList', displayList);
     let that = this;
     let list;
     
