@@ -14,9 +14,12 @@ import rootReducer from './reducers/index';
 // Components
 import App from './components/app';
 import Login from './components/login';
+
 import User from './components/user';
-import Error from './components/error';
+
 import Main from './components/main';
+
+import Error from './components/error';
 
 // Sync dispatched route actions to the history
 
