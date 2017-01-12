@@ -66,21 +66,19 @@ class ConcertMap extends Component {
     
     let { concertsDisplayList, concertsDisplayListFirebase } = this.props;
     
-    if(!concertsDisplayList){
-      concertsDisplayList = concertsDisplayListFirebase;
-    }
-    
+    let displayList = concertsDisplayListFirebase || concertsDisplayList;
+
     let that = this;
     let list;
     
-    if(!concertsDisplayList){
+    if(!displayList){
       return <div>loading....</div>
     }
     
-    if(concertsDisplayList.filteredList && concertsDisplayList.filteredList.length){
-      list = concertsDisplayList.filteredList
+    if(displayList.filteredList && displayList.filteredList.length){
+      list = displayList.filteredList
     } else {
-      list = concertsDisplayList.totalList
+      list = displayList.totalList
     }
     
     return(
