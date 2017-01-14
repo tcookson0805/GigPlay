@@ -67,6 +67,8 @@ ul {
   left: -50%;
   width: 200%;
   height: 200%;
+  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%);
 }
 
 video {
@@ -81,21 +83,27 @@ video {
 }
 
 .login-hero {
-  opacity: 0.5;
+/*  opacity: 0.5;*/
 /*  width: 30em;*/
 /*  position: relative;*/
-  top: 60%;
-  transform: translateY(50%);
+/*  top: 50%;*/
+  transform: translateY(40%);
   text-align: center;
+  background-color: transparent;
+}
+
+.login-hero-info img {
+
 }
 
 .login-hero-info {
-
+  opacity: 1;
 }
 
 .login-hero-info-text1 {
   font-weight: bold;
   font-size: 1.2em;
+  opacity: 1
 }
 
 .login-hero-info-link {
