@@ -86,6 +86,34 @@ class ConcertMap extends Component {
         <div className="map">
           <Map google={this.state.google} onClick={this.onMapClicked} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style} containerStyle={this.state.containerStyle}>
            {list.map(function(concert, index) {
+
+              var yy = concert.date.slice(0,4);
+              var mm = concert.date.slice(5,7);
+              var dd = concert.date.slice(8,10);
+
+              var months = {
+                '01': 'January',
+                '02': 'February',
+                '03': 'March',
+                '04': 'April',
+                '05': 'May',
+                '06': 'June',
+                '07': 'July',
+                '08': 'August',
+                '09': 'September',
+                '10': 'October',
+                '11': 'November',
+                '12': 'December'
+              }
+
+              var date = months[mm] + ' ' + dd + ', ' + yy;
+
+              if(concert.state){
+                var location = concert.city + ', ' + concert.state;
+              } else {
+                var location = concert.city
+              }
+
               return (
                 <Marker
                   onClick={that.onMarkerClick}
@@ -93,7 +121,7 @@ class ConcertMap extends Component {
                   venue={concert.venue}
                   city={concert.city}
                   state={concert.state}
-                  date={concert.date}
+                  date={date}
                   time={concert.time} 
                   position={{'lat':concert.lat, 'lng':concert.long}}
                   event={concert.event}
@@ -102,21 +130,28 @@ class ConcertMap extends Component {
                 />
               )
             })}
-            <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
+            <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow} class='infoMarker'>
                 <div className='map-info-window'>
-                  <h1><strong>{this.state.selectedPlace.artist}</strong></h1>
-                  <p>{this.state.selectedPlace.event}</p>
+                  
+                  <div className="map-info-window-artist">
+                    <h1>{this.state.selectedPlace.artist}</h1>
+                  </div>
                   
                   <div>
                     <strong>Venue:</strong> {this.state.selectedPlace.venue}
                   </div>
-                  <div><strong>Date:</strong> {this.state.selectedPlace.date}</div>
-                  <div><strong>Time:</strong> {this.state.selectedPlace.time}</div>
+
+                  <div>
+                    <strong>Date:</strong> {this.state.selectedPlace.date}
+                  </div>
+                  
+                  
                   <div>
                     <a href={this.state.selectedPlace.url} target="_blank">
                       <img src="../../style/images/ticket2.png" height="40em" alt=""/>
                     </a>
                   </div>
+
                 </div>
             </InfoWindow> 
           </Map>                 
