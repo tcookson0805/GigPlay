@@ -17,13 +17,28 @@ class ResultsBox extends Component {
     
     const { concertsDisplayList, concertsDisplayListFirebase } = this.props
     
-    // console.log('concertsDisplayList', concertsDisplayList);
-    // console.log('concertsDisplayListFirebase', concertsDisplayListFirebase);
+    console.log('concertsDisplayList', concertsDisplayList);
+    console.log('concertsDisplayListFirebase', concertsDisplayListFirebase);
     let list = concertsDisplayListFirebase || concertsDisplayList
     let displayList;
      
     if(!list){
-      return <div>loading....</div>
+      return (
+        <div className="results-box col-md-12">
+          <div className="results-box-header">
+            <h2>SHOWS FROM YOUR FAVORITE ARTISTS</h2>
+          </div>
+          <div>
+            <div className="loading">
+              Loading 
+            </div>
+            
+            <div className="loader">
+              <img src="../../style/images/loading.svg" alt=""/>
+            </div>
+          </div>
+        </div>
+      )
     }
     
     if(list.filteredList && list.filteredList.length){
@@ -64,6 +79,7 @@ class ResultsBox extends Component {
         <div className="results-group">
           { 
             displayList.map(function(concert, index) {
+              // console.log('concert.date', concert.date);
               if(concert.display){
                 return (
                   <ResultItem 
