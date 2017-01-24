@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import loginSVG from '../log_in.svg';
 import BackgroundVideo from 'react-background-video';
 
-import loginSVG2 from '../../../public/9a1de5e2bdf092f25e0b62818dedd02e.svg'
-
 export default class Login extends Component {
   
   constructor(props) {
