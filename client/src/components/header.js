@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavDropdown, MenuItem, Row, Col, Nav } from 'react-bootstrap'
 
-import SearchBox from '../containers/search_box';
 import { getUserInfoFirebase } from '../actions/firebase-actions';
 
 class Header extends Component {
