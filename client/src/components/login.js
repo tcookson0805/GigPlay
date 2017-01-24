@@ -35,7 +35,7 @@ export default class Login extends Component {
                 <p className="login-hero-info-text1">Find concerts in your area <br />based on the songs you <br />listen to most.</p>
                 <p>And support artists you love</p>
                 <span className="login-hero-info-link">
-                  <a href="/login" dangerouslySetInnerHTML={{__html: loginSVG2}}></a>                
+                  <a href="/login" dangerouslySetInnerHTML={{__html: loginSVG}}></a>                
                 </span>
               </div>
             </div>
