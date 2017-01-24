@@ -54,7 +54,7 @@ class ArtistList extends Component {
             </div>
             
             <div className="loader">
-              <Loading type="bars" color="e3e3e3" height={10} width={10} color={`#1ED760`} />
+              <img src="../../style/images/loading.svg" alt=""/>
             </div>
             
           </div>
