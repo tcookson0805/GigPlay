@@ -172,17 +172,6 @@ video {
   margin-top: 2em;
 }
 
-.search-box {
-  border: 1px solid black;
-}
-
-.search-form {
-  margin: 1em;
-}
-
-.search-form > .form-group {
-  margin: 0 1em;
-}
 
 /* ARTIST LIST COMPONENT*/
 
@@ -268,10 +257,6 @@ video {
   color: black;
 }
 
-.map-info-window-background {
-  height: 100%;
-}
-
 .map-info-window h1 {
   margin-bottom: 0.5em;
 }
@@ -327,16 +312,4 @@ video {
 
 .result-item-city {
   font-style: italic;
-}
-
-.result-item-info {
-/*  border-left: 0.1em solid black;
-*/  
-/*  padding-left: 2em;
-*/  float: left;
-}
-
-.result-item-img {
-  width: 10%;
-  height: 10%;
 }
