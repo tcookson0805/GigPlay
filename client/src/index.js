@@ -29,8 +29,10 @@ const history = syncHistoryWithStore(hashHistory, store);
 
 
 // import '../style/style.less';
-// import '../style/style.css';
+import '../style/style.css';
 // require("css!../style/style.css");
+
+// import '../style/style.scss'
 
 class Root extends Component {
   render() {
