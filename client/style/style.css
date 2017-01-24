@@ -112,13 +112,19 @@ video {
 
 /* LOADING COMPONENT*/
 .loading {
-  font-size: 1em;
+  font-size: 2em;
   float: left;
 }
 
 .loader {
-  height: 20em;
+  padding-top: 0.5em;
+  padding-left: 0.25em;
   float: left;
+}
+
+.loader img {
+  width: 2em;
+  height: auto;
 }
 
 
@@ -182,8 +188,6 @@ video {
 
 .artist-list {
   padding: 1em;
-  margin-top: 1em;
-
 }
 
 .artist-list-header {
@@ -218,11 +222,12 @@ video {
 }
 
 .artist {
+  font-family: HelveticaNeue;
   margin: 0.4em;
   cursor: pointer;
   border-radius: 1em;
   font-weight: bold;
-  font-size: 0.7em;
+  font-size: 0.8em;
   color: blue;
 }
 
@@ -242,13 +247,15 @@ video {
 
 /* MAP BOX COMPONENT */
 
+.infoMarker {
+  background-color: blue;
+}
 
 .map-box {
   border: 0.1em solid black;
   height: 40em;
   margin-top: 1em;
   overflow: auto;
-  color: blue;
 }
 
 .map {
@@ -261,6 +268,10 @@ video {
   color: black;
 }
 
+.map-info-window-background {
+  height: 100%;
+}
+
 .map-info-window h1 {
   margin-bottom: 0.5em;
 }
@@ -269,7 +280,7 @@ video {
 
 .results-box {
   padding: 1em;
-  margin-top: 1em;
+/*  margin-top: 1em;*/
 }
 
 .results-box-header {
@@ -285,7 +296,7 @@ video {
 }
 
 .result-item {
-  margin: 1em;
+  font-family: HelveticaNeue
 }
 
 .result-item-header {
@@ -293,8 +304,8 @@ video {
 }
 
 .result-item-ticket {
-  position: absolute;
-  padding-left: 4em;
+/*  position: absolute;
+  padding-left: 4em;*/
 }
 
 .result-item-date {
@@ -304,6 +315,18 @@ video {
 
 .result-item-artist {
   font-weight: bold;
+}
+
+.result-item-venue {
+
+}
+
+.result-item-location {
+
+}
+
+.result-item-city {
+  font-style: italic;
 }
 
 .result-item-info {
