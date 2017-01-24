@@ -281,7 +281,8 @@ video {
 }
 
 .result-item {
-  font-family: HelveticaNeue
+  font-family: HelveticaNeue;
+  margin-bottom: 1em;
 }
 
 .result-item-header {
