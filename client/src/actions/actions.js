@@ -372,10 +372,11 @@ export function getConcerts(artistsArray) {
               }
             
             })
-            _.sortBy(concertsDisplayList['totalList'], 'date');
-            concertsDisplayList.totalObj['ALL ARTISTS'] = concertsDisplayList.totalList;
+            const sorted = _.sortBy(concertsDisplayList['totalList'], 'date');
+            concertsDisplayList.totalList = sorted;
+            concertsDisplayList.totalObj['ALL ARTISTS'] = sorted;
             const payload = { concertsList, artistsObjTM, artistsIdArray, artistsIdString, concertsDisplayList }
-            // console.log('getConcerts payload', payload);
+            console.log('getConcerts payload', payload);
             dispatch({'type': FETCH_CONCERTS, data: payload});  
           })
         }
