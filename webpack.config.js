@@ -31,11 +31,12 @@ module.exports = {
 
   module: {
     loaders: [
+      { test: /\.svg$/, loaders: ['raw-loader']},
       { test: /\.js?$/, loader: 'babel', exclude: /node_modules/ },
       { test: /\.scss?$/, loader: 'style!css!sass', include: path.join(__dirname, 'src', 'styles') },
       { test: /\.png$/, loader: 'file' },
       { test: /\.css$/, loader: 'style-loader!css-loader', },
-      { test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/, loader: 'file'}
+      { test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9]+)?$/, loader: 'file'}
     ]
   }
 }
