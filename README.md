@@ -17,3 +17,24 @@ The front-end is built using React Redux and styled with Boostrap, while the Bac
 ### Mobile
 
 # Development Roadmap
+
+Future enhancements
+
+* continue to make UI enhancements
+
+* add search feature
+	* search for new artists
+	* search for concerts
+		* by location
+		* by time frame
+
+* allow artist list manipulation
+	* add artists
+	* remove artists
+
+* improve map feature
+	* implement cluster/heat mapping feature
+
+* allow users to share concert information
+    * with other users directly
+    * on social media feeds
