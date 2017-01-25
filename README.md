@@ -4,7 +4,7 @@ GigPlay is an app that informs its users of upcoming concerts for the bands they
 
 # Overview
 
-People love music. People love concerts. People especially love concerts featuring bands playing the music that they love. That is where GigPlay comes in. GigPlay takes the songs that people save in their Spotify Account and then makes calls to TicketMaster's API to provide a list of all those band's upcoming concerts.  
+People love music. People love concerts. People especially love concerts featuring bands playing the music that they love. That is where GigPlay comes in. GigPlay takes the songs that people save in their Spotify Account and then uses TicketMaster's API to provide a list of all upcoming concerts for the bands that play those songs.
 
 # Technical
 
