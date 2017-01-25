@@ -33,43 +33,41 @@ const ResultItem = (props) => {
 
   console.log('date', date);
 
+        // <div className="col-md-2 col-sm-6 result-item-ticket">
+        //     <ResultItemTicket url={props.url} />
+        // </div>
 
   return (
+
     <div className="result-item">
-      
+      <a href={props.url} target="_blank">
       <div className="row">
-    
-        <div className="col-md-2">
-          <div className="result-item-date">
+      
+        <div className="col-md-3 col-sm-6 result-item-date">
             {date}
-          </div>
         </div>
         
-        <div className="col-md-3">
-          <div className="result-item-artist">
+        <div className="col-md-4 col-sm-6 result-item-artist">
             {props.artist} 
-          </div>
         </div>
         
-        <div className="col-md-5">
-          <div className="result-item-location">
-            <div className="result-item-venue">
+        <div className="col-md-5 col-sm-6 result-item-location">
+          <div className="row result-item-venue">
+            <div className="col-md-12">
               {props.venue}
             </div>
-            <div className="result-item-city">
+          </div>
+          <div className="row result-item-city">
+            <div className="col-md-12">
               {location}
             </div>
           </div>
         </div>
-        
-        <div className="col-md-2">
-          <div className="result-item-ticket">
-            <ResultItemTicket url={props.url} />
-          </div>
-        </div>
-      
-      </div>
 
+      </div>
+      </a>
+
+    
     </div>
   )
 }
