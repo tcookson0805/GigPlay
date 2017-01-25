@@ -231,7 +231,7 @@ video {
 
 
 .hero {
-  margin: auto 2em;
+  margin: 0;
 }
 
 /* MAP BOX COMPONENT */
@@ -282,8 +282,19 @@ video {
 
 .result-item {
   font-family: HelveticaNeue;
-  margin-bottom: 1em;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
 }
+
+.result-item a {
+  color: black;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.result-item:hover {
+/*  background-color: #E95D12;
+*/}
 
 .result-item-header {
   
@@ -313,4 +324,190 @@ video {
 
 .result-item-city {
   font-style: italic;
+}
+
+
+
+
+
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+
+  .login-background {
+    display: none;
+  }
+
+  .login-hero {
+    text-align: center;
+    background-color: transparent;
+  }
+
+  .header {
+    height: 8em;
+    padding-top: 1em;
+    text-align: center;
+    border-bottom: 0.1em solid black;
+  }
+
+  .header-logo {
+    padding: 0;
+  }
+
+  .header-logo img {
+    width: 130%;
+    margin-left: 0.5em;
+  }
+
+  .header-user {
+    display: none; 
+  }
+
+
+  /* ARTIST LIST COMPONENT*/
+
+  .artist-list {
+    padding: 0.5em 0 1em 0;
+    border: 0.1em solid black;
+
+    margin: 2em 0;
+  }
+
+  .artist-list-header {
+    margin: 0.5em auto;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .artist-list-header h2 {
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+  
+  .artist-list > .list-group {
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 25em;
+    display: inline-block;
+  }
+
+  .list-group-item {
+    border: 0.1em solid grey;
+/*    float: left;*/
+    letter-spacing: 0em;
+  }
+
+  .artist {
+    font-family: HelveticaNeue;
+    margin-left: 10%;
+    cursor: pointer;
+    border-radius: 0.75em;
+/*    font-weight: bold;*/
+    font-size: 1.2em;
+    width: 80%;
+/*    float: left;*/
+    text-align: center;
+    padding: 1em 1.5em;
+  }
+
+  .artist * {
+    text-align: center;
+  }
+
+
+
+  /* RESULTS COMPONENT */
+
+  .results-box {
+    padding: 0.5em 0;
+    border: 0.1em solid black;
+  /*  margin-top: 1em;*/
+  }
+
+  .results-box-header {
+    margin: 0.5em auto;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .results-box-header h2 {
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+
+  .results-group {
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 25em;
+  }
+
+  .result-item {
+    font-family: HelveticaNeue;
+    margin-bottom: 1em;
+    text-align: center;
+  }
+
+  .result-item-date {
+/*    width: 40%;*/
+    text-align: center;
+/*    margin-bottom: 0.5em;*/
+/*    float:left;*/
+    font-size: 1.2em;
+  }
+
+  .result-item-artist {
+/*    width: 60%;*/
+    text-align: center;
+/*    margin-bottom: 0.5em;*/
+    font-size: 1.5em;
+  }
+
+  .result-item-location {
+/*    width: 100%;*/
+    text-align: center;
+/*    float: right;*/
+    font-size: 1.2em;
+  }
+
+  .result-item-venue {
+    text-align: center;
+  }
+
+  .result-item-city {
+    text-align: center;
+  }
+
+
+  /* MAP BOX COMPONENT */
+
+  .infoMarker {
+    background-color: blue;
+  }
+
+  .map-box {
+    position: absolute;
+    border: 0.1em solid black;
+    height: 10em;
+    width: 90%;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-top: 1em;
+    margin-bottom: 2em;
+    overflow: auto;
+    display: none;
+  }
+
+  .map {
+    width: 100%;
+    height: 100%;
+  }
+
+  .map-info-window {
+    color: black;
+  }
+
+  .map-info-window h1 {
+    margin-bottom: 0.5em;
+  }
+
+
 }
