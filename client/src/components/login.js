@@ -24,10 +24,8 @@ export default class Login extends Component {
         </div>
 
         <div className="row">
-          <div className="col-md-4">
-          </div>
-          <div className="col-md-4">
-            <div className="jumbotron login-hero">
+          <div className="col-md-4 offset-md-4">
+            <div className="login-hero">
               <div className="login-hero-info">
                 <img src="../../style/images/Gigplay-logo-1x.png" alt="Gigplay Logo"/>
                 <p className="login-hero-info-text1">Find concerts in your area <br />based on the songs you <br />listen to most.</p>
