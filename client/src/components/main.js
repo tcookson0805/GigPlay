@@ -145,7 +145,14 @@ class Main extends Component {
           <Header />
         </div>
         <div className='row hero'>
-          <div className="col-md-8">
+
+          <div className="col-md-5">
+            <div className="row">
+              <ArtistList />
+            </div>
+          </div>
+          
+          <div className="col-md-7">
             <div className="row">
               <ResultsBox />
             </div>
@@ -153,11 +160,7 @@ class Main extends Component {
               <MapBox />
             </div>
           </div>
-          <div className="col-md-4">
-            <div className="row">
-              <ArtistList />
-            </div>
-          </div>
+
         </div>
       </div>
     )
