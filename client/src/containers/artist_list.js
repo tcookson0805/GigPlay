@@ -42,7 +42,7 @@ class ArtistList extends Component {
 
     if(!displayList) {
       return (
-        <div className='artist-list col-md-12'>
+        <div className='col-md-12 col-sm-12 artist-list'>
           <div className="artist-list-header">
             <h2>FILTER BY ARTIST</h2>
           </div>
