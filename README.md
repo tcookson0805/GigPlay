@@ -12,9 +12,7 @@ The front-end is built using React Redux and styled with Boostrap, while the Bac
 
 # UX
 
-### Web
-
-### Mobile
+User is is first directed to login in with Spotify. By doing so they will be directed to Spotify to enter their account email and password for authentication. After authentication, User is taken to their homepage. The homepage contains a list of all the artists that play the songs they have saved to the Spotify account, a list of all upcoming concerts by those artists, and a map with markers denoting the concert locations. By clicking on an artist name, the User is able to filter the concert and map results.  
 
 # Development Roadmap
 
