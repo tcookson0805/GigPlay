@@ -8,8 +8,6 @@ import base from '../../../config/firebase';
 
 import googleApiKey from '../../../config/google';
 
-
-
 import { fetchCity } from '../actions/actions'
 
 class ConcertMap extends Component {
