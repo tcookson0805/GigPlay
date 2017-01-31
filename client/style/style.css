@@ -93,7 +93,7 @@ video {
 }
 
 .login-hero-info img {
-
+  width: 80%;
 }
 
 .login-hero-info {
@@ -102,12 +102,20 @@ video {
 
 .login-hero-info-text1 {
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.5em;
   opacity: 1
+}
+
+.login-hero-info-text2 {
+  font-size: 1.25em;
 }
 
 .login-hero-info-link {
   opacity: 1.0;
+}
+
+.login-hero-demo {
+
 }
 
 /* LOADING COMPONENT*/
@@ -241,8 +249,11 @@ video {
 }
 
 .map-box {
+  position: absolute;
   border: 0.1em solid black;
   height: 40em;
+  left: 2%;
+  width: 98%;
   margin-top: 1em;
   overflow: auto;
 }
