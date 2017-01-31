@@ -80,6 +80,7 @@ class ArtistList extends Component {
               } 
             }
           })}
+          <div></div>
         </div>
       </div>
     )
