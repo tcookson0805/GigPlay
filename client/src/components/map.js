@@ -25,7 +25,7 @@ class ConcertMap extends Component {
 
       },
       containerStyle: {
-        height: '40em',
+        height: '31em',
         width: '100%'
       },
       showingInfoWindow: false,

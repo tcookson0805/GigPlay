@@ -32,10 +32,24 @@ const ResultItem = (props) => {
 
 
   console.log('date', date);
+  
+  console.log('time', typeof props.time);
 
-        // <div className="col-md-2 col-sm-6 result-item-ticket">
-        //     <ResultItemTicket url={props.url} />
-        // </div>
+  var timeConversion =  function(time){
+    var result = '';
+    var hour = parseInt(time.substring(0,2));
+    var min = time.substring(2,5);
+
+    if(hour >= 12) {
+      var h = hour - 12
+      result = h + min + ' pm';
+    } else {
+      result = hour + min + ' am';
+    }
+    return result
+  }
+
+  var time = timeConversion(props.time);
 
   return (
 
@@ -43,11 +57,11 @@ const ResultItem = (props) => {
       <a href={props.url} target="_blank">
       <div className="row">
       
-        <div className="col-md-3 col-sm-6 result-item-date">
+        <div className="col-md-2 col-sm-6 result-item-date">
             {date}
         </div>
         
-        <div className="col-md-4 col-sm-6 result-item-artist">
+        <div className="col-md-3 col-sm-6 result-item-artist">
             {props.artist} 
         </div>
         
@@ -63,11 +77,13 @@ const ResultItem = (props) => {
             </div>
           </div>
         </div>
+        <div className="col-md-2">
+          {time}
+        </div>
 
       </div>
       </a>
 
-    
     </div>
   )
 }

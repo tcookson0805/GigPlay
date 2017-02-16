@@ -12,7 +12,6 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-console.log(process.env.NODE_ENV);
 // if we're developing, use webpack middleware for module hot reloading
 if (process.env.NODE_ENV !== 'production') {
   console.log('==> 🌎 using webpack');
@@ -28,7 +27,6 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
   app.use(webpackHotMiddleware(compiler));
 }
-
 
 app.use(morgan('dev'))
   .use(cookieParser())
