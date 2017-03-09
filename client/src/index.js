@@ -14,27 +14,20 @@ import rootReducer from './reducers/index';
 // Components
 import App from './components/app';
 import Login from './components/login';
-
 import User from './components/user';
-
 import Main from './components/main';
-
 import Error from './components/error';
 
 // Sync dispatched route actions to the history
-
 const middleware = applyMiddleware(thunk);
 const store = createStore(rootReducer, middleware);
 const history = syncHistoryWithStore(hashHistory, store);
 
-
-// import '../style/style.less';
-// import '../style/style.css';
-// require("css!../style/style.css");
+// importing CSS file
 import '../style/main.css';
-// import '../style/style.scss'
 
 class Root extends Component {
+
   render() {
     return (
       <Provider store={store}>
@@ -49,6 +42,7 @@ class Root extends Component {
       </Provider>
     );
   }
+  
 }
 
 ReactDOM.render(<Root />, document.getElementById('root'));

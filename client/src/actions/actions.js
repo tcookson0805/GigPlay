@@ -28,10 +28,8 @@ export function setTokens({accessToken, refreshToken}) {
 // getting the user's info from the /me api
 export function getMyInfo() { 
   return dispatch => {
-    // console.log('getMyInfo running')
     dispatch({ type: SPOTIFY_ME_BEGIN});
     spotifyApi.getMe().then(data => {
-      // console.log('getMyInfo data', data)
       dispatch({ type: SPOTIFY_ME_SUCCESS, data: data });
     }).catch(e => {
       dispatch({ type: SPOTIFY_ME_FAILURE, error: e });
@@ -42,12 +40,11 @@ export function getMyInfo() {
 
 export function getMyTracks(offset) {
   return dispatch => {
-    
-    // console.log('getMyTracks running')
+
     let tracksLoaded = 0;
         
     spotifyApi.getMySavedTracks({'limit': 50}).then( tracks => {
-      // console.log('getMySavedTracks first call', tracks);
+
       const totalTracks  = tracks.total;
       const trackCalls  = Math.ceil(tracks.total / 50);
       const artistsArray = [];
@@ -55,12 +52,10 @@ export function getMyTracks(offset) {
       
       tracks.items.forEach(function(item, index) {
         tracksLoaded++
-        // console.log(item.track.artists[0].name)
         
         let artistNameFirst = item.track.artists[0].name.replace('.','').replace('$','').replace('#','').replace('[','').replace(']','');            
         let artistName = artistNameFirst.replace('.','').replace('$','').replace('#','').replace('[','').replace(']','');
         
-        // console.log(artistName)
         artistsArray.push(artistName);
 
         if(artistsObj[artistName]){
@@ -71,22 +66,24 @@ export function getMyTracks(offset) {
             'ticketmaster_id': null
           }
         }
-      })
+
+      });
       
       return { tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded};
       
     })
     
     .then( data => {     
-      // console.log('getMySavedTracks first call return', data)
-        
+
       let { tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = data
       const allTracks = tracks.items
       let arrayHold = [];
       let objHold = {}
 
       for(var i = 1; i <= trackCalls; i++) {
+
         spotifyApi.getMySavedTracks({'limit': 50, 'offset': i*50}).then( info => {
+          
           info.items.forEach(function(item, index) {
             tracksLoaded++
             
@@ -104,26 +101,26 @@ export function getMyTracks(offset) {
                 'ticketmaster_id': null
               }
             }
-          })
+
+          });
           
           return { artistsArray, artistsObj, allTracks, tracksLoaded }
           
         })
         .then ( obj => {        
-          // console.log('getMySavedTracks last call return', obj);         
+
           const tracks = obj.allTracks    
           const artistsArrayUniq = _.uniq(obj.artistsArray);
-          // console.log('artistsArrayUniq',artistsArrayUniq)
+
           const artistsArray = _.sortBy(artistsArrayUniq)
           artistsArray.unshift('ALL ARTISTS')
-          // console.log('artistsArray', artistsArray)
+
           let payload = {artistsArray, artistsObj, totalTracks, trackCalls, tracks, tracksLoaded}
           
-          // console.log('getMySaved Tracks final payload', payload);
           if(payload.tracks.length === payload.totalTracks){
             dispatch({'type': FETCH_TRACKS, 'data': payload})            
           }
-        })
+        });
       }
     })
   };
@@ -143,8 +140,6 @@ if(!TICKETMASTER_ROOT){
 export function getConcerts(artistsArray) {
   
   return dispatch => {
-    
-    console.log('getConcerts starting to run');
 
     // setting up info to be returned
     let artistsObjTM = {}
@@ -160,8 +155,7 @@ export function getConcerts(artistsArray) {
     const artistsNum = artistsArray.length;
 
     // looping through each artist
-    for(var i = 0; i < artistsNum; i++) {
-      
+    for(var i = 0; i < artistsNum; i++) {     
       // creating key for each artist set to object that will contain their ticketmaster info in artistsObjTM
       let artistName = artistsArray[i];
       artistsObjTM[artistName] = {
@@ -206,13 +200,12 @@ export function getConcerts(artistsArray) {
             }
           })
         }
+
         artistsDone++
         return
       })
       .then( data => {
         
-        // console.log('getConcerts first run', data);
-
         // Important step....by making sure that we have gotten all the artists information first before making
         // our request to ticketmaster, we can use that information to create an id string of all the artists and
         // send ONE batched call to ticketmaster to get all events. This means we only send one request for all artists
@@ -227,14 +220,16 @@ export function getConcerts(artistsArray) {
           axios.get(eventUrl).then( evts => {
             
             evts.data._embedded.events.forEach(function(item, index) {        
+
               const location = item._embedded.venues[0].location || {};
-              // console.log('location', location)
+
               if(location.hasOwnProperty('latitude') && location.hasOwnProperty('longitude')) {
 
-                concertsList.push(item)                
+                concertsList.push(item)   
+
                 const location = item._embedded.venues[0].location                
                 const attractions = item._embedded.attractions
-                let artist
+                let artist;
                 let city = item._embedded.venues[0].city ? item._embedded.venues[0].city.name : '';
                 let state = item._embedded.venues[0].state ? item._embedded.venues[0].state.name : '';
                 let date = item.dates.start.localDate;
@@ -263,7 +258,7 @@ export function getConcerts(artistsArray) {
                     duplicate = true
                   }
                 })
-                console.log('artist', artist);
+
                 if(!duplicate && artist){
                   concertsDisplayList['totalList'].push({artist, city, state, date, lat, long, time, venue, event, url, display});
                   concertsDisplayList['totalObj'][artist].push({artist, city, state, date, lat, long, time, venue, event, url, display});
@@ -271,20 +266,22 @@ export function getConcerts(artistsArray) {
             
               }
             
-            })
+            });
+            
             const sorted = _.sortBy(concertsDisplayList['totalList'], 'date');
+            
             concertsDisplayList.totalList = sorted;
             concertsDisplayList.totalObj['ALL ARTISTS'] = sorted;
+            
             const payload = { concertsList, artistsObjTM, artistsIdArray, artistsIdString, concertsDisplayList }
-            console.log('getConcerts payload', payload);
+
             dispatch({'type': FETCH_CONCERTS, data: payload});  
-          })
+          });
         }
       }) 
     }
   }
 }
-
 
 const MAP_ROOT_URL = 'https://maps.googleapis.com/maps/api/geocode/json?';
 const MAP_API_KEY = 'AIzaSyDOW-uZgD8XhxaRqeVfQB_c62UCthL3PGU';

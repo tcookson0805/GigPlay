@@ -11,14 +11,12 @@ const noStyle = {
   'cursor': 'default'
 }
 
-
 class Artist extends Component {
   
   constructor(props) {
     super(props);
     this.state = {}
   }
-
 
   componentWillMount(){
     
@@ -30,21 +28,19 @@ class Artist extends Component {
       name: name,
       style: noStyle
     })
-
   }
   
   render() {
 
     const { name, concerts } = this.props;
+
     return (
       <li className="artist list-group-item" style={this.state.style}>
         {name} (0)
       </li>
     )
-    
   }
 }
-
 
 function mapStateToProps(state) {
   const { user } = state.auth

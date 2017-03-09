@@ -16,16 +16,11 @@ class ArtistList extends Component {
     this.state = {};
   }
   
-  componentWillMount() {
-    console.log('ARTIST LIST ------- componentWillMount this.props', this.props)
-  }  
+  componentWillMount() {}  
 
   render() {
     
-    const { artistsArray, artistsArrayFirebase, concertsDisplayList, concertsDisplayListFirebase } = this.props
-    
-    console.log('ARTIST LIST ------- render this.props', this.props)
-    
+    const { artistsArray, artistsArrayFirebase, concertsDisplayList, concertsDisplayListFirebase } = this.props;
     const artistsList = artistsArrayFirebase || artistsArray;
     const displayList = concertsDisplayListFirebase || concertsDisplayList;
     let totalList;
@@ -41,28 +36,28 @@ class ArtistList extends Component {
     }
 
     if(!displayList) {
+
       return (
+        
         <div className='col-md-12 col-sm-12 artist-list'>
           <div className="artist-list-header">
             <h2>FILTER BY ARTIST</h2>
           </div>
           <div className='list-group'>
-
-
             <div className="loading">
               Loading 
             </div>
-            
             <div className="loader">
               <img src="../../style/images/loading.svg" alt=""/>
             </div>
-            
           </div>
         </div>
+
       )    
     }
 
     return (
+
       <div className='artist-list col-md-12'>
         <div className="artist-list-header">
           <h2>FILTER BY ARTIST</h2>
@@ -83,9 +78,9 @@ class ArtistList extends Component {
           <div></div>
         </div>
       </div>
+
     )
   }
-
 }
 
 function mapStateToProps(state) {

@@ -2,13 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map, Marker, InfoWindow, GoogleApiComponent } from 'google-maps-react'
+
 import base from '../../../config/firebase';
-
-// import GoogleMap from 'google-map-react';
-
 import googleApiKey from '../../../config/google';
 
-import { fetchCity } from '../actions/actions'
+import { fetchCity } from '../actions/actions';
 
 class ConcertMap extends Component {
     
@@ -21,9 +19,7 @@ class ConcertMap extends Component {
         lat: 37.09024,
         lng: -95.712891
       },
-      style: {
-
-      },
+      style: {},
       containerStyle: {
         height: '31em',
         width: '100%'
@@ -38,7 +34,6 @@ class ConcertMap extends Component {
     this.onMapClicked = this.onMapClicked.bind(this);
   }
 
-  
   onMarkerClick(props, marker, e){
     this.setState({
       selectedPlace: props,
@@ -52,20 +47,16 @@ class ConcertMap extends Component {
       this.setState({
         showingInfoWindow: false,
         activeMarker: null
-      })
+      });
     }
   }
 
-  componentWillUpdate(nextProps) {
-    // console.log('MAP nextProps', nextProps)
-  }
+  componentWillUpdate(nextProps) {}
 
   render() {
     
-    let { concertsDisplayList, concertsDisplayListFirebase } = this.props;
-    
+    let { concertsDisplayList, concertsDisplayListFirebase } = this.props;    
     let displayList = concertsDisplayListFirebase || concertsDisplayList;
-    console.log('displayList', displayList);
     let that = this;
     let list;
     
@@ -79,7 +70,8 @@ class ConcertMap extends Component {
       list = displayList.totalList
     }
     
-    return(
+    return (
+
       <div className="row">
         <div className="map">
           <Map google={this.state.google} onClick={this.onMapClicked} initialCenter={this.state.initialCenter} zoom={this.state.zoom} style={this.state.style} containerStyle={this.state.containerStyle}>
@@ -130,26 +122,20 @@ class ConcertMap extends Component {
             })}
             <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow} class='infoMarker'>
                 <div className='map-info-window'>
-                  
                   <div className="map-info-window-artist">
                     <h1>{this.state.selectedPlace.artist}</h1>
                   </div>
-                  
                   <div>
                     <strong>Venue:</strong> {this.state.selectedPlace.venue}
                   </div>
-
                   <div>
                     <strong>Date:</strong> {this.state.selectedPlace.date}
                   </div>
-                  
-                  
                   <div>
                     <a href={this.state.selectedPlace.url} target="_blank">
                       <img src="../../style/images/ticket2.png" height="40em" alt=""/>
                     </a>
                   </div>
-
                 </div>
             </InfoWindow> 
           </Map>                 

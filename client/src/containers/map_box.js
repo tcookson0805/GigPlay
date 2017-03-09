@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import ConcertMap from '../components/map'
+import ConcertMap from '../components/map';
 
 class MapBox extends Component {
   
@@ -10,13 +10,13 @@ class MapBox extends Component {
   }
   
   render() {
-    console.log('MAPBOX this.props', this.props)
-    const { concertsDisplayList, concertsDisplayListFirebase } = this.props;
 
+    const { concertsDisplayList, concertsDisplayListFirebase } = this.props;
     const displayList = concertsDisplayListFirebase || concertsDisplayList;
 
-    if(!displayList){
+    if(!displayList){  
       return (
+
         <div className="col-md-12 map-box">
           <div>
             <div className="loading">
@@ -28,13 +28,16 @@ class MapBox extends Component {
             </div>
           </div>
         </div>
+      
       )
     }
 
     return (
+      
       <div className="col-md-12 map-box">
         <ConcertMap />
       </div>
+    
     )
   }  
 }

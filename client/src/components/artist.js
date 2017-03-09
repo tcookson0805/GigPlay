@@ -1,7 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getConcertsFirebase, updateConcertsDisplayList, resetConcertsDisplayList, addToFilteredFirebase, removeFromFilteredFirebase } from '../actions/firebase-actions';
+import { 
+  getConcertsFirebase, 
+  updateConcertsDisplayList, 
+  resetConcertsDisplayList, 
+  addToFilteredFirebase, 
+  removeFromFilteredFirebase } from '../actions/firebase-actions';
 
 const _ = require('underscore');
 
@@ -13,7 +18,6 @@ const unSelectedStyle = {
   'backgroundColor': '#545A60',
   'color': 'white'
 }
-
 
 class Artist extends Component {
   
@@ -27,9 +31,7 @@ class Artist extends Component {
     }
   }
 
-
   componentWillMount(){
-    // console.log('ARTIST ------ componentWillMount this.props', this.props);
     
     const name = this.props.name;
     const concerts = this.props.concerts;
@@ -39,18 +41,18 @@ class Artist extends Component {
       name: name,
       concerts: concerts,
       style: unSelectedStyle
-    })
+    });
+
     this.handleClick = this.handleClick.bind(this);
   }
   
   handleClick(){
-    console.log('clicked');
+
     const { name, user, userInfoFirebase } = this.props;
     const id = userInfoFirebase ? userInfoFirebase.id : user.id;
     const endpoint = 'users/' + id;
     const selected = this.state.selected
   
-
     if(selected){
       this.setState({
         selected: false,
@@ -65,23 +67,14 @@ class Artist extends Component {
       this.props.addToFilteredFirebase(endpoint, this, name);
     }
 
-
-    // this.props.updateConcertsDisplayList(endpoint, this, name, this.state.selected)    
-
-
   }
 
-  componentDidMount() {
-    // console.log('ARTIST ------ componentDidMount state', this.state)  
-    // console.log('ARTIST ------ componentDidMount props', this.props)  
-  }
+  componentDidMount() {}
   
   componentWillReceiveProps(nextProps){
-    // console.log('ARTIST ------ nextProps', nextProps)
 
     const { name } = this.props;
     
-
     if(nextProps.concertsDisplayListFirebase){
       if(nextProps.concertsDisplayListFirebase.filteredObj[name]) {
         this.setState({
@@ -96,11 +89,9 @@ class Artist extends Component {
       }
     }  
   }
-
   
   render() {
-    // console.log('ARTIST ------ RENDER state', this.state)  
-    // console.log('ARTIST ------ RENDER props', this.props) 
+
     const { name, concerts } = this.props;
 
     return (
@@ -108,15 +99,15 @@ class Artist extends Component {
         {name} ({concerts.length})
       </li>
     )
-    
   }
 }
 
-
 function mapStateToProps(state) {
+
   const { user } = state.auth
   const { concertsDisplayList } = state.concerts
   const { concertsDisplayListFirebase, userInfoFirebase } = state.firebase
+  
   return { concertsDisplayList, concertsDisplayListFirebase, user, userInfoFirebase }
 }
 

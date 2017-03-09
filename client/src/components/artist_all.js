@@ -9,11 +9,11 @@ const selectedStyle = {
   'backgroundColor': 'black',
   'color': 'white'
 }
+
 const unSelectedStyle = {
   'backgroundColor': '#545A60',
   'color': 'white'
 }
-
 
 class ArtistAll extends Component {
   
@@ -27,13 +27,11 @@ class ArtistAll extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-
   handleClick() {
-    console.log('clicked');
+
     const { name, user, userInfoFirebase } = this.props;
     const id = userInfoFirebase ? userInfoFirebase.id : user.id;
     const endpoint = 'users/' + id;
-
 
     this.setState({
       selected: true,
@@ -44,7 +42,6 @@ class ArtistAll extends Component {
   }
 
   componentWillMount(){
-    // console.log('ARTIST ALL------ componentWillMount this.props', this.props);
     
     const name = this.props.name;
     const concerts = this.props.concerts;
@@ -56,17 +53,11 @@ class ArtistAll extends Component {
       style: selectedStyle,
       selected: true
     })
-    
   }
   
-  componentDidMount() {
-    // console.log('ARTIST ALL ------ componentDidMount state', this.state)  
-    // console.log('ARTIST ALL ------ componentDidMount props', this.props)  
-  }
+  componentDidMount() {}
   
   componentWillReceiveProps(nextProps){
-    // console.log('ARTIST ALL------ nextProps', nextProps)
-    // console.log('ARTIST ALL------ this.props', this.props)
     
     if(nextProps.concertsDisplayListFirebase){
       if(nextProps.concertsDisplayListFirebase.filteredList.length){
@@ -82,11 +73,9 @@ class ArtistAll extends Component {
       }
     }  
   }
-
   
   render() {
-    // console.log('ARTIST ALL ------ RENDER state', this.state)  
-    // console.log('ARTIST ALL ------ RENDER props', this.props) 
+
     const { name, concerts } = this.props;
 
     return (
@@ -94,10 +83,8 @@ class ArtistAll extends Component {
         {name} ({concerts.length})
       </li>
     )
-    
   }
 }
-
 
 function mapStateToProps(state) {
   const { user } = state.auth

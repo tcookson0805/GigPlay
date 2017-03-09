@@ -13,17 +13,14 @@ class ResultsBox extends Component {
   }
    
   render() {
-    // console.log('RESULT BOX ------ this.props', this.props)
     
-    const { concertsDisplayList, concertsDisplayListFirebase } = this.props
-    
-    console.log('concertsDisplayList', concertsDisplayList);
-    console.log('concertsDisplayListFirebase', concertsDisplayListFirebase);
-    let list = concertsDisplayListFirebase || concertsDisplayList
+    const { concertsDisplayList, concertsDisplayListFirebase } = this.props;
+    let list = concertsDisplayListFirebase || concertsDisplayList;
     let displayList;
      
     if(!list){
       return (
+
         <div className="results-box col-md-12">
           <div className="results-box-header">
             <h2>SHOWS FROM YOUR FAVORITE ARTISTS</h2>
@@ -38,6 +35,7 @@ class ResultsBox extends Component {
             </div>
           </div>
         </div>
+
       )
     }
     
@@ -48,14 +46,13 @@ class ResultsBox extends Component {
     }
   
     return (
+
       <div className="results-box col-md-12">
         <div className="results-box-header">
           <h2>SHOWS FROM YOUR FAVORITE ARTISTS</h2>
         </div>
         <div className="results-group">
-          { 
-            displayList.map(function(concert, index) {
-              // console.log('concert.date', concert.date);
+          { displayList.map(function(concert, index) {
               if(concert.display){
                 return (
                   <ResultItem 
@@ -88,7 +85,7 @@ function mapStateToProps(state) {
     concertsDisplayListFirebase['filteredObj'] = {};
   }
   
-  return { concertsDisplayList, concertsDisplayListFirebase }
+  return { concertsDisplayList, concertsDisplayListFirebase };
 }
 
 export default connect(mapStateToProps)(ResultsBox);

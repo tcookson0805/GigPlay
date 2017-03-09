@@ -8,10 +8,10 @@ import base from '../../../config/firebase';
 
 console.log(process.env.FIREBASE_AUTH_DOMAIN);
 
-import Loading from 'react-loading'
+import Loading from 'react-loading';
 
 const _ = require('underscore');
-const testList = ["The Lumineers", "Coldplay", "Drake", "Empire of the Sun"]
+const testList = ["The Lumineers", "Coldplay", "Drake", "Empire of the Sun"];
  
 class User extends Component {
 
@@ -22,7 +22,6 @@ class User extends Component {
       refreshToken: null,
       user: {}
     }
-
     this.goToMainPage = this.goToMainPage.bind(this);
   }
  
@@ -31,35 +30,16 @@ class User extends Component {
     this.props.router.push(endpoint);
   }
   
-  getData(){
+  getData() {
     const {dispatch, params} = this.props;
     const {accessToken, refreshToken} = params;
-    this.props.setTokens({accessToken, refreshToken})
+    this.props.setTokens({accessToken, refreshToken});
     this.props.getMyInfo();
   }
   
-  // syncFirebase() {
-  //   this.ref = base.syncState(`users/${this.props.user.id}/userInfo`, {
-  //     context: this,
-  //     state: 'userInfo'
-  //   });
-    
-  //   this.ref = base.syncState(`users/${this.props.user.id}/artistsArray`, {
-  //     context: this,
-  //     state: 'artistsArray',
-  //     asArray: true
-  //   });
-    
-  //   this.ref = base.syncState(`users/${this.props.user.id}/concertsDisplayList`, {
-  //     context: this,
-  //     state: 'concertsDisplayList'
-  //   });
-  // }
- 
   componentWillMount() {
     // running getData function to trigger setTokens, getMyInfo, and getMyTracks functions
     this.getData();
-    // console.log('Component Did Mount this.props', this.props)    
   }
     
   componentWillReceiveProps(nextProps) {
@@ -73,32 +53,21 @@ class User extends Component {
     if(nextProps.refreshToken){
       this.setState({
         refreshToken: nextProps.refreshToken
-      })
+      });
     }
 
     if(nextProps.user.id){
       this.setState({
         user: nextProps.user
-      })
+      });
     }
-
-    // console.log('Component Will Receive Props this.props', this.props);
-    // console.log('Component Will Receive Props nextProps', nextProps);
-    // console.log('Component Will Receive Props this.state', this.state);
 
   }
   
   componentDidUpdate(prevProps, prevState){
-
-    // console.log('Component Did Update this.props', this.props);
-    // console.log('Component Did Update prevProps', prevProps);
-    // console.log('Component Did Update prevState', prevState);
-    // console.log('Component Will Receive Props this.state', this.state);
-
     if(this.state.user.id){
       this.goToMainPage();
     }
-
   }
   
   /** Render the user's info */
@@ -109,6 +78,7 @@ class User extends Component {
     const imageUrl = images[0] ? images[0].url : "";
     
     return (
+
       <div className="row">
         <div className="col-md-6 loading">
           Loading 
@@ -117,6 +87,7 @@ class User extends Component {
           <Loading type="bars" color="e3e3e3" height={300} width={300} color={`#1ED760`} />
         </div>
       </div>
+      
     )
   }
 }
