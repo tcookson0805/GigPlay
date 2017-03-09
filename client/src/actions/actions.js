@@ -1,7 +1,6 @@
 import axios from 'axios'
 import Spotify from 'spotify-web-api-js';
 import base from '../../../config/firebase';
-// var base = require('../../../config/firebase') || undefined;
 
 const _ = require('underscore');
 const spotifyApi = new Spotify();
@@ -14,7 +13,7 @@ export const SPOTIFY_ME_FAILURE = 'SPOTIFY_ME_FAILURE';
 export const FETCH_TRACKS = 'FETCH_TRACKS';
 
 
-// /** set the app's access and refresh tokens */
+// setting the app's access and refresh tokens 
 export function setTokens({accessToken, refreshToken}) {
   console.log('set Tokens ran')
   if (accessToken) {
@@ -26,10 +25,10 @@ export function setTokens({accessToken, refreshToken}) {
   }
 }
 
-/* get the user's info from the /me api */
+// getting the user's info from the /me api
 export function getMyInfo() { 
   return dispatch => {
-    console.log('getMyInfo running')
+    // console.log('getMyInfo running')
     dispatch({ type: SPOTIFY_ME_BEGIN});
     spotifyApi.getMe().then(data => {
       // console.log('getMyInfo data', data)
@@ -41,103 +40,10 @@ export function getMyInfo() {
 }
 
 
-// export const FETCH_SPOTIFY = 'FETCH_SPOTIFY';
-
-// export function getSpotify(){
-
-//   return dispatch => {
-
-//     console.log('getSpotify is running');
-
-//     let totalTracks;
-//     let trackCalls;
-
-//     spotifyApi.getMySavedTracks().then( tracks => {
-//       totalTracks = tracks.total
-//       trackCalls = Math.ceil(tracks.total / 50);
-
-//       console.log('tracks', tracks);
-//       console.log('totalTracks', totalTracks);
-//       console.log('trackCalls', trackCalls);
-
-
-//       return {totalTracks, trackCalls}
-//     })
-
-//     .then( data => {
-//       let totalCalls = data.trackCalls;
-//       let trackArray = [];
-//       let tracker = 0
-
-
-//       for(var i = 0; i < trackCalls; i++) {
-//         spotifyApi.getMySavedTracks({'limit': 50, 'offset': i*50}).then( tracks => {
-//           tracker ++
-//           // console.log('i', i)
-//           // console.log('all TRACKS', tracks)
-//           trackArray.push(tracks.items)         
-//           trackArray = _.flatten(trackArray);
-//           return {trackArray, tracker, trackCalls}
-//         })
-
-//         .then ( data => {
-//           let trackArray = _.flatten(data.trackArray);
-//           let tracker = data.tracker;
-//           let totalCalls = data.trackCalls;
-
-//           // console.log('DADADATATA', data)
-
-//           if(tracker === totalCalls){
-//             return { trackArray }
-//           } else {
-            
-//           } 
-
-//         })
-
-//         .then( data => {
-//           console.log('data', data)
-//           // const trackArray = data.trackArray;
-
-//           // let artistsArray = [];
-//           // let artistsObj = {}
-
-//           // for(var i = 0; i < trackArray.length; i++){
-            
-//           //   let artistName = trackArray[i].track.artists[0].name
-//           //   artistsArray.push(artistName);
-//           //   artistObj['artistName'] = trackArray[i].track
-
-//           // }
-          
-//           // return { artistsArray, artistsObj}
-
-//         })
-
-//         .then( data => {
-
-//           console.log('data', data)
-          
-
-//         })
-
-//       }
-
-//     })
-
-
-//   }
-
-
-// }
-
-
-
 export function getMyTracks(offset) {
   return dispatch => {
     
-    console.log('getMyTracks running')
-    
+    // console.log('getMyTracks running')
     let tracksLoaded = 0;
         
     spotifyApi.getMySavedTracks({'limit': 50}).then( tracks => {
@@ -167,13 +73,11 @@ export function getMyTracks(offset) {
         }
       })
       
-
       return { tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded};
       
     })
     
-    .then( data => {
-      
+    .then( data => {     
       // console.log('getMySavedTracks first call return', data)
         
       let { tracks, totalTracks, trackCalls, artistsArray, artistsObj, tracksLoaded } = data
@@ -205,10 +109,8 @@ export function getMyTracks(offset) {
           return { artistsArray, artistsObj, allTracks, tracksLoaded }
           
         })
-        .then ( obj => {
-          
-          // console.log('getMySavedTracks last call return', obj);
-          
+        .then ( obj => {        
+          // console.log('getMySavedTracks last call return', obj);         
           const tracks = obj.allTracks    
           const artistsArrayUniq = _.uniq(obj.artistsArray);
           // console.log('artistsArrayUniq',artistsArrayUniq)
@@ -218,11 +120,9 @@ export function getMyTracks(offset) {
           let payload = {artistsArray, artistsObj, totalTracks, trackCalls, tracks, tracksLoaded}
           
           // console.log('getMySaved Tracks final payload', payload);
-
           if(payload.tracks.length === payload.totalTracks){
             dispatch({'type': FETCH_TRACKS, 'data': payload})            
           }
-
         })
       }
     })
@@ -363,8 +263,8 @@ export function getConcerts(artistsArray) {
                     duplicate = true
                   }
                 })
-                
-                if(!duplicate){
+                console.log('artist', artist);
+                if(!duplicate && artist){
                   concertsDisplayList['totalList'].push({artist, city, state, date, lat, long, time, venue, event, url, display});
                   concertsDisplayList['totalObj'][artist].push({artist, city, state, date, lat, long, time, venue, event, url, display});
                 }  

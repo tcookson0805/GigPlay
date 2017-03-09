@@ -47,30 +47,6 @@ class ResultsBox extends Component {
       displayList = list.totalList
     }
   
-  
-    // if(!list){
-    //   return (
-    //     <div className="results-box col-md-12">
-    //       <div className="results-box-header">
-    //         <h2>SHOWS FROM YOUR FAVORITE ARTISTS</h2>
-    //       </div>
-    //       <div className="results-group">
-            
-    //         <div className="loading">
-    //           Loading 
-    //         </div>
-            
-    //         <div className="loader">
-    //           <Loading type="bars" color="e3e3e3" height={10} width={10} color={`#1ED760`} />
-    //         </div>
-          
-    //       </div>
-    //     </div>
-    //     )
-    // }
-
-    
-
     return (
       <div className="results-box col-md-12">
         <div className="results-box-header">

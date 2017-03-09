@@ -1,4 +1,4 @@
-body {
+/*body {
   padding-bottom: 3em;
 }
 
@@ -47,12 +47,12 @@ ul {
   list-style: none; 
   margin: 0; 
   padding: 0; 
-}
+}*/
 
 /* LOGIN COMPONENT*/
 
-.login-background {
-  position: fixed;
+/*.login-background {*/
+/*  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -67,7 +67,7 @@ ul {
   left: -50%;
   width: 200%;
   height: 200%;
-  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
 }
 
@@ -82,12 +82,12 @@ video {
   min-width: 50%;
 }
 
-.login-hero {
+.login-hero {*/
 /*  opacity: 0.5;*/
 /*  width: 30em;*/
 /*  position: relative;*/
 /*  top: 50%;*/
-  transform: translateY(40%);
+/*  transform: translateY(40%);
   text-align: center;
   background-color: transparent;
 }
@@ -116,10 +116,10 @@ video {
 
 .login-hero-demo {
 
-}
+}*/
 
 /* LOADING COMPONENT*/
-.loading {
+/*.loading {
   font-size: 2em;
   float: left;
 }
@@ -133,14 +133,14 @@ video {
 .loader img {
   width: 2em;
   height: auto;
-}
+}*/
 
 
 
 /* HEADER COMPONENT */
 
 
-.header {
+/*.header {
   height: 8em;
   padding-top: 1em;
   text-align: center;
@@ -178,12 +178,12 @@ video {
   float: left;
   margin-left: 1em;
   margin-top: 2em;
-}
+}*/
 
 
 /* ARTIST LIST COMPONENT*/
 
-.artist-list {
+/*.artist-list {
   padding: 1em;
 }
 
@@ -232,19 +232,19 @@ video {
   margin: 1em;
   cursor: pointer;
   background-color: red;
-}
+}*/
 
 
 /* MAIN COMPONENT */
 
 
-.hero {
+/*.hero {
   margin: 0;
-}
+}*/
 
 /* MAP BOX COMPONENT */
 
-.infoMarker {
+/*.infoMarker {
   background-color: blue;
 }
 
@@ -270,227 +270,164 @@ video {
 
 .map-info-window h1 {
   margin-bottom: 0.5em;
-}
-
-/* RESULTS COMPONENT */
-
-.results-box {
-  padding: 1em;
-/*  margin-top: 1em;*/
-}
-
-.results-box-header {
-  margin: 1em auto;
-  border-bottom: 0.1em solid black;
-  letter-spacing: 0.1em;
-}
-
-.results-group {
-  overflow: hidden;
-  overflow-y: scroll;
-  height: 17em;
-}
-
-.result-item {
-  font-family: HelveticaNeue;
-  padding: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-.result-item a {
-  color: black;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.result-item:hover {
-/*  background-color: #E95D12;
-*/}
-
-.result-item-header {
-  
-}
-
-.result-item-ticket {
-/*  position: absolute;
-  padding-left: 4em;*/
-}
-
-.result-item-date {
-/*  border-right: 0.1em solid black;
-*//*  margin: 0 1em;*/
-}
-
-.result-item-artist {
-  font-weight: bold;
-}
-
-.result-item-venue {
-
-}
-
-.result-item-location {
-
-}
-
-.result-item-city {
-  font-style: italic;
-}
+}*/
 
 
 
 
 
-@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
 
 
-  .login-background {
+/*@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+
+*/
+/*  .login-background {
     display: none;
-  }
+  }*/
 
-  .login-hero {
+/*  .login-hero {
     text-align: center;
     background-color: transparent;
   }
-
-  .header {
+*/
+/*  .header {
     height: 8em;
     padding-top: 1em;
     text-align: center;
     border-bottom: 0.1em solid black;
-  }
+  }*/
 
-  .header-logo {
+ /* .header-logo {
     padding: 0;
-  }
+  }*/
 
-  .header-logo img {
+/*  .header-logo img {
     width: 130%;
     margin-left: 0.5em;
-  }
+  }*/
 
-  .header-user {
+/*  .header-user {
     display: none; 
   }
-
+*/
 
   /* ARTIST LIST COMPONENT*/
 
-  .artist-list {
+/*  .artist-list {
     padding: 0.5em 0 1em 0;
     border: 0.1em solid black;
 
     margin: 2em 0;
-  }
+  }*/
 
-  .artist-list-header {
+/*  .artist-list-header {
     margin: 0.5em auto;
     font-weight: bold;
     text-align: center;
-  }
+  }*/
 
-  .artist-list-header h2 {
+/*  .artist-list-header h2 {
     font-weight: bold;
     font-size: 1.5em;
-  }
+  }*/
   
-  .artist-list > .list-group {
+/*  .artist-list > .list-group {
     overflow: hidden;
     overflow-y: scroll;
     height: 25em;
     display: inline-block;
-  }
-
+  }*/
+/*
   .list-group-item {
-    border: 0.1em solid grey;
+    border: 0.1em solid grey;*/
 /*    float: left;*/
-    letter-spacing: 0em;
-  }
+/*    letter-spacing: 0em;
+  }*/
 
-  .artist {
+/*  .artist {
     font-family: HelveticaNeue;
     margin-left: 10%;
     cursor: pointer;
-    border-radius: 0.75em;
+    border-radius: 0.75em;*/
 /*    font-weight: bold;*/
-    font-size: 1.2em;
-    width: 80%;
+/*    font-size: 1.2em;
+    width: 80%;*/
 /*    float: left;*/
-    text-align: center;
-    padding: 1em 1.5em;
-  }
+/*    text-align: center;
+    padding: 1em 1.5em;*/
+/*  }*/
 
-  .artist * {
+/*  .artist * {
     text-align: center;
-  }
+  }*/
 
 
 
   /* RESULTS COMPONENT */
 
-  .results-box {
+/*  .results-box {
     padding: 0.5em 0;
-    border: 0.1em solid black;
+    border: 0.1em solid black;*/
   /*  margin-top: 1em;*/
-  }
+/*  }*/
 
-  .results-box-header {
+/*  .results-box-header {
     margin: 0.5em auto;
     font-weight: bold;
     text-align: center;
-  }
+  }*/
 
-  .results-box-header h2 {
+/*  .results-box-header h2 {
     font-weight: bold;
     font-size: 1.5em;
-  }
+  }*/
 
-  .results-group {
+/*  .results-group {
     overflow: hidden;
     overflow-y: scroll;
     height: 25em;
-  }
+  }*/
 
-  .result-item {
+/*  .result-item {
     font-family: HelveticaNeue;
     margin-bottom: 1em;
     text-align: center;
-  }
+  }*/
 
-  .result-item-date {
+/*  .result-item-date {*/
 /*    width: 40%;*/
-    text-align: center;
-/*    margin-bottom: 0.5em;*/
+/*    text-align: center;
+*//*    margin-bottom: 0.5em;*/
 /*    float:left;*/
-    font-size: 1.2em;
-  }
+/*    font-size: 1.2em;
+  }*/
 
-  .result-item-artist {
+/*  .result-item-artist {*/
 /*    width: 60%;*/
-    text-align: center;
+/*    text-align: center;*/
 /*    margin-bottom: 0.5em;*/
-    font-size: 1.5em;
-  }
+/*    font-size: 1.5em;
+  }*/
 
-  .result-item-location {
+/*  .result-item-location {*/
 /*    width: 100%;*/
-    text-align: center;
+/*    text-align: center;*/
 /*    float: right;*/
-    font-size: 1.2em;
-  }
+/*    font-size: 1.2em;
+  }*/
 
-  .result-item-venue {
+/*  .result-item-venue {
     text-align: center;
-  }
+  }*/
 
-  .result-item-city {
+/*  .result-item-city {
     text-align: center;
-  }
+  }*/
 
 
   /* MAP BOX COMPONENT */
 
-  .infoMarker {
+/*  .infoMarker {
     background-color: blue;
   }
 
@@ -518,7 +455,7 @@ video {
 
   .map-info-window h1 {
     margin-bottom: 0.5em;
-  }
+  }*/
 
 
-}
+/*}*/

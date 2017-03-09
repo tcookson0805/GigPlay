@@ -57,15 +57,15 @@ const ResultItem = (props) => {
       <a href={props.url} target="_blank">
       <div className="row">
       
-        <div className="col-md-2 col-sm-6 result-item-date">
+        <div className="col-lg-3 col-md-3 col-sm-6 result-item-date">
             {date}
         </div>
         
-        <div className="col-md-3 col-sm-6 result-item-artist">
+        <div className="col-lg-3 col-md-3 col-sm-6 result-item-artist">
             {props.artist} 
         </div>
         
-        <div className="col-md-5 col-sm-6 result-item-location">
+        <div className="col-lg-4 col-md-4 col-sm-6 result-item-location">
           <div className="row result-item-venue">
             <div className="col-md-12">
               {props.venue}
@@ -77,7 +77,7 @@ const ResultItem = (props) => {
             </div>
           </div>
         </div>
-        <div className="col-md-2">
+        <div className="col-lg-2 col-md-2 col-sm-6 result-item-time">
           {time}
         </div>
 
