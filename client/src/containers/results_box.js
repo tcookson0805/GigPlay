@@ -23,7 +23,7 @@ class ResultsBox extends Component {
 
         <div className="results-box col-md-12">
           <div className="results-box-header">
-            <h2>SHOWS FROM YOUR FAVORITE ARTISTS</h2>
+            SHOWS FROM YOUR FAVORITE ARTISTS
           </div>
           <div>
             <div className="loading">

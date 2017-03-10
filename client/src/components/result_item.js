@@ -53,25 +53,23 @@ const ResultItem = (props) => {
     <div className="result-item">
       <a href={props.url} target="_blank">
       <div className="row">
-        <div className="col-lg-3 col-md-3 col-sm-6 result-item-date">
+        <div className="col-lg-3 col-md-4 col-sm-6 result-item-date">
           {date}
         </div>
         <div className="col-lg-3 col-md-3 col-sm-6 result-item-artist">
           {props.artist} 
         </div>
-        <div className="col-lg-4 col-md-4 col-sm-6 result-item-location">
-          <div className="row result-item-venue">
-            <div className="col-md-12">
+        <div className="col-lg-4 col-md-5 col-sm-12 result-item-location">
+          <div className="row">
+            <div className="col-md-12 result-item-venue">
               {props.venue}
             </div>
-          </div>
-          <div className="row result-item-city">
-            <div className="col-md-12">
+            <div className="col-md-12 result-item-city">
               {location}
             </div>
           </div>
         </div>
-        <div className="col-lg-2 col-md-2 col-sm-6 result-item-time">
+        <div className="col-lg-2 result-item-time">
           {time}
         </div>
       </div>

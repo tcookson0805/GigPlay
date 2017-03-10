@@ -117,9 +117,7 @@ ul {
         width: 80%
       }
     }
-    .login-hero-demo {
-
-    }
+    .login-hero-demo {}
   }
 }
 
@@ -143,22 +141,24 @@ ul {
 
 // HEADER COMPONENT 
 
-
 .header {
   height: 8em;
   padding-top: 1em;
   text-align: center;
   border-bottom: 0.1em solid black;
+  overflow: auto;
   .header-logo {
     padding-left: 3.5em;
     float: left;
+    overflow: auto;
     @media screen and (max-width: $break-medium){
       padding: 0;
+      width: 100%;
     }
     img {
       @media screen and (max-width: $break-medium){
-        width: 130%;
-        margin: 0 auto;
+        width: 20em;
+        margin: 0 auto 1em auto;
       } 
     } 
   }
@@ -166,9 +166,9 @@ ul {
     padding-right: 3.5em;
     float: right;
     list-style: none;
-    // @media screen and (max-width: $break-medium){
-    //   display: none;
-    // } 
+    @media screen and (max-width: $break-medium){
+      display: none;
+    } 
     .header-user-pic {
       float: left;
       .header-user-pic-spotify {
@@ -198,8 +198,13 @@ ul {
     font-weight: bold;
     border-bottom: 0.1em solid black;
     letter-spacing: 0.1em;
+    @media screen and (max-width: $break-large){
+      text-align: center;
+      font-size: 0.8em;
+    } 
     @media screen and (max-width: $break-medium){
       text-align: center;
+      font-size: 1em;
     } 
   }
   .list-group {
@@ -261,6 +266,9 @@ ul {
 
 .hero {
   margin: 0;
+  @media screen and (max-width: $break-medium){
+    // background-color: black;
+  }
 }
 
 
@@ -306,13 +314,19 @@ ul {
 .results-box {
   padding: 1em;
   @media screen and (max-width: $break-medium){
+    border-top: 0.1em solid black;
     margin-top: 2em;
   } 
   .results-box-header {
     margin: 1em auto;
     border-bottom: 0.1em solid black;
     letter-spacing: 0.1em;
+    @media screen and (max-width: $break-large) {
+      font-size: 0.8em;
+      text-align: center;
+    }
     @media screen and (max-width: $break-medium){
+      font-size: 1em;
       text-align: center;
     } 
   }
@@ -345,7 +359,7 @@ ul {
   //  margin: 0 1em;
     @media screen and (max-width: $break-medium){
       text-align: center;
-      font-size: 1.2em;
+      font-size: 1.5em;
     } 
   }
   .result-item-artist {
@@ -361,15 +375,26 @@ ul {
       font-size: 1.2em;
     } 
     .result-item-venue {
+      @media screen and (max-width: $break-medium){
+        width: 50%;
+        // border: 0.1em solid red;
+        margin: 0;
+        padding: 0;
+      }
     }
     .result-item-city {
       font-style: italic;
+      @media screen and (max-width: $break-medium){
+        width: 50%;
+        // border: 0.1em solid red;
+        margin: 0;
+        padding: 0;
+      }
     }
   }
   .result-item-time {
-    @media screen and (max-width: $break-medium){
-      text-align: center;
-      font-size: 1.2em;
+    @media screen and (max-width: $break-large){
+      display: none;
     } 
   }
 }

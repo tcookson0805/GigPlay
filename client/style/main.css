@@ -108,21 +108,27 @@ ul {
   height: 8em;
   padding-top: 1em;
   text-align: center;
-  border-bottom: 0.1em solid black; }
+  border-bottom: 0.1em solid black;
+  overflow: auto; }
   .header .header-logo {
     padding-left: 3.5em;
-    float: left; }
+    float: left;
+    overflow: auto; }
     @media screen and (max-width: 768px) {
       .header .header-logo {
-        padding: 0; } }
+        padding: 0;
+        width: 100%; } }
     @media screen and (max-width: 768px) {
       .header .header-logo img {
-        width: 130%;
-        margin: 0 auto; } }
+        width: 20em;
+        margin: 0 auto 1em auto; } }
   .header .header-user {
     padding-right: 3.5em;
     float: right;
     list-style: none; }
+    @media screen and (max-width: 768px) {
+      .header .header-user {
+        display: none; } }
     .header .header-user .header-user-pic {
       float: left; }
       .header .header-user .header-user-pic .header-user-pic-spotify {
@@ -144,9 +150,14 @@ ul {
     font-weight: bold;
     border-bottom: 0.1em solid black;
     letter-spacing: 0.1em; }
+    @media screen and (max-width: 992px) {
+      .artist-list .artist-list-header {
+        text-align: center;
+        font-size: 0.8em; } }
     @media screen and (max-width: 768px) {
       .artist-list .artist-list-header {
-        text-align: center; } }
+        text-align: center;
+        font-size: 1em; } }
   .artist-list .list-group {
     overflow: hidden;
     overflow-y: scroll;
@@ -224,13 +235,19 @@ ul {
   padding: 1em; }
   @media screen and (max-width: 768px) {
     .results-box {
+      border-top: 0.1em solid black;
       margin-top: 2em; } }
   .results-box .results-box-header {
     margin: 1em auto;
     border-bottom: 0.1em solid black;
     letter-spacing: 0.1em; }
+    @media screen and (max-width: 992px) {
+      .results-box .results-box-header {
+        font-size: 0.8em;
+        text-align: center; } }
     @media screen and (max-width: 768px) {
       .results-box .results-box-header {
+        font-size: 1em;
         text-align: center; } }
   .results-box .results-group {
     overflow: hidden;
@@ -251,7 +268,7 @@ ul {
   @media screen and (max-width: 768px) {
     .result-item .result-item-date {
       text-align: center;
-      font-size: 1.2em; } }
+      font-size: 1.5em; } }
   .result-item .result-item-artist {
     font-weight: bold; }
     @media screen and (max-width: 768px) {
@@ -262,11 +279,20 @@ ul {
     .result-item .result-item-location {
       text-align: center;
       font-size: 1.2em; } }
+  @media screen and (max-width: 768px) {
+    .result-item .result-item-location .result-item-venue {
+      width: 50%;
+      margin: 0;
+      padding: 0; } }
   .result-item .result-item-location .result-item-city {
     font-style: italic; }
-  @media screen and (max-width: 768px) {
+    @media screen and (max-width: 768px) {
+      .result-item .result-item-location .result-item-city {
+        width: 50%;
+        margin: 0;
+        padding: 0; } }
+  @media screen and (max-width: 992px) {
     .result-item .result-item-time {
-      text-align: center;
-      font-size: 1.2em; } }
+      display: none; } }
 
 /*# sourceMappingURL=main.css.map */
