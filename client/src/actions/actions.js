@@ -153,7 +153,9 @@ export function getConcerts(artistsArray) {
     let artistsIdArray = [];
     let artistsDone = 0;
     const artistsNum = artistsArray.length;
-
+    
+    console.log('artistsArray', artistsArray)
+    
     // looping through each artist
     for(var i = 0; i < artistsNum; i++) {     
       // creating key for each artist set to object that will contain their ticketmaster info in artistsObjTM
@@ -173,112 +175,119 @@ export function getConcerts(artistsArray) {
       // creating the proper url to make each ticketmaster request
       const attractionsUrl = `${TICKETMASTER_ROOT}attractions.json?keyword=${artistName}&apikey=${TICKETMASTER_KEY}`
       
+
       // making our ticketmaster request
-      axios.get(attractionsUrl).then( response => {
+      setTimeout(function(){ axios.get(attractionsUrl)}, i*1000);
+
+// 20:24:27
+// 20:24:31
+
+
+      // .then( response => {
         
-        // making sure the response we get has a data._embedded property
-        // which is where all relevant attractions info will be contained 
-        if(response.data._embedded){
-          let attractions = response.data._embedded.attractions          
-          attractions.forEach(function(item, index) {
+      //   // making sure the response we get has a data._embedded property
+      //   // which is where all relevant attractions info will be contained 
+      //   if(response.data._embedded){
+      //     let attractions = response.data._embedded.attractions          
+      //     attractions.forEach(function(item, index) {
 
-            // KEY CHECK POINT
-            // The attractions we receive is an array that includes attractions that don't always exactly match the name
-            // of the artist and sometimes, even when they do, they are duplicates. When we have duplicates, it appears that
-            // only one of them actually has a link to the artist's page on ticketmaster. Therefore the 'test' I created 
-            // requires not only that the item's name exactly match the artist's name, but also that the item has a link
-            // to an artist's page on ticketmaster. This has resulted, atleast for my spotify, only 117 of my 137 artists
-            // meeting this test. I am not sure what is happening with the other 20, but due to ticketmaster's quota I will
-            // come back later and see what is going on.
+      //       // KEY CHECK POINT
+      //       // The attractions we receive is an array that includes attractions that don't always exactly match the name
+      //       // of the artist and sometimes, even when they do, they are duplicates. When we have duplicates, it appears that
+      //       // only one of them actually has a link to the artist's page on ticketmaster. Therefore the 'test' I created 
+      //       // requires not only that the item's name exactly match the artist's name, but also that the item has a link
+      //       // to an artist's page on ticketmaster. This has resulted, atleast for my spotify, only 117 of my 137 artists
+      //       // meeting this test. I am not sure what is happening with the other 20, but due to ticketmaster's quota I will
+      //       // come back later and see what is going on.
             
-            if(item.name === artistName && item.url){
-              artistsIdArray.push(response.data._embedded.attractions[index].id)
-              artistsObjTM[artistName].ticketmaster_id = response.data._embedded.attractions[index].id;
-              artistsObjTM[artistName].ticketmaster_images = response.data._embedded.attractions[index].images || [];
-              artistsObjTM[artistName].ticketmaster_url = response.data._embedded.attractions[index].url || [];
-              artistsObjTM[artistName].ticketmaster_classifications = response.data._embedded.attractions[index].classifications || []; 
-            }
-          })
-        }
+      //       if(item.name === artistName && item.url){
+      //         artistsIdArray.push(response.data._embedded.attractions[index].id)
+      //         artistsObjTM[artistName].ticketmaster_id = response.data._embedded.attractions[index].id;
+      //         artistsObjTM[artistName].ticketmaster_images = response.data._embedded.attractions[index].images || [];
+      //         artistsObjTM[artistName].ticketmaster_url = response.data._embedded.attractions[index].url || [];
+      //         artistsObjTM[artistName].ticketmaster_classifications = response.data._embedded.attractions[index].classifications || []; 
+      //       }
+      //     })
+      //   }
 
-        artistsDone++
-        return
-      })
-      .then( data => {
+      //   artistsDone++
+      //   return
+      // })
+      // .then( data => {
         
-        // Important step....by making sure that we have gotten all the artists information first before making
-        // our request to ticketmaster, we can use that information to create an id string of all the artists and
-        // send ONE batched call to ticketmaster to get all events. This means we only send one request for all artists
-        // instead of one request for each artist.
+      //   // Important step....by making sure that we have gotten all the artists information first before making
+      //   // our request to ticketmaster, we can use that information to create an id string of all the artists and
+      //   // send ONE batched call to ticketmaster to get all events. This means we only send one request for all artists
+      //   // instead of one request for each artist.
         
-        if(artistsDone === artistsNum) {
-          const artistsIdString = artistsIdArray.toString()          
-          const eventUrl = `${TICKETMASTER_ROOT}events.json?attractionId=${artistsIdString}&apikey=${TICKETMASTER_KEY}&size=500`
-          const eventUrl2 = `${TICKETMASTER_ROOT}events.json?attractionId=${artistsIdString}&apikey=${TICKETMASTER_KEY}&size=500&page=1`          
+      //   if(artistsDone === artistsNum) {
+      //     const artistsIdString = artistsIdArray.toString()          
+      //     const eventUrl = `${TICKETMASTER_ROOT}events.json?attractionId=${artistsIdString}&apikey=${TICKETMASTER_KEY}&size=500`
+      //     const eventUrl2 = `${TICKETMASTER_ROOT}events.json?attractionId=${artistsIdString}&apikey=${TICKETMASTER_KEY}&size=500&page=1`          
 
-          // Sending our request to ticketmaster
-          axios.get(eventUrl).then( evts => {
+      //     // Sending our request to ticketmaster
+      //     axios.get(eventUrl).then( evts => {
             
-            evts.data._embedded.events.forEach(function(item, index) {        
+      //       evts.data._embedded.events.forEach(function(item, index) {        
 
-              const location = item._embedded.venues[0].location || {};
+      //         const location = item._embedded.venues[0].location || {};
 
-              if(location.hasOwnProperty('latitude') && location.hasOwnProperty('longitude')) {
+      //         if(location.hasOwnProperty('latitude') && location.hasOwnProperty('longitude')) {
 
-                concertsList.push(item)   
+      //           concertsList.push(item)   
 
-                const location = item._embedded.venues[0].location                
-                const attractions = item._embedded.attractions
-                let artist;
-                let city = item._embedded.venues[0].city ? item._embedded.venues[0].city.name : '';
-                let state = item._embedded.venues[0].state ? item._embedded.venues[0].state.name : '';
-                let date = item.dates.start.localDate;
+      //           const location = item._embedded.venues[0].location                
+      //           const attractions = item._embedded.attractions
+      //           let artist;
+      //           let city = item._embedded.venues[0].city ? item._embedded.venues[0].city.name : '';
+      //           let state = item._embedded.venues[0].state ? item._embedded.venues[0].state.name : '';
+      //           let date = item.dates.start.localDate;
                 
-                let lat = location.latitude ? location.latitude : null;
-                let long = location.longitude ? location.longitude : null;
-                let time = item.dates.start.localTime || 'tbd'
-                let venue = item._embedded.venues[0].name ? item._embedded.venues[0].name : '';
-                let event = item.name || '';
-                let url = item.url;
-                let display = true;
+      //           let lat = location.latitude ? location.latitude : null;
+      //           let long = location.longitude ? location.longitude : null;
+      //           let time = item.dates.start.localTime || 'tbd'
+      //           let venue = item._embedded.venues[0].name ? item._embedded.venues[0].name : '';
+      //           let event = item.name || '';
+      //           let url = item.url;
+      //           let display = true;
                 
-                //loop over item._embedded.attractions to grab correct artist name
-                attractions.forEach(function(attraction, index) {
-                  const name = attraction.name;
-                  if(artistsObjTM[name]) {
-                    artist = name;
-                  }
-                })
+      //           //loop over item._embedded.attractions to grab correct artist name
+      //           attractions.forEach(function(attraction, index) {
+      //             const name = attraction.name;
+      //             if(artistsObjTM[name]) {
+      //               artist = name;
+      //             }
+      //           })
                 
-                // This is just to eliminate duplication of concerts since Ticketmaster sends back
-                // a separate event for each different ticket package for the same concert
-                let duplicate = false;
-                concertsDisplayList['totalList'].forEach(function(concert, index) {
-                  if(concert.artist === artist && concert.city === city && concert.date === date){
-                    duplicate = true
-                  }
-                })
+      //           // This is just to eliminate duplication of concerts since Ticketmaster sends back
+      //           // a separate event for each different ticket package for the same concert
+      //           let duplicate = false;
+      //           concertsDisplayList['totalList'].forEach(function(concert, index) {
+      //             if(concert.artist === artist && concert.city === city && concert.date === date){
+      //               duplicate = true
+      //             }
+      //           })
 
-                if(!duplicate && artist){
-                  concertsDisplayList['totalList'].push({artist, city, state, date, lat, long, time, venue, event, url, display});
-                  concertsDisplayList['totalObj'][artist].push({artist, city, state, date, lat, long, time, venue, event, url, display});
-                }  
+      //           if(!duplicate && artist){
+      //             concertsDisplayList['totalList'].push({artist, city, state, date, lat, long, time, venue, event, url, display});
+      //             concertsDisplayList['totalObj'][artist].push({artist, city, state, date, lat, long, time, venue, event, url, display});
+      //           }  
             
-              }
+      //         }
             
-            });
+      //       });
             
-            const sorted = _.sortBy(concertsDisplayList['totalList'], 'date');
+      //       const sorted = _.sortBy(concertsDisplayList['totalList'], 'date');
             
-            concertsDisplayList.totalList = sorted;
-            concertsDisplayList.totalObj['ALL ARTISTS'] = sorted;
+      //       concertsDisplayList.totalList = sorted;
+      //       concertsDisplayList.totalObj['ALL ARTISTS'] = sorted;
             
-            const payload = { concertsList, artistsObjTM, artistsIdArray, artistsIdString, concertsDisplayList }
+      //       const payload = { concertsList, artistsObjTM, artistsIdArray, artistsIdString, concertsDisplayList }
 
-            dispatch({'type': FETCH_CONCERTS, data: payload});  
-          });
-        }
-      }) 
+      //       dispatch({'type': FETCH_CONCERTS, data: payload});  
+      //     });
+      //   }
+      // }) 
     }
   }
 }

@@ -75,7 +75,9 @@ class Main extends Component {
       
       // Step 4 -since spotifyLoaded state hasn't yet changed, we run getConcerts
       if(!this.state.spotifyLoaded){
-        this.props.getConcerts(nextProps.artistsArray);      
+        console.log('nextProps.artistsArray', nextProps.artistsArray);
+        this.props.getConcerts(nextProps.artistsArray);         
+        // this.props.getConcerts(testList);      
       }
 
       // set our state to what getTracks has returned 
